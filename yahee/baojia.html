@@ -44,6 +44,9 @@
             .calculation-wrapper { @apply flex items-center gap-2; }
             .toggle-calc-btn { @apply text-gray-400 hover:text-primary transition-colors cursor-pointer p-1; }
             .calculation-hidden { display: none !important; }
+            .modal-backdrop { @apply fixed inset-0 bg-black/50 z-40 hidden; }
+            .modal-content { @apply fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto z-50 hidden; }
+            .modal-active { @apply block; }
         }
 
         @keyframes fadeIn {
@@ -66,7 +69,18 @@
                     <i class="fa fa-calculator mr-3"></i>报价、计价、计算系统　　　　　　YaHee, Studio.
                 </h1>
                 <div class="flex items-center space-x-4 mt-3 sm:mt-0">
-                    <!-- 已移除打印按钮 -->
+                    <!-- 客户管理区域 -->
+                    <div class="relative w-full sm:w-auto">
+                        <select id="customer-select" class="w-full sm:w-64 px-3 py-2 border border-gray-300 rounded-md input-focus appearance-none bg-white">
+                            <option value="">选择客户</option>
+                        </select>
+                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                            <i class="fa fa-chevron-down text-xs"></i>
+                        </div>
+                    </div>
+                    <button id="manage-customers-btn" class="bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-md transition-colors flex items-center">
+                        <i class="fa fa-users mr-2"></i>客户管理
+                    </button>
                 </div>
             </div>
         </div>
@@ -925,6 +939,92 @@
         </div>
     </main>
 
+    <!-- 客户管理模态框 -->
+    <div id="customer-modal-backdrop" class="modal-backdrop"></div>
+    <div id="customer-modal" class="modal-content">
+        <div class="p-6">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-xl font-bold text-primary">客户管理</h2>
+                <button id="close-modal-btn" class="text-gray-500 hover:text-gray-700 transition-colors">
+                    <i class="fa fa-times text-xl"></i>
+                </button>
+            </div>
+            
+            <div class="flex justify-between items-center mb-6">
+                <button id="add-customer-btn" class="bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-md transition-colors flex items-center">
+                    <i class="fa fa-plus mr-2"></i>添加客户
+                </button>
+                <div class="flex space-x-2">
+                    <button id="export-customers-btn" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md transition-colors flex items-center">
+                        <i class="fa fa-download mr-2"></i>导出
+                    </button>
+                    <button id="import-customers-btn" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md transition-colors flex items-center">
+                        <i class="fa fa-upload mr-2"></i>导入
+                    </button>
+                    <input type="file" id="import-file-input" accept=".json" class="hidden">
+                </div>
+            </div>
+            
+            <!-- 客户列表 -->
+            <div class="overflow-x-auto">
+                <table class="min-w-full bg-white">
+                    <thead>
+                        <tr class="bg-gray-100 text-left">
+                            <th class="py-3 px-4 font-semibold">客户名称</th>
+                            <th class="py-3 px-4 font-semibold">联系人</th>
+                            <th class="py-3 px-4 font-semibold">电话</th>
+                            <th class="py-3 px-4 font-semibold">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="customer-list">
+                        <!-- 客户数据将通过JS动态填充 -->
+                        <tr>
+                            <td colspan="4" class="py-4 px-4 text-center text-gray-500">暂无客户数据，请添加客户</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- 客户表单 -->
+            <div id="customer-form-container" class="mt-6 hidden">
+                <h3 id="form-title" class="text-lg font-semibold mb-4">添加客户</h3>
+                <form id="customer-form">
+                    <input type="hidden" id="customer-id">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <label for="customer-name" class="block text-sm font-medium text-gray-700 mb-1">客户名称 *</label>
+                            <input type="text" id="customer-name" class="w-full px-3 py-2 border border-gray-300 rounded-md input-focus" required>
+                        </div>
+                        <div>
+                            <label for="customer-contact" class="block text-sm font-medium text-gray-700 mb-1">联系人</label>
+                            <input type="text" id="customer-contact" class="w-full px-3 py-2 border border-gray-300 rounded-md input-focus">
+                        </div>
+                        <div>
+                            <label for="customer-phone" class="block text-sm font-medium text-gray-700 mb-1">电话</label>
+                            <input type="tel" id="customer-phone" class="w-full px-3 py-2 border border-gray-300 rounded-md input-focus">
+                        </div>
+                        <div>
+                            <label for="customer-email" class="block text-sm font-medium text-gray-700 mb-1">邮箱</label>
+                            <input type="email" id="customer-email" class="w-full px-3 py-2 border border-gray-300 rounded-md input-focus">
+                        </div>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <h4 class="text-sm font-semibold mb-3">单价设置（不设置则使用默认值）</h4>
+                        <div id="price-settings" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <!-- 单价设置将通过JS动态生成 -->
+                        </div>
+                    </div>
+                    
+                    <div class="flex justify-end space-x-3">
+                        <button type="button" id="cancel-form-btn" class="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors">取消</button>
+                        <button type="submit" class="bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-md transition-colors">保存</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <!-- 页脚 -->
     <footer class="bg-white border-t mt-12 py-6">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -939,12 +1039,470 @@
         // 用于跟踪每个类别的行数
         const categoryRowCount = {};
         
+        // 客户数据存储
+        let customers = [];
+        let currentCustomerId = null;
+        
         // DOM元素初始化
         const toggleRulesBtns = document.querySelectorAll('.toggle-rules-btn');
         const itemContainers = document.querySelectorAll('.item-container');
         const totalAmountEl = document.querySelector('.total-amount');
+        const customerSelect = document.getElementById('customer-select');
+        const manageCustomersBtn = document.getElementById('manage-customers-btn');
+        const customerModal = document.getElementById('customer-modal');
+        const customerModalBackdrop = document.getElementById('customer-modal-backdrop');
+        const closeModalBtn = document.getElementById('close-modal-btn');
+        const addCustomerBtn = document.getElementById('add-customer-btn');
+        const customerList = document.getElementById('customer-list');
+        const customerFormContainer = document.getElementById('customer-form-container');
+        const customerForm = document.getElementById('customer-form');
+        const formTitle = document.getElementById('form-title');
+        const customerIdInput = document.getElementById('customer-id');
+        const customerNameInput = document.getElementById('customer-name');
+        const customerContactInput = document.getElementById('customer-contact');
+        const customerPhoneInput = document.getElementById('customer-phone');
+        const customerEmailInput = document.getElementById('customer-email');
+        const cancelFormBtn = document.getElementById('cancel-form-btn');
+        const priceSettingsContainer = document.getElementById('price-settings');
+        const exportCustomersBtn = document.getElementById('export-customers-btn');
+        const importCustomersBtn = document.getElementById('import-customers-btn');
+        const importFileInput = document.getElementById('import-file-input');
 
-        // 1. 初始化增加行功能
+        // 1. 客户数据管理
+        function initCustomerData() {
+            // 从localStorage加载客户数据
+            const savedCustomers = localStorage.getItem('quotationSystemCustomers');
+            if (savedCustomers) {
+                customers = JSON.parse(savedCustomers);
+            } else {
+                customers = [];
+            }
+            
+            // 更新客户选择下拉框
+            updateCustomerSelect();
+            
+            // 更新客户列表
+            renderCustomerList();
+            
+            // 生成价格设置表单
+            generatePriceSettingsForm();
+        }
+        
+        // 保存客户数据到localStorage
+        function saveCustomersToLocalStorage() {
+            localStorage.setItem('quotationSystemCustomers', JSON.stringify(customers));
+        }
+        
+        // 更新客户选择下拉框
+        function updateCustomerSelect() {
+            // 保存当前选中值
+            const currentValue = customerSelect.value;
+            
+            // 清空下拉框
+            customerSelect.innerHTML = '<option value="">选择客户</option>';
+            
+            // 添加客户选项
+            customers.forEach(customer => {
+                const option = document.createElement('option');
+                option.value = customer.id;
+                option.textContent = customer.name;
+                customerSelect.appendChild(option);
+            });
+            
+            // 恢复选中值
+            if (currentValue) {
+                customerSelect.value = currentValue;
+            }
+        }
+        
+        // 渲染客户列表
+        function renderCustomerList() {
+            if (customers.length === 0) {
+                customerList.innerHTML = '<tr><td colspan="4" class="py-4 px-4 text-center text-gray-500">暂无客户数据，请添加客户</td></tr>';
+                return;
+            }
+            
+            customerList.innerHTML = '';
+            
+            customers.forEach(customer => {
+                const row = document.createElement('tr');
+                row.className = 'border-b hover:bg-gray-50 transition-colors';
+                
+                row.innerHTML = `
+                    <td class="py-3 px-4">${customer.name}</td>
+                    <td class="py-3 px-4">${customer.contact || '-'}</td>
+                    <td class="py-3 px-4">${customer.phone || '-'}</td>
+                    <td class="py-3 px-4">
+                        <div class="flex space-x-2">
+                            <button class="edit-customer text-primary hover:text-primary/80 transition-colors" data-id="${customer.id}">
+                                <i class="fa fa-pencil"></i> 编辑
+                            </button>
+                            <button class="delete-customer text-danger hover:text-danger/80 transition-colors" data-id="${customer.id}">
+                                <i class="fa fa-trash"></i> 删除
+                            </button>
+                        </div>
+                    </td>
+                `;
+                
+                customerList.appendChild(row);
+            });
+            
+            // 绑定编辑和删除事件
+            document.querySelectorAll('.edit-customer').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const id = btn.getAttribute('data-id');
+                    editCustomer(id);
+                });
+            });
+            
+            document.querySelectorAll('.delete-customer').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const id = btn.getAttribute('data-id');
+                    if (confirm('确定要删除这个客户吗？')) {
+                        deleteCustomer(id);
+                    }
+                });
+            });
+        }
+        
+        // 生成价格设置表单
+        function generatePriceSettingsForm() {
+            priceSettingsContainer.innerHTML = '';
+            
+            // 获取所有独特的品类
+            const categories = new Set();
+            document.querySelectorAll('.item-row').forEach(row => {
+                // 只获取基础品类（不带序号的）
+                const category = row.dataset.category.split(' ')[0];
+                categories.add(category);
+            });
+            
+            // 为每个品类创建价格设置项
+            categories.forEach(category => {
+                // 找到该品类的默认价格
+                let defaultPrice = 0;
+                const row = document.querySelector(`.item-row[data-category^="${category}"]`);
+                if (row) {
+                    defaultPrice = parseFloat(row.querySelector('.price').value) || 0;
+                }
+                
+                const priceSetting = document.createElement('div');
+                priceSetting.className = 'price-setting-item';
+                priceSetting.innerHTML = `
+                    <label for="price-${category}" class="block text-sm font-medium text-gray-700 mb-1">${category} 单价</label>
+                    <input type="number" step="0.01" min="0" id="price-${category}" 
+                           class="w-full px-3 py-2 border border-gray-300 rounded-md input-focus"
+                           data-category="${category}"
+                           placeholder="默认: ${defaultPrice.toFixed(2)}">
+                `;
+                
+                priceSettingsContainer.appendChild(priceSetting);
+            });
+        }
+        
+        // 添加新客户
+        function addCustomer() {
+            // 重置表单
+            customerForm.reset();
+            customerIdInput.value = '';
+            formTitle.textContent = '添加客户';
+            
+            // 显示表单
+            showCustomerForm();
+        }
+        
+        // 编辑客户
+        function editCustomer(id) {
+            const customer = customers.find(c => c.id === id);
+            if (!customer) return;
+            
+            // 填充表单
+            customerIdInput.value = customer.id;
+            customerNameInput.value = customer.name;
+            customerContactInput.value = customer.contact || '';
+            customerPhoneInput.value = customer.phone || '';
+            customerEmailInput.value = customer.email || '';
+            
+            // 填充价格设置
+            Object.keys(customer.prices || {}).forEach(category => {
+                const input = document.getElementById(`price-${category}`);
+                if (input) {
+                    input.value = customer.prices[category];
+                }
+            });
+            
+            // 显示表单
+            formTitle.textContent = '编辑客户';
+            showCustomerForm();
+        }
+        
+        // 保存客户
+        function saveCustomer(event) {
+            event.preventDefault();
+            
+            const id = customerIdInput.value || generateId();
+            const name = customerNameInput.value.trim();
+            
+            if (!name) {
+                alert('客户名称不能为空');
+                return;
+            }
+            
+            // 收集价格设置
+            const prices = {};
+            document.querySelectorAll('#price-settings input').forEach(input => {
+                const category = input.getAttribute('data-category');
+                const price = parseFloat(input.value);
+                if (!isNaN(price) && price > 0) {
+                    prices[category] = price;
+                }
+            });
+            
+            const customerData = {
+                id,
+                name,
+                contact: customerContactInput.value.trim(),
+                phone: customerPhoneInput.value.trim(),
+                email: customerEmailInput.value.trim(),
+                prices
+            };
+            
+            // 检查是添加还是编辑
+            const existingIndex = customers.findIndex(c => c.id === id);
+            if (existingIndex >= 0) {
+                // 更新现有客户
+                customers[existingIndex] = customerData;
+            } else {
+                // 添加新客户
+                customers.push(customerData);
+            }
+            
+            // 保存到本地存储
+            saveCustomersToLocalStorage();
+            
+            // 更新UI
+            updateCustomerSelect();
+            renderCustomerList();
+            
+            // 隐藏表单
+            hideCustomerForm();
+        }
+        
+        // 删除客户
+        function deleteCustomer(id) {
+            customers = customers.filter(customer => customer.id !== id);
+            
+            // 如果删除的是当前选中的客户，重置选择
+            if (currentCustomerId === id) {
+                customerSelect.value = '';
+                currentCustomerId = null;
+                // 恢复默认单价
+                restoreDefaultPrices();
+            }
+            
+            // 保存到本地存储
+            saveCustomersToLocalStorage();
+            
+            // 更新UI
+            updateCustomerSelect();
+            renderCustomerList();
+        }
+        
+        // 显示客户表单
+        function showCustomerForm() {
+            customerFormContainer.classList.remove('hidden');
+            customerFormContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+        
+        // 隐藏客户表单
+        function hideCustomerForm() {
+            customerFormContainer.classList.add('hidden');
+        }
+        
+        // 2. 客户选择与单价加载
+        function initCustomerSelection() {
+            customerSelect.addEventListener('change', () => {
+                const customerId = customerSelect.value;
+                currentCustomerId = customerId;
+                
+                if (customerId) {
+                    // 加载客户的单价设置
+                    loadCustomerPrices(customerId);
+                } else {
+                    // 恢复默认单价
+                    restoreDefaultPrices();
+                }
+                
+                // 重新计算所有价格
+                recalculateAll();
+            });
+        }
+        
+        // 加载客户的单价设置
+        function loadCustomerPrices(customerId) {
+            const customer = customers.find(c => c.id === customerId);
+            if (!customer || !customer.prices) return;
+            
+            // 应用每个品类的单价
+            Object.keys(customer.prices).forEach(category => {
+                const price = customer.prices[category];
+                // 找到所有该品类的行（包括带序号的）
+                document.querySelectorAll(`.item-row[data-category^="${category}"]`).forEach(row => {
+                    const priceInput = row.querySelector('.price');
+                    if (priceInput) {
+                        priceInput.value = price;
+                        // 触发输入事件以更新计算
+                        priceInput.dispatchEvent(new Event('input'));
+                    }
+                });
+            });
+        }
+        
+        // 恢复默认单价
+        function restoreDefaultPrices() {
+            // 保存当前的品类和价格映射
+            const defaultPrices = {};
+            
+            // 找到每个基础品类的默认价格
+            document.querySelectorAll('.item-row').forEach(row => {
+                const category = row.dataset.category.split(' ')[0];
+                // 只保存第一个出现的品类的价格作为默认值
+                if (!defaultPrices[category]) {
+                    const priceInput = row.querySelector('.price');
+                    defaultPrices[category] = priceInput.value;
+                }
+            });
+            
+            // 应用默认价格到所有行
+            Object.keys(defaultPrices).forEach(category => {
+                const price = defaultPrices[category];
+                document.querySelectorAll(`.item-row[data-category^="${category}"]`).forEach(row => {
+                    const priceInput = row.querySelector('.price');
+                    if (priceInput) {
+                        priceInput.value = price;
+                        // 触发输入事件以更新计算
+                        priceInput.dispatchEvent(new Event('input'));
+                    }
+                });
+            });
+        }
+        
+        // 3. 客户数据导入导出
+        function initImportExport() {
+            // 导出客户数据
+            exportCustomersBtn.addEventListener('click', () => {
+                if (customers.length === 0) {
+                    alert('没有客户数据可导出');
+                    return;
+                }
+                
+                const dataStr = JSON.stringify(customers, null, 2);
+                const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+                
+                const exportFileDefaultName = `客户数据_${new Date().toLocaleDateString().replace(/\//g, '-')}.json`;
+                
+                const linkElement = document.createElement('a');
+                linkElement.setAttribute('href', dataUri);
+                linkElement.setAttribute('download', exportFileDefaultName);
+                linkElement.click();
+            });
+            
+            // 导入客户数据
+            importCustomersBtn.addEventListener('click', () => {
+                importFileInput.click();
+            });
+            
+            importFileInput.addEventListener('change', (event) => {
+                const file = event.target.files[0];
+                if (!file) return;
+                
+                if (file.type !== 'application/json' && !file.name.endsWith('.json')) {
+                    alert('请选择JSON格式的文件');
+                    return;
+                }
+                
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    try {
+                        const importedData = JSON.parse(e.target.result);
+                        
+                        if (!Array.isArray(importedData)) {
+                            alert('导入的数据格式不正确');
+                            return;
+                        }
+                        
+                        // 检查数据结构
+                        const isValid = importedData.every(item => 
+                            typeof item === 'object' && 
+                            item !== null && 
+                            typeof item.id === 'string' && 
+                            typeof item.name === 'string'
+                        );
+                        
+                        if (!isValid) {
+                            alert('导入的数据结构不正确');
+                            return;
+                        }
+                        
+                        // 合并数据（保留现有数据，添加新数据，ID重复的则覆盖）
+                        importedData.forEach(importedCustomer => {
+                            const existingIndex = customers.findIndex(c => c.id === importedCustomer.id);
+                            if (existingIndex >= 0) {
+                                customers[existingIndex] = importedCustomer;
+                            } else {
+                                customers.push(importedCustomer);
+                            }
+                        });
+                        
+                        // 保存并更新UI
+                        saveCustomersToLocalStorage();
+                        updateCustomerSelect();
+                        renderCustomerList();
+                        
+                        alert(`成功导入 ${importedData.length} 个客户数据`);
+                    } catch (error) {
+                        console.error('导入失败', error);
+                        alert('导入失败，请检查文件格式是否正确');
+                    }
+                };
+                reader.readAsText(file);
+                
+                // 重置input值，允许重复选择同一个文件
+                importFileInput.value = '';
+            });
+        }
+        
+        // 4. 模态框控制
+        function initModal() {
+            // 打开模态框
+            manageCustomersBtn.addEventListener('click', () => {
+                customerModal.classList.add('modal-active');
+                customerModalBackdrop.classList.add('modal-active');
+                document.body.style.overflow = 'hidden'; // 防止背景滚动
+            });
+            
+            // 关闭模态框
+            function closeModal() {
+                customerModal.classList.remove('modal-active');
+                customerModalBackdrop.classList.remove('modal-active');
+                document.body.style.overflow = ''; // 恢复滚动
+                hideCustomerForm();
+            }
+            
+            closeModalBtn.addEventListener('click', closeModal);
+            customerModalBackdrop.addEventListener('click', closeModal);
+            
+            // 添加客户按钮
+            addCustomerBtn.addEventListener('click', addCustomer);
+            
+            // 取消表单按钮
+            cancelFormBtn.addEventListener('click', hideCustomerForm);
+            
+            // 表单提交
+            customerForm.addEventListener('submit', saveCustomer);
+        }
+        
+        // 5. 初始化增加行功能
         function initAddRowFeature() {
             // 使用document级别的事件委托，确保动态元素也能触发
             document.addEventListener('click', (e) => {
@@ -981,6 +1539,22 @@
                 // 更新新行的data-category属性，包含序号
                 newRow.dataset.category = `${originalCategory} ${formattedCount}`;
                 
+                // 如果有选中的客户，应用其单价设置
+                if (currentCustomerId) {
+                    const customer = customers.find(c => c.id === currentCustomerId);
+                    if (customer && customer.prices) {
+                        // 只取基础品类（不带序号的）
+                        const baseCategory = originalCategory.split(' ')[0];
+                        const price = customer.prices[baseCategory];
+                        if (price) {
+                            const priceInput = newRow.querySelector('.price');
+                            if (priceInput) {
+                                priceInput.value = price;
+                            }
+                        }
+                    }
+                }
+                
                 // 添加动画类
                 newRow.classList.add('scale-in');
                 
@@ -1000,7 +1574,7 @@
             });
         }
 
-        // 2. 初始化删除行功能
+        // 6. 初始化删除行功能
         function initDeleteRowFeature() {
             document.addEventListener('click', (e) => {
                 const deleteBtn = e.target.closest('.delete-row-btn');
@@ -1131,7 +1705,7 @@
             icon.classList.add('fa-eye-slash');
         }
 
-        // 3. 尺寸选择联动单价
+        // 7. 尺寸选择联动单价
         function bindSizeSelectEvent(select) {
             if (!select) return;
             select.addEventListener('change', () => {
@@ -1145,7 +1719,7 @@
             });
         }
 
-        // 4. 计算过程显示/隐藏功能 - 修复后的实现
+        // 8. 计算过程显示/隐藏功能
         function bindToggleCalculationEvent(button) {
             if (!button) return;
             
@@ -1178,7 +1752,7 @@
             });
         }
 
-        // 5. 单个项目价格计算
+        // 9. 单个项目价格计算
         function calculateItemPrice(row) {
             // 使用data属性明确指定计算类型
             const calcType = row.dataset.calcType || 'area';
@@ -1277,7 +1851,7 @@
             };
         }
 
-        // 6. 计算分类小计
+        // 10. 计算分类小计
         function calculateSectionSubtotals() {
             document.querySelectorAll('section').forEach(section => {
                 const subtotalEl = section.querySelector('.section-subtotal');
@@ -1292,7 +1866,7 @@
             });
         }
 
-        // 7. 计算总价
+        // 11. 计算总价
         function calculateTotalAmount() {
             let total = 0;
             document.querySelectorAll('.section-subtotal').forEach(subtotalEl => {
@@ -1305,7 +1879,7 @@
             return total;
         }
 
-        // 8. 规则显示/隐藏切换
+        // 12. 规则显示/隐藏切换
         function initRuleToggle() {
             toggleRulesBtns.forEach(btn => {
                 btn.addEventListener('click', () => {
@@ -1327,7 +1901,7 @@
             });
         }
 
-        // 9. 面积/价格规则互斥
+        // 13. 面积/价格规则互斥
         function initRuleMutualExclusion() {
             document.querySelectorAll('.min-area-switch').forEach(switchEl => {
                 switchEl.addEventListener('change', () => {
@@ -1348,7 +1922,7 @@
             });
         }
 
-        // 10. 输入值变化时重新计算
+        // 14. 输入值变化时重新计算
         function initInputListener() {
             document.addEventListener('input', (e) => {
                 const target = e.target;
@@ -1365,14 +1939,14 @@
             });
         }
 
-        // 11. 重新计算所有项目
+        // 15. 重新计算所有项目
         function recalculateAll() {
             document.querySelectorAll('.item-row').forEach(row => calculateItemPrice(row));
             calculateSectionSubtotals();
             calculateTotalAmount();
         }
 
-        // 12. 页面滚动时导航栏效果
+        // 16. 页面滚动时导航栏效果
         function initScrollEffect() {
             const header = document.querySelector('header');
             let lastScrollTop = 0;
@@ -1394,8 +1968,20 @@
             });
         }
 
+        // 工具函数：生成唯一ID
+        function generateId() {
+            return Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
+        }
+
         // 初始化所有功能
         function initAllFeatures() {
+            // 客户管理相关初始化
+            initCustomerData();
+            initCustomerSelection();
+            initModal();
+            initImportExport();
+            
+            // 原有功能初始化
             initAddRowFeature();
             initDeleteRowFeature();
             initRuleToggle();
