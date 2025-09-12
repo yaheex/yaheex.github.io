@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>报价计算系统</title>
+    <title>报价、计价、计算系统　　　　　　YaHee, Studio.</title>
     <!-- 外部资源引入 -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
@@ -41,6 +41,9 @@
             .delete-row-btn { @apply text-danger hover:text-danger/80 transition-colors text-sm flex items-center mt-2 cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity; }
             .fade-in { animation: fadeIn 0.3s ease-in-out; }
             .scale-in { animation: scaleIn 0.2s ease-out; }
+            .calculation-wrapper { @apply flex items-center gap-2; }
+            .toggle-calc-btn { @apply text-gray-400 hover:text-primary transition-colors cursor-pointer p-1; }
+            .calculation-hidden { display: none !important; }
         }
 
         @keyframes fadeIn {
@@ -60,12 +63,10 @@
         <div class="container mx-auto px-4 py-5 sm:px-6 lg:px-8">
             <div class="flex flex-wrap justify-between items-center">
                 <h1 class="text-[clamp(1.5rem,3vw,2rem)] font-bold text-primary flex items-center">
-                    <i class="fa fa-calculator mr-3"></i>报价计算系统
+                    <i class="fa fa-calculator mr-3"></i>报价、计价、计算系统
                 </h1>
                 <div class="flex items-center space-x-4 mt-3 sm:mt-0">
-                    <button id="printBtn" class="bg-gray-200 hover:bg-gray-300 text-dark px-4 py-2 rounded-lg transition flex items-center">
-                        <i class="fa fa-print mr-2"></i>打印报价
-                    </button>
+                    <!-- 已移除打印按钮 -->
                 </div>
             </div>
         </div>
@@ -108,7 +109,12 @@
                         </div>
                         <div class="mt-4 pt-4 border-t border-gray-100 flex flex-wrap justify-between">
                             <div class="w-full md:w-2/3 mb-4 md:mb-0">
-                                <div class="text-sm text-gray-500 calculation">计算过程：请输入数量</div>
+                                <div class="calculation-wrapper">
+                                    <button class="toggle-calc-btn" title="显示计算过程">
+                                        <i class="fa fa-eye-slash"></i>
+                                    </button>
+                                    <div class="text-sm text-gray-500 calculation calculation-hidden">计算过程：请输入数量</div>
+                                </div>
                             </div>
                             <div class="w-full md:w-1/3 flex justify-between items-center">
                                 <div class="text-right">
@@ -154,7 +160,12 @@
                         </div>
                         <div class="mt-4 pt-4 border-t border-gray-100 flex flex-wrap justify-between">
                             <div class="w-full md:w-2/3 mb-4 md:mb-0">
-                                <div class="text-sm text-gray-500 calculation">计算过程：请输入数量</div>
+                                <div class="calculation-wrapper">
+                                    <button class="toggle-calc-btn" title="显示计算过程">
+                                        <i class="fa fa-eye-slash"></i>
+                                    </button>
+                                    <div class="text-sm text-gray-500 calculation calculation-hidden">计算过程：请输入数量</div>
+                                </div>
                             </div>
                             <div class="w-full md:w-1/3 flex justify-between items-center">
                                 <div class="text-right">
@@ -201,7 +212,12 @@
                         </div>
                         <div class="mt-4 pt-4 border-t border-gray-100 flex flex-wrap justify-between">
                             <div class="w-full md:w-2/3 mb-4 md:mb-0">
-                                <div class="text-sm text-gray-500 calculation">计算过程：请输入数量</div>
+                                <div class="calculation-wrapper">
+                                    <button class="toggle-calc-btn" title="显示计算过程">
+                                        <i class="fa fa-eye-slash"></i>
+                                    </button>
+                                    <div class="text-sm text-gray-500 calculation calculation-hidden">计算过程：请输入数量</div>
+                                </div>
                             </div>
                             <div class="w-full md:w-1/3 flex justify-between items-center">
                                 <div class="text-right">
@@ -305,7 +321,12 @@
                         </div>
                         <div class="mt-4 pt-4 border-t border-gray-100 flex flex-wrap justify-between">
                             <div class="w-full md:w-2/3 mb-4 md:mb-0">
-                                <div class="text-sm text-gray-500 calculation">计算过程：请输入尺寸和单价</div>
+                                <div class="calculation-wrapper">
+                                    <button class="toggle-calc-btn" title="显示计算过程">
+                                        <i class="fa fa-eye-slash"></i>
+                                    </button>
+                                    <div class="text-sm text-gray-500 calculation calculation-hidden">计算过程：请输入尺寸和单价</div>
+                                </div>
                             </div>
                             <div class="w-full md:w-1/3 flex justify-between items-center">
                                 <div class="text-right">
@@ -348,7 +369,12 @@
                         </div>
                         <div class="mt-4 pt-4 border-t border-gray-100 flex flex-wrap justify-between">
                             <div class="w-full md:w-2/3 mb-4 md:mb-0">
-                                <div class="text-sm text-gray-500 calculation">计算过程：请输入尺寸和单价</div>
+                                <div class="calculation-wrapper">
+                                    <button class="toggle-calc-btn" title="显示计算过程">
+                                        <i class="fa fa-eye-slash"></i>
+                                    </button>
+                                    <div class="text-sm text-gray-500 calculation calculation-hidden">计算过程：请输入尺寸和单价</div>
+                                </div>
                             </div>
                             <div class="w-full md:w-1/3 flex justify-between items-center">
                                 <div class="text-right">
@@ -391,7 +417,12 @@
                         </div>
                         <div class="mt-4 pt-4 border-t border-gray-100 flex flex-wrap justify-between">
                             <div class="w-full md:w-2/3 mb-4 md:mb-0">
-                                <div class="text-sm text-gray-500 calculation">计算过程：请输入尺寸和单价</div>
+                                <div class="calculation-wrapper">
+                                    <button class="toggle-calc-btn" title="显示计算过程">
+                                        <i class="fa fa-eye-slash"></i>
+                                    </button>
+                                    <div class="text-sm text-gray-500 calculation calculation-hidden">计算过程：请输入尺寸和单价</div>
+                                </div>
                             </div>
                             <div class="w-full md:w-1/3 flex justify-between items-center">
                                 <div class="text-right">
@@ -434,7 +465,12 @@
                         </div>
                         <div class="mt-4 pt-4 border-t border-gray-100 flex flex-wrap justify-between">
                             <div class="w-full md:w-2/3 mb-4 md:mb-0">
-                                <div class="text-sm text-gray-500 calculation">计算过程：请输入尺寸和单价</div>
+                                <div class="calculation-wrapper">
+                                    <button class="toggle-calc-btn" title="显示计算过程">
+                                        <i class="fa fa-eye-slash"></i>
+                                    </button>
+                                    <div class="text-sm text-gray-500 calculation calculation-hidden">计算过程：请输入尺寸和单价</div>
+                                </div>
                             </div>
                             <div class="w-full md:w-1/3 flex justify-between items-center">
                                 <div class="text-right">
@@ -538,7 +574,12 @@
                         </div>
                         <div class="mt-4 pt-4 border-t border-gray-100 flex flex-wrap justify-between">
                             <div class="w-full md:w-2/3 mb-4 md:mb-0">
-                                <div class="text-sm text-gray-500 calculation">计算过程：请输入尺寸和单价</div>
+                                <div class="calculation-wrapper">
+                                    <button class="toggle-calc-btn" title="显示计算过程">
+                                        <i class="fa fa-eye-slash"></i>
+                                    </button>
+                                    <div class="text-sm text-gray-500 calculation calculation-hidden">计算过程：请输入尺寸和单价</div>
+                                </div>
                             </div>
                             <div class="w-full md:w-1/3 flex justify-between items-center">
                                 <div class="text-right">
@@ -581,7 +622,12 @@
                         </div>
                         <div class="mt-4 pt-4 border-t border-gray-100 flex flex-wrap justify-between">
                             <div class="w-full md:w-2/3 mb-4 md:mb-0">
-                                <div class="text-sm text-gray-500 calculation">计算过程：请输入尺寸和单价</div>
+                                <div class="calculation-wrapper">
+                                    <button class="toggle-calc-btn" title="显示计算过程">
+                                        <i class="fa fa-eye-slash"></i>
+                                    </button>
+                                    <div class="text-sm text-gray-500 calculation calculation-hidden">计算过程：请输入尺寸和单价</div>
+                                </div>
                             </div>
                             <div class="w-full md:w-1/3 flex justify-between items-center">
                                 <div class="text-right">
@@ -624,7 +670,12 @@
                         </div>
                         <div class="mt-4 pt-4 border-t border-gray-100 flex flex-wrap justify-between">
                             <div class="w-full md:w-2/3 mb-4 md:mb-0">
-                                <div class="text-sm text-gray-500 calculation">计算过程：请输入尺寸和单价</div>
+                                <div class="calculation-wrapper">
+                                    <button class="toggle-calc-btn" title="显示计算过程">
+                                        <i class="fa fa-eye-slash"></i>
+                                    </button>
+                                    <div class="text-sm text-gray-500 calculation calculation-hidden">计算过程：请输入尺寸和单价</div>
+                                </div>
                             </div>
                             <div class="w-full md:w-1/3 flex justify-between items-center">
                                 <div class="text-right">
@@ -672,7 +723,12 @@
                         </div>
                         <div class="mt-4 pt-4 border-t border-gray-100 flex flex-wrap justify-between">
                             <div class="w-full md:w-2/3 mb-4 md:mb-0">
-                                <div class="text-sm text-gray-500 calculation">计算过程：请输入数量</div>
+                                <div class="calculation-wrapper">
+                                    <button class="toggle-calc-btn" title="显示计算过程">
+                                        <i class="fa fa-eye-slash"></i>
+                                    </button>
+                                    <div class="text-sm text-gray-500 calculation calculation-hidden">计算过程：请输入数量</div>
+                                </div>
                             </div>
                             <div class="w-full md:w-1/3 flex justify-between items-center">
                                 <div class="text-right">
@@ -772,7 +828,12 @@
                         </div>
                         <div class="mt-4 pt-4 border-t border-gray-100 flex flex-wrap justify-between">
                             <div class="w-full md:w-2/3 mb-4 md:mb-0">
-                                <div class="text-sm text-gray-500 calculation">计算过程：请输入字的大小和单价</div>
+                                <div class="calculation-wrapper">
+                                    <button class="toggle-calc-btn" title="显示计算过程">
+                                        <i class="fa fa-eye-slash"></i>
+                                    </button>
+                                    <div class="text-sm text-gray-500 calculation calculation-hidden">计算过程：请输入字的大小和单价</div>
+                                </div>
                             </div>
                             <div class="w-full md:w-1/3 flex justify-between items-center">
                                 <div class="text-right">
@@ -811,7 +872,12 @@
                         </div>
                         <div class="mt-4 pt-4 border-t border-gray-100 flex flex-wrap justify-between">
                             <div class="w-full md:w-2/3 mb-4 md:mb-0">
-                                <div class="text-sm text-gray-500 calculation">计算过程：请输入字的大小和单价</div>
+                                <div class="calculation-wrapper">
+                                    <button class="toggle-calc-btn" title="显示计算过程">
+                                        <i class="fa fa-eye-slash"></i>
+                                    </button>
+                                    <div class="text-sm text-gray-500 calculation calculation-hidden">计算过程：请输入字的大小和单价</div>
+                                </div>
                             </div>
                             <div class="w-full md:w-1/3 flex justify-between items-center">
                                 <div class="text-right">
@@ -863,8 +929,7 @@
     <footer class="bg-white border-t mt-12 py-6">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center text-gray-500 text-sm">
-                <p>报价计算系统 &copy; 2024 - 所有权利保留</p>
-                <p class="mt-1">更新日期: 2024年5月（整合所有优化功能）</p>
+                <p>报价、计价、计算系统 &copy; 2024 - 所有权利保留</p>
             </div>
         </div>
     </footer>
@@ -875,12 +940,11 @@
         const categoryRowCount = {};
         
         // DOM元素初始化
-        const printBtn = document.getElementById('printBtn');
         const toggleRulesBtns = document.querySelectorAll('.toggle-rules-btn');
         const itemContainers = document.querySelectorAll('.item-container');
         const totalAmountEl = document.querySelector('.total-amount');
 
-        // 1. 初始化增加行功能（修复第一类增加行失效问题）
+        // 1. 初始化增加行功能
         function initAddRowFeature() {
             // 使用document级别的事件委托，确保动态元素也能触发
             document.addEventListener('click', (e) => {
@@ -925,6 +989,9 @@
                 
                 // 重新绑定尺寸选择联动事件
                 bindSizeSelectEvent(newRow.querySelector('.size'));
+                
+                // 重新绑定计算过程显示/隐藏事件
+                bindToggleCalculationEvent(newRow.querySelector('.toggle-calc-btn'));
                 
                 // 重新计算价格
                 calculateItemPrice(newRow);
@@ -1052,8 +1119,16 @@
                 defaultText = '计算过程：请输入字的大小和单价';
             }
             
-            row.querySelector('.calculation').textContent = defaultText;
+            const calculationEl = row.querySelector('.calculation');
+            calculationEl.textContent = defaultText;
+            calculationEl.classList.add('calculation-hidden'); // 确保隐藏
+            
             row.querySelector('.total-price').textContent = '¥0.00';
+            
+            // 确保眼睛图标状态正确
+            const icon = row.querySelector('.toggle-calc-btn i');
+            icon.classList.remove('fa-eye');
+            icon.classList.add('fa-eye-slash');
         }
 
         // 3. 尺寸选择联动单价
@@ -1070,7 +1145,40 @@
             });
         }
 
-        // 4. 单个项目价格计算
+        // 4. 计算过程显示/隐藏功能 - 修复后的实现
+        function bindToggleCalculationEvent(button) {
+            if (!button) return;
+            
+            // 确保初始状态正确
+            const calculationEl = button.nextElementSibling;
+            const icon = button.querySelector('i');
+            
+            // 移除旧的事件监听器（防止重复绑定）
+            const newButton = button.cloneNode(true);
+            button.parentNode.replaceChild(newButton, button);
+            
+            newButton.addEventListener('click', () => {
+                const calcEl = newButton.nextElementSibling;
+                const ico = newButton.querySelector('i');
+                
+                // 使用classList来判断和切换状态，更可靠
+                if (calcEl.classList.contains('calculation-hidden')) {
+                    // 显示计算过程
+                    calcEl.classList.remove('calculation-hidden');
+                    ico.classList.remove('fa-eye-slash');
+                    ico.classList.add('fa-eye');
+                    newButton.title = "隐藏计算过程";
+                } else {
+                    // 隐藏计算过程
+                    calcEl.classList.add('calculation-hidden');
+                    ico.classList.remove('fa-eye');
+                    ico.classList.add('fa-eye-slash');
+                    newButton.title = "显示计算过程";
+                }
+            });
+        }
+
+        // 5. 单个项目价格计算
         function calculateItemPrice(row) {
             // 使用data属性明确指定计算类型
             const calcType = row.dataset.calcType || 'area';
@@ -1169,7 +1277,7 @@
             };
         }
 
-        // 5. 计算分类小计
+        // 6. 计算分类小计
         function calculateSectionSubtotals() {
             document.querySelectorAll('section').forEach(section => {
                 const subtotalEl = section.querySelector('.section-subtotal');
@@ -1184,7 +1292,7 @@
             });
         }
 
-        // 6. 计算总价
+        // 7. 计算总价
         function calculateTotalAmount() {
             let total = 0;
             document.querySelectorAll('.section-subtotal').forEach(subtotalEl => {
@@ -1197,7 +1305,7 @@
             return total;
         }
 
-        // 7. 规则显示/隐藏切换
+        // 8. 规则显示/隐藏切换
         function initRuleToggle() {
             toggleRulesBtns.forEach(btn => {
                 btn.addEventListener('click', () => {
@@ -1219,7 +1327,7 @@
             });
         }
 
-        // 8. 面积/价格规则互斥
+        // 9. 面积/价格规则互斥
         function initRuleMutualExclusion() {
             document.querySelectorAll('.min-area-switch').forEach(switchEl => {
                 switchEl.addEventListener('change', () => {
@@ -1240,7 +1348,7 @@
             });
         }
 
-        // 9. 输入值变化时重新计算
+        // 10. 输入值变化时重新计算
         function initInputListener() {
             document.addEventListener('input', (e) => {
                 const target = e.target;
@@ -1254,14 +1362,6 @@
                     calculateSectionSubtotals();
                     calculateTotalAmount();
                 }
-            });
-        }
-
-        // 10. 打印功能
-        function initPrintFeature() {
-            printBtn.addEventListener('click', () => {
-                // 打印前可以添加一些样式调整
-                window.print();
             });
         }
 
@@ -1301,11 +1401,13 @@
             initRuleToggle();
             initRuleMutualExclusion();
             initInputListener();
-            initPrintFeature();
             initScrollEffect();
             
             // 绑定初始尺寸选择事件
             document.querySelectorAll('.size').forEach(select => bindSizeSelectEvent(select));
+            
+            // 绑定计算过程显示/隐藏事件
+            document.querySelectorAll('.toggle-calc-btn').forEach(btn => bindToggleCalculationEvent(btn));
             
             // 初始化类别计数
             document.querySelectorAll('.item-row').forEach(row => {
