@@ -37,6 +37,7 @@
             .model-card.disabled { @apply opacity-60 cursor-not-allowed; }
             .card-shadow { @apply shadow-md hover:shadow-lg transition-shadow duration-300; }
             .status-dot { @apply w-2 h-2 rounded-full inline-block mr-1; }
+            .zoomable-image { @apply cursor-zoom-in transition-transform duration-200 hover:scale-105; }
         }
     </style>
 </head>
@@ -51,6 +52,8 @@
                 <div id="creditDisplay" class="flex items-center gap-1 text-sm text-secondary">
                     <i class="fa fa-credit-card text-primary"></i>
                     <span>当前积分: <span id="creditCount">--</span></span>
+                    <span id="totalCredit" class="ml-2 hidden">(总积分: <span id="totalCreditCount">--</span>)</span>
+                    <div id="creditStatus" class="ml-2 hidden"></div>
                 </div>
                 <button id="apiSettingBtn" class="flex items-center gap-1 text-secondary hover:text-primary btn-hover px-3 py-1.5 rounded-lg">
                     <i class="fa fa-key"></i>
@@ -107,19 +110,6 @@
                                         <i class="fa fa-check-circle text-primary"></i>
                                     </div>
                                 </div>
-                                <div class="model-card" data-model="flux">
-                                    <div class="flex justify-between items-start">
-                                        <div>
-                                            <h4 class="font-medium flex items-center">
-                                                Flux
-                                                <span class="status-dot bg-success ml-2"></span>
-                                                <span class="text-xs text-gray-500 ml-1">正常</span>
-                                            </h4>
-                                            <p class="text-xs text-gray-500 mt-1">支持文字、人像、万物高清放大。</p>
-                                        </div>
-                                        <i class="fa fa-check-circle text-primary hidden"></i>
-                                    </div>
-                                </div>
                             </div>
                         </div>
 
@@ -131,29 +121,21 @@
                             <div>
                                 <label for="bananaSubModel" class="block text-sm font-medium text-gray-600 mb-2">Banana 子模型：</label>
                                 <select id="bananaSubModel" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary">
-                                    <option value="nano-banana-pro">banana-pro ~~~ 3000积分/次 - ￥0.15~￥0.3/次</option>
+                                    <option value="nano-banana-pro">banana-pro ~~~ 1800积分/次 - ￥0.09~￥0.18/次</option>
                                     <option value="nano-banana">banana ~~~ 1400积分/次 - ￥0.07~￥0.14/次</option>
-                                    <option value="nano-banana-fast" selected>banana-fast ~~~ 440积分/次 - ￥0.022~￥0.044/次</option>
+                                </select>
+                            </div>
+                            <!-- 新增图像大小选择，仅对pro模型显示 -->
+                            <div id="bananaImageSizeContainer" class="mt-2 hidden">
+                                <label for="bananaImageSize" class="block text-sm font-medium text-gray-600 mb-2">图像大小 (仅Pro模型)：</label>
+                                <select id="bananaImageSize" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary">
+                                    <option value="1K" selected>1K</option>
+                                    <option value="2K">2K</option>
+                                    <option value="4K">4K</option>
                                 </select>
                             </div>
                         </div>
 
-                        <div id="fluxConfig" class="border-l-4 border-primary pl-4 py-2 hidden">
-                            <div>
-                                <label for="fluxSubModel" class="block text-sm font-medium text-gray-600 mb-2">Flux 子模型：</label>
-                                <select id="fluxSubModel" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary">
-                                    <option value="flux-kontext-pro" selected>pro ~~~ 700积分/次 - ￥0.035~￥0.07/次</option>
-                                    <option value="flux-kontext-max">max ~~~ 1400积分/次 - ￥0.07~￥0.14/次</option>
-                                </select>
-                            </div>
-                        </div>
-                        
-                        <div>
-                            <label class="block text-sm font-medium text-gray-600 mb-2">
-                                <input type="checkbox" id="forceResolution" class="mr-2" checked>
-                                YaHee, Studio.   QQ：814032057~
-                            </label>
-                        </div>
                         <div>
                             <label for="imageSize" class="block text-sm font-medium text-gray-600 mb-2">图片比例：</label>
                             <select id="imageSize" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary">
@@ -230,7 +212,7 @@
 							<span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="消除布纹，优化布纹处细节，移除噪点，色块平滑">去布纹</span>
                             <span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="移除背景，改为白色背景">白色背景</span>
                             <span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="透明背景">透明背景(GPT)</span>
-                            <span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="提取主体元素，跳过显示不完整的元素，合理平铺摆放，保持每个元素的比例。如果摆不下，就扩大画布比例，保证每个元素完整的分布展示，不要重叠和遮挡，每个元素只展示一次">拆分元素(banana-pro)</span>
+                            <span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="将图像中的所有设计元素完全分离，转换为独立的平面设计素材。每个元素必须：1) 完全独立无连接；2) 元素间保持至少20像素的最小间距；3) 采用严格的网格化布局排列；4) 所有元素正面朝向，无角度倾斜；5) 按元素类型和大小智能分组排列；6) 浅灰色(#f5f5f5)极简背景，无任何装饰元素；7) 元素排列遵循从左到右、从上到下的阅读顺序；8) 如元素过多则自动创建多行多列布局，确保所有元素完整可见；9) 生成前进行重叠检测，如有重叠风险则自动调整元素位置和大小。">拆分元素(banana-pro)</span>
                             <span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="修复并为这张照片上色">照片上色</span>
                             <span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="改为夜间亮化效果图">改为夜间亮化效果图</span>
                             <span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="发光字">发光字</span>
@@ -311,31 +293,28 @@
                     </h2>
                     <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3" id="casesContainer">
                         <div class="rounded-lg overflow-hidden border border-gray-200 hover:shadow-md transition-shadow cursor-pointer case-item" data-img="https://aisearch.cdn.bcebos.com/fileManager/n-JQzIHmOAQdZItDkjSd3Q/1763617170801z6GbUq.jpg" title="案例1">
-                            <img src="https://aisearch.cdn.bcebos.com/fileManager/n-JQzIHmOAQdZItDkjSd3Q/1763617170801z6GbUq.jpg" alt="案例1" class="w-full h-24 object-cover">
+                            <img src="https://aisearch.cdn.bcebos.com/fileManager/n-JQzIHmOAQdZItDkjSd3Q/1763617170801z6GbUq.jpg" alt="案例1" class="w-full h-24 object-cover zoomable-image">
                         </div>
                         <div class="rounded-lg overflow-hidden border border-gray-200 hover:shadow-md transition-shadow cursor-pointer case-item" data-img="https://aisearch.cdn.bcebos.com/fileManager/n-JQzIHmOAQdZItDkjSd3Q/1763617170808ubntSM.jpg" title="案例2">
-                            <img src="https://aisearch.cdn.bcebos.com/fileManager/n-JQzIHmOAQdZItDkjSd3Q/1763617170808ubntSM.jpg" alt="案例2" class="w-full h-24 object-cover">
+                            <img src="https://aisearch.cdn.bcebos.com/fileManager/n-JQzIHmOAQdZItDkjSd3Q/1763617170808ubntSM.jpg" alt="案例2" class="w-full h-24 object-cover zoomable-image">
                         </div>
                         <div class="rounded-lg overflow-hidden border border-gray-200 hover:shadow-md transition-shadow cursor-pointer case-item" data-img="https://aisearch.cdn.bcebos.com/fileManager/n-JQzIHmOAQdZItDkjSd3Q/17636171708098d5xv1.jpg" title="案例3">
-                            <img src="https://aisearch.cdn.bcebos.com/fileManager/n-JQzIHmOAQdZItDkjSd3Q/17636171708098d5xv1.jpg" alt="案例3" class="w-full h-24 object-cover">
+                            <img src="https://aisearch.cdn.bcebos.com/fileManager/n-JQzIHmOAQdZItDkjSd3Q/17636171708098d5xv1.jpg" alt="案例3" class="w-full h-24 object-cover zoomable-image">
                         </div>
                         <div class="rounded-lg overflow-hidden border border-gray-200 hover:shadow-md transition-shadow cursor-pointer case-item" data-img="https://aisearch.cdn.bcebos.com/fileManager/n-JQzIHmOAQdZItDkjSd3Q/1763617170810zjAXwx.jpg" title="案例4">
-                            <img src="https://aisearch.cdn.bcebos.com/fileManager/n-JQzIHmOAQdZItDkjSd3Q/1763617170810zjAXwx.jpg" alt="案例4" class="w-full h-24 object-cover">
+                            <img src="https://aisearch.cdn.bcebos.com/fileManager/n-JQzIHmOAQdZItDkjSd3Q/1763617170810zjAXwx.jpg" alt="案例4" class="w-full h-24 object-cover zoomable-image">
                         </div>
                         <div class="rounded-lg overflow-hidden border border-gray-200 hover:shadow-md transition-shadow cursor-pointer case-item" data-img="https://aisearch.cdn.bcebos.com/fileManager/n-JQzIHmOAQdZItDkjSd3Q/1763617170812GWectp.jpg" title="案例5">
-                            <img src="https://aisearch.cdn.bcebos.com/fileManager/n-JQzIHmOAQdZItDkjSd3Q/1763617170812GWectp.jpg" alt="案例5" class="w-full h-24 object-cover">
+                            <img src="https://aisearch.cdn.bcebos.com/fileManager/n-JQzIHmOAQdZItDkjSd3Q/1763617170812GWectp.jpg" alt="案例5" class="w-full h-24 object-cover zoomable-image">
                         </div> 
-                        <div class="rounded-lg overflow-hidden border border-gray-200 hover:shadow-md transition-shadow cursor-pointer case-item" data-img="https://aisearch.cdn.bcebos.com/fileManager/n-JQzIHmOAQdZItDkjSd3Q/1763617170813Euc8s6.jpg" title="案例6">
-                            <img src="https://aisearch.cdn.bcebos.com/fileManager/n-JQzIHmOAQdZItDkjSd3Q/1763617170813Euc8s6.jpg" alt="案例6" class="w-full h-24 object-cover">
+                        <div class="rounded-lg overflow-hidden border border-gray-200 hover:shadow-md transition-shadow cursor-pointer case-item" data-img="https://aisearch.cdn.bcebos.com/fileManager/n-JQzIHmOAQdZItDkjSd3Q/176394894500339KVZA.jpg" title="案例6">
+                            <img src="https://aisearch.cdn.bcebos.com/fileManager/n-JQzIHmOAQdZItDkjSd3Q/176394894500339KVZA.jpg" alt="案例6" class="w-full h-24 object-cover zoomable-image">
                         </div>
-                        <div class="rounded-lg overflow-hidden border border-gray-200 hover:shadow-md transition-shadow cursor-pointer case-item" data-img="https://aisearch.cdn.bcebos.com/fileManager/n-JQzIHmOAQdZItDkjSd3Q/1763617170814sNIE8N.jpg" title="案例7">
-                            <img src="https://aisearch.cdn.bcebos.com/fileManager/n-JQzIHmOAQdZItDkjSd3Q/1763617170814sNIE8N.jpg" alt="案例7" class="w-full h-24 object-cover">
+                        <div class="rounded-lg overflow-hidden border border-gray-200 hover:shadow-md transition-shadow cursor-pointer case-item" data-img="https://aisearch.cdn.bcebos.com/fileManager/n-JQzIHmOAQdZItDkjSd3Q/1763948945007deifl_.jpg" title="案例7">
+                            <img src="https://aisearch.cdn.bcebos.com/fileManager/n-JQzIHmOAQdZItDkjSd3Q/1763948945007deifl_.jpg" alt="案例7" class="w-full h-24 object-cover zoomable-image">
                         </div>
-                        <div class="rounded-lg overflow-hidden border border-gray-200 hover:shadow-md transition-shadow cursor-pointer case-item" data-img="https://aisearch.cdn.bcebos.com/fileManager/n-JQzIHmOAQdZItDkjSd3Q/1763617170816vFuguu.jpg" title="案例8">
-                            <img src="https://aisearch.cdn.bcebos.com/fileManager/n-JQzIHmOAQdZItDkjSd3Q/1763617170816vFuguu.jpg" alt="案例8" class="w-full h-24 object-cover">
-                        </div>
-                        <div class="rounded-lg overflow-hidden border border-gray-200 hover:shadow-md transition-shadow cursor-pointer case-item" data-img="https://aisearch.cdn.bcebos.com/fileManager/n-JQzIHmOAQdZItDkjSd3Q/1763718210978aP6ZD2.jpg" title="案例9">
-                            <img src="https://aisearch.cdn.bcebos.com/fileManager/n-JQzIHmOAQdZItDkjSd3Q/1763718210978aP6ZD2.jpg" alt="案例9" class="w-full h-24 object-cover">
+                        <div class="rounded-lg overflow-hidden border border-gray-200 hover:shadow-md transition-shadow cursor-pointer case-item" data-img="https://aisearch.cdn.bcebos.com/fileManager/n-JQzIHmOAQdZItDkjSd3Q/1763718210978aP6ZD2.jpg" title="案例8">
+                            <img src="https://aisearch.cdn.bcebos.com/fileManager/n-JQzIHmOAQdZItDkjSd3Q/1763718210978aP6ZD2.jpg" alt="案例8" class="w-full h-24 object-cover zoomable-image">
                         </div>
                     </div>
                 </div>
@@ -358,14 +337,53 @@
                     <i class="fa fa-times"></i>
                 </button>
             </div>
+            
+            <!-- 积分统计区域 -->
+            <div class="mb-4 p-3 bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg border border-blue-200">
+                <div class="flex justify-between items-center mb-2">
+                    <span class="text-sm font-medium text-gray-700">积分统计</span>
+                    <button id="refreshCredits" class="text-xs bg-primary/10 text-primary px-2 py-1 rounded hover:bg-primary/20 transition-colors">
+                        <i class="fa fa-refresh mr-1"></i>刷新
+                    </button>
+                </div>
+                <div class="grid grid-cols-2 gap-2 text-xs">
+                    <div class="text-center p-2 bg-white rounded border">
+                        <div class="text-gray-500">有效API</div>
+                        <div id="validApiCount" class="font-bold text-primary">0</div>
+                    </div>
+                    <div class="text-center p-2 bg-white rounded border">
+                        <div class="text-gray-500">总积分</div>
+                        <div id="modalTotalCredit" class="font-bold text-success">0</div>
+                    </div>
+                    <div class="text-center p-2 bg-white rounded border">
+                        <div class="text-gray-500">最高积分</div>
+                        <div id="maxCredit" class="font-bold text-warning">0</div>
+                    </div>
+                    <div class="text-center p-2 bg-white rounded border">
+                        <div class="text-gray-500">最低积分</div>
+                        <div id="minCredit" class="font-bold text-danger">0</div>
+                    </div>
+                </div>
+            </div>
+            
             <div class="space-y-4">
+                <!-- 批量操作区域 -->
+                <div class="border-b border-gray-200 pb-4">
+                    <label class="block text-sm font-medium text-gray-600 mb-2">批量操作</label>
+                    <div class="flex gap-2">
+                        <button id="batchAddBtn" class="flex-1 bg-gray-100 text-gray-700 font-medium py-2 px-4 rounded-lg btn-hover">
+                            <i class="fa fa-plus mr-2"></i>批量添加
+                        </button>
+                        <button id="batchExportBtn" class="flex-1 bg-gray-100 text-gray-700 font-medium py-2 px-4 rounded-lg btn-hover">
+                            <i class="fa fa-download mr-2"></i>批量导出
+                        </button>
+                    </div>
+                </div>
+                
                 <!-- 批量添加 API Key 区域 -->
                 <div class="border-b border-gray-200 pb-4">
                     <label class="block text-sm font-medium text-gray-600 mb-2">批量添加 API Key（每行一个）</label>
                     <textarea id="batchApiKeys" rows="3" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary resize-none" placeholder="请输入多个 API Key，每行一个"></textarea>
-                    <button id="batchAddBtn" class="mt-2 w-full bg-gray-100 text-gray-700 font-medium py-2 px-4 rounded-lg btn-hover">
-                        <i class="fa fa-plus mr-2"></i>批量添加
-                    </button>
                 </div>
                 
                 <div id="apiKeyList" class="max-h-60 overflow-y-auto">
@@ -394,6 +412,8 @@
     </div>
 
     <script>
+        const BASE_URL = 'https://grsai.dakka.com.cn';
+        
         const appState = {
             uploadedImages: [],
             selectedTags: new Set(),
@@ -402,15 +422,17 @@
             apiKeys: JSON.parse(localStorage.getItem('apiKeys')) || [{ key: '', credits: 0 }],
             selectedApiKeyIndex: 0,
             selectedModel: 'banana',
-            selectedBananaSubModel: 'nano-banana-fast',
+            selectedBananaSubModel: 'nano-banana',
             historyPage: 1,
             historyPageSize: 8,
             maxCredit: 10000,
             modelStatus: {
                 gpt: { status: true, error: '' },
-                banana: { status: true, error: '' },
-                flux: { status: true, error: '' }
-            }
+                banana: { status: true, error: '' }
+            },
+            totalCredits: 0,
+            validApiCount: 0,
+            modelStatusCheckInterval: null
         };
 
         const elements = {
@@ -426,9 +448,8 @@
             gptConfig: document.getElementById('gptConfig'),
             bananaConfig: document.getElementById('bananaConfig'),
             bananaSubModel: document.getElementById('bananaSubModel'),
-            fluxConfig: document.getElementById('fluxConfig'),
-            fluxSubModel: document.getElementById('fluxSubModel'),
-            forceResolution: document.getElementById('forceResolution'),
+            bananaImageSizeContainer: document.getElementById('bananaImageSizeContainer'),
+            bananaImageSize: document.getElementById('bananaImageSize'),
             imageSize: document.getElementById('imageSize'),
             generateBtn: document.getElementById('generateBtn'),
             previewResult: document.getElementById('previewResult'),
@@ -452,8 +473,111 @@
             closePreviewModal: document.getElementById('closePreviewModal'),
             previewModalImg: document.getElementById('previewModalImg'),
             batchApiKeys: document.getElementById('batchApiKeys'),
-            batchAddBtn: document.getElementById('batchAddBtn')
+            batchAddBtn: document.getElementById('batchAddBtn'),
+            batchExportBtn: document.getElementById('batchExportBtn'),
+            totalCredit: document.getElementById('totalCredit'),
+            totalCreditCount: document.getElementById('totalCreditCount'),
+            creditStatus: document.getElementById('creditStatus'),
+            validApiCount: document.getElementById('validApiCount'),
+            modalTotalCredit: document.getElementById('modalTotalCredit'),
+            maxCredit: document.getElementById('maxCredit'),
+            minCredit: document.getElementById('minCredit'),
+            refreshCredits: document.getElementById('refreshCredits')
         };
+
+        // 模型状态检查相关函数
+        async function checkModelStatus(modelName) {
+            try {
+                const response = await fetch(`${BASE_URL}/client/common/getModelStatus?model=${modelName}`);
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.code === 0) {
+                        appState.modelStatus[modelName] = data.data;
+                        updateModelStatusUI(modelName, data.data);
+                        return data.data;
+                    }
+                }
+                // 如果请求失败，设置默认状态为异常
+                appState.modelStatus[modelName] = { status: false, error: '状态检查失败' };
+                updateModelStatusUI(modelName, { status: false, error: '状态检查失败' });
+            } catch (error) {
+                console.error(`检查模型 ${modelName} 状态失败:`, error);
+                appState.modelStatus[modelName] = { status: false, error: '网络错误' };
+                updateModelStatusUI(modelName, { status: false, error: '网络错误' });
+            }
+        }
+
+        async function checkAllModelStatus() {
+            const models = ['sora-image', 'nano-banana-pro'];
+            for (const model of models) {
+                await checkModelStatus(model);
+            }
+        }
+
+        function updateModelStatusUI(modelName, statusData) {
+            const modelCard = document.querySelector(`.model-card[data-model="${modelName}"]`);
+            if (!modelCard) return;
+            
+            const statusDot = modelCard.querySelector('.status-dot');
+            const statusText = modelCard.querySelector('.text-xs.text-gray-500');
+            
+            if (statusData.status) {
+                // 模型正常
+                statusDot.className = 'status-dot bg-success';
+                statusText.textContent = '正常';
+                modelCard.classList.remove('disabled');
+                
+                // 如果当前选中的模型恢复正常，确保可以点击
+                if (modelName === appState.selectedModel) {
+                    modelCard.classList.add('active');
+                    modelCard.querySelector('.fa-check-circle').classList.remove('hidden');
+                }
+            } else {
+                // 模型异常
+                statusDot.className = 'status-dot bg-danger';
+                statusText.textContent = statusData.error || '异常';
+                modelCard.classList.add('disabled');
+                
+                // 如果当前选中的模型异常，自动切换到其他可用模型
+                if (modelName === appState.selectedModel) {
+                    switchToAvailableModel();
+                }
+            }
+        }
+
+        function switchToAvailableModel() {
+            const models = ['sora-image', 'nano-banana-pro'];
+            const availableModel = models.find(model => 
+                appState.modelStatus[model] && appState.modelStatus[model].status
+            );
+            
+            if (availableModel && availableModel !== appState.selectedModel) {
+                // 自动切换到可用的模型
+                const modelCard = document.querySelector(`.model-card[data-model="${availableModel}"]`);
+                if (modelCard && !modelCard.classList.contains('disabled')) {
+                    modelCard.click(); // 触发点击事件来切换模型
+                    showToast(`模型 ${appState.selectedModel} 异常，已自动切换到 ${availableModel}`, 'warning');
+                }
+            } else if (!availableModel) {
+                // 所有模型都不可用
+                showToast('所有模型当前都不可用，请稍后再试', 'error');
+                elements.generateBtn.disabled = true;
+            }
+        }
+
+        function startModelStatusPolling() {
+            // 每2分钟检查一次模型状态
+            appState.modelStatusCheckInterval = setInterval(() => {
+                checkAllModelStatus();
+            }, 1222 * 60 * 1000);
+        }
+
+        function stopModelStatusPolling() {
+            if (appState.modelStatusCheckInterval) {
+                clearInterval(appState.modelStatusCheckInterval);
+                appState.modelStatusCheckInterval = null;
+            }
+        }
 
         function init() {
             renderApiKeyList();
@@ -462,10 +586,15 @@
             bindEvents();
             updateModelSelection(appState.selectedModel);
             updateCreditDisplay();
+            updateCreditStatistics();
             
             if (appState.apiKeys.length > 0 && appState.apiKeys[0].key) {
                 fetchAllApiCredits();
             }
+            
+            // 添加模型状态检查
+            checkAllModelStatus();
+            startModelStatusPolling();
         }
 
         function bindEvents() {
@@ -494,6 +623,11 @@
             modelCards.forEach(card => {
                 card.addEventListener('click', function() {
                     const modelName = this.dataset.model;
+                    if (this.classList.contains('disabled')) {
+                        const status = appState.modelStatus[modelName];
+                        showToast(`模型 ${modelName} 当前不可用: ${status.error}`, 'warning');
+                        return;
+                    }
                     if (this.classList.contains('active')) return;
                     modelCards.forEach(c => {
                         c.classList.remove('active');
@@ -508,6 +642,7 @@
             
             elements.bananaSubModel.addEventListener('change', function() {
                 appState.selectedBananaSubModel = this.value;
+                updateBananaImageSizeVisibility();
             });
 
             elements.generateBtn.addEventListener('click', generateImage);
@@ -571,13 +706,15 @@
                 }
             });
 
-            document.querySelectorAll('.case-item').forEach(item => {
-                item.addEventListener('click', function() {
-                    const imgSrc = this.getAttribute('data-img');
+            // 为所有可点击放大的图片添加事件监听
+            document.addEventListener('click', function(e) {
+                // 检查是否点击了可放大的图片
+                if (e.target.classList.contains('zoomable-image')) {
+                    const imgSrc = e.target.src;
                     elements.previewModalImg.src = imgSrc;
                     elements.imagePreviewModal.classList.remove('hidden');
                     document.body.style.overflow = 'hidden';
-                });
+                }
             });
 
             elements.closePreviewModal.addEventListener('click', () => {
@@ -594,6 +731,54 @@
 
             // 批量添加 API Key 功能
             elements.batchAddBtn.addEventListener('click', batchAddApiKeys);
+            
+            // 批量导出 API Key 功能
+            elements.batchExportBtn.addEventListener('click', batchExportApiKeys);
+            
+            // 刷新积分按钮
+            elements.refreshCredits.addEventListener('click', fetchAllApiCredits);
+            
+            // 页面卸载时停止轮询
+            window.addEventListener('beforeunload', stopModelStatusPolling);
+        }
+
+        function updateBananaImageSizeVisibility() {
+            // 只有当选择banana-pro时才显示图像大小选项
+            if (appState.selectedBananaSubModel === 'nano-banana-pro') {
+                elements.bananaImageSizeContainer.classList.remove('hidden');
+            } else {
+                elements.bananaImageSizeContainer.classList.add('hidden');
+            }
+        }
+
+        function batchExportApiKeys() {
+            // 过滤掉空的和无效的API Key
+            const validApiKeys = appState.apiKeys
+                .filter(api => api.key && api.key.startsWith('sk-'))
+                .map(api => api.key);
+            
+            if (validApiKeys.length === 0) {
+                showToast('没有有效的API Key可以导出', 'warning');
+                return;
+            }
+            
+            // 创建纯API Key内容，每行一个
+            const exportContent = validApiKeys.join('\n');
+            
+            // 创建Blob对象并下载
+            const blob = new Blob([exportContent], { type: 'text/plain;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            const timestamp = new Date().toISOString().slice(0, 19).replace(/[:.]/g, '-');
+            
+            a.href = url;
+            a.download = `yahee-api-keys-${timestamp}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            showToast(`成功导出 ${validApiKeys.length} 个API Key`, 'success');
         }
 
         function batchAddApiKeys() {
@@ -694,6 +879,7 @@
             elements.apiModal.classList.add('hidden');
             showToast('API Key 已保存');
             fetchAllApiCredits();
+            updateCreditStatistics();
         }
 
         async function fetchAllApiCredits() {
@@ -701,7 +887,7 @@
                 const apiKey = appState.apiKeys[i];
                 if (apiKey.key) {
                     try {
-                        const response = await fetch(`https://grsai.dakka.com.cn/client/common/getCredits?apikey=${apiKey.key}`);
+                        const response = await fetch(`${BASE_URL}/client/common/getCredits?apikey=${apiKey.key}`);
                         if (response.ok) {
                             const data = await response.json();
                             if (data.code === 0 && data.data) {
@@ -715,6 +901,7 @@
             }
             filterLowCreditKeys();
             updateCreditDisplay();
+            updateCreditStatistics();
             renderApiKeyList();
             localStorage.setItem('apiKeys', JSON.stringify(appState.apiKeys));
         }
@@ -732,22 +919,87 @@
             }
         }
 
+        function updateCreditStatistics() {
+            const validKeys = appState.apiKeys.filter(api => api.key && api.key.startsWith('sk-'));
+            appState.validApiCount = validKeys.length;
+            
+            if (validKeys.length > 0) {
+                const credits = validKeys.map(api => api.credits || 0);
+                appState.totalCredits = credits.reduce((sum, credit) => sum + credit, 0);
+                const maxCredit = Math.max(...credits);
+                const minCredit = Math.min(...credits);
+                
+                // 更新模态框统计
+                elements.validApiCount.textContent = appState.validApiCount;
+                elements.modalTotalCredit.textContent = appState.totalCredits;
+                elements.maxCredit.textContent = maxCredit;
+                elements.minCredit.textContent = minCredit;
+                
+                // 更新顶部总积分显示
+                elements.totalCreditCount.textContent = appState.totalCredits;
+                elements.totalCredit.classList.remove('hidden');
+                
+                // 更新视觉提示
+                updateCreditVisualHint();
+            } else {
+                // 没有有效API Key时的显示
+                elements.validApiCount.textContent = '0';
+                elements.modalTotalCredit.textContent = '0';
+                elements.maxCredit.textContent = '0';
+                elements.minCredit.textContent = '0';
+                elements.totalCredit.classList.add('hidden');
+                elements.creditStatus.innerHTML = '';
+            }
+        }
+        
+        function updateCreditVisualHint() {
+            const currentKey = appState.apiKeys[appState.selectedApiKeyIndex];
+            const currentCredit = currentKey.credits || 0;
+            
+            let statusIcon = '';
+            let statusColor = '';
+            let statusText = '';
+            
+            if (currentCredit >= 5000) {
+                statusIcon = 'fa-check-circle';
+                statusColor = 'text-success';
+                statusText = '积分充足';
+            } else if (currentCredit >= 1000) {
+                statusIcon = 'fa-info-circle';
+                statusColor = 'text-warning';
+                statusText = '积分正常';
+            } else if (currentCredit >= 400) {
+                statusIcon = 'fa-exclamation-triangle';
+                statusColor = 'text-warning';
+                statusText = '积分较低';
+            } else {
+                statusIcon = 'fa-times-circle';
+                statusColor = 'text-danger';
+                statusText = '积分不足';
+            }
+            
+            elements.creditStatus.innerHTML = `
+                <i class="fa ${statusIcon} ${statusColor} mr-1"></i>
+                <span class="${statusColor} text-xs">${statusText}</span>
+            `;
+            elements.creditStatus.classList.remove('hidden');
+        }
+
         function updateCreditDisplay() {
             const currentKey = appState.apiKeys[appState.selectedApiKeyIndex];
             elements.creditCount.textContent = currentKey.credits || '--';
+            updateCreditVisualHint();
         }
 
         function updateModelSelection(modelName) {
             elements.gptConfig.classList.add('hidden');
             elements.bananaConfig.classList.add('hidden');
-            elements.fluxConfig.classList.add('hidden');
 
             if (modelName === 'gpt') {
                 elements.gptConfig.classList.remove('hidden');
             } else if (modelName === 'banana') {
                 elements.bananaConfig.classList.remove('hidden');
-            } else if (modelName === 'flux') {
-                elements.fluxConfig.classList.remove('hidden');
+                updateBananaImageSizeVisibility();
             }
         }
 
@@ -767,7 +1019,7 @@
                     const previewItem = document.createElement('div');
                     previewItem.className = 'relative rounded overflow-hidden';
                     previewItem.innerHTML = `
-                        <img src="${imageUrl}" alt="预览图" class="w-full h-20 object-cover">
+                        <img src="${imageUrl}" alt="预览图" class="w-full h-20 object-cover zoomable-image">
                         <button class="absolute top-1 right-1 bg-danger/80 text-white rounded-full w-5 h-5 flex items-center justify-center hover:bg-danger" data-url="${imageUrl}">
                             <i class="fa fa-times text-xs"></i>
                         </button>
@@ -845,8 +1097,6 @@
             let modelName = appState.selectedModel;
             if (modelName === 'banana') {
                 modelName += ` (${appState.selectedBananaSubModel})`;
-            } else if (modelName === 'flux') {
-                modelName += ` (${elements.fluxSubModel.value})`;
             } else if (modelName === 'gpt') {
                  modelName += ` (sora-image)`;
             }
@@ -879,7 +1129,7 @@
                 }
 
                 try {
-                    const response = await fetch('https://grsai.dakka.com.cn/v1/draw/result', {
+                    const response = await fetch(`${BASE_URL}/v1/draw/result`, {
                         method: 'POST',
                         headers: { 
                             'Content-Type': 'application/json',
@@ -932,7 +1182,7 @@
             }
             
             // 超时后，提供详细的手动查询信息
-            const manualQueryCmd = `curl -X POST https://grsai.dakka.com.cn/v1/draw/result -H "Content-Type: application/json" -H "Authorization: Bearer ${apiKey}" -d '{"id": "${taskId}"}'`;
+            const manualQueryCmd = `curl -X POST ${BASE_URL}/v1/draw/result -H "Content-Type: application/json" -H "Authorization: Bearer ${apiKey}" -d '{"id": "${taskId}"}'`;
             
             throw new Error(
                 `任务超时。请稍后使用任务ID手动查询结果。\n\n` +
@@ -987,7 +1237,12 @@
 
             try {
                 const isGPTModel = appState.selectedModel === 'gpt';
-                const isFluxModel = appState.selectedModel === 'flux';
+                const isBananaModel = appState.selectedModel === 'banana';
+
+                // 直接使用用户选择的比例，不再强制使用auto
+                const actualSize = elements.imageSize.value;
+                
+                console.log('使用的图片比例:', actualSize);
 
                 const requestData = {
                     prompt: prompt,
@@ -1000,20 +1255,28 @@
                 
                 let apiUrl;
                 if (isGPTModel) {
-                    apiUrl = 'https://grsai.dakka.com.cn/v1/draw/completions';
+                    apiUrl = `${BASE_URL}/v1/draw/completions`;
                     requestData.model = 'sora-image';
-                    requestData.size = elements.forceResolution.checked ? 'auto' : elements.imageSize.value;
+                    requestData.size = actualSize; // 使用用户选择的比例
                     requestData.variants = 1;
                     requestData.webHook = "-1";
-                } else if (isFluxModel) {
-                    apiUrl = 'https://grsai.dakka.com.cn/v1/draw/flux';
-                    requestData.model = elements.fluxSubModel.value;
-                    requestData.aspectRatio = elements.forceResolution.checked ? 'auto' : elements.imageSize.value;
-                } else {
-                    apiUrl = 'https://grsai.dakka.com.cn/v1/draw/nano-banana';
+                } else if (isBananaModel) {
+                    // 更新Banana模型请求参数以支持Gemini官方接口格式
+                    apiUrl = `${BASE_URL}/v1/draw/nano-banana`;
                     requestData.model = appState.selectedBananaSubModel;
-                    requestData.aspectRatio = elements.forceResolution.checked ? 'auto' : elements.imageSize.value;
+                    requestData.aspectRatio = actualSize; // 使用用户选择的比例
+                    requestData.shutProgress = false;
+                    
+                    // 只有pro模型支持imageSize参数
+                    if (appState.selectedBananaSubModel === 'nano-banana-pro') {
+                        requestData.imageSize = elements.bananaImageSize.value;
+                    }
+                    
+                    // 使用webHook参数为"-1"以支持轮询方式获取结果
+                    requestData.webHook = "-1";
                 }
+
+                console.log('发送的请求数据:', JSON.stringify(requestData, null, 2));
 
                 const response = await fetch(apiUrl, {
                     method: 'POST',
@@ -1026,10 +1289,11 @@
 
                 let resultData = null;
 
-                if (isGPTModel) {
+                if (isGPTModel || isBananaModel) {
+                    // GPT和Banana模型都使用轮询方式
                     if (!response.ok) {
                         const errorText = await response.text();
-                        console.error('GPT API 请求失败:', errorText);
+                        console.error('API 请求失败:', errorText);
                         throw new Error(`请求失败: ${response.status} ${response.statusText}`);
                     }
                     const initialResponse = await response.json();
@@ -1038,74 +1302,11 @@
                         showToast(`任务已提交，ID: ${taskId}，开始轮询结果...`, 'info');
                         resultData = await pollForResult(taskId, apiKey);
                     } else {
-                        throw new Error(`GPT API 未能返回任务ID: ${initialResponse.msg || '未知错误'}`);
-                    }
-                } else {
-                    if (!response.ok) {
-                        const errorText = await response.text();
-                        console.error('流式API请求失败:', errorText);
-                        throw new Error(`请求失败: ${response.status} ${response.statusText}`);
-                    }
-                    if (!response.body) {
-                        throw new Error('服务器不支持流式响应');
-                    }
-                    const reader = response.body.getReader();
-                    const decoder = new TextDecoder();
-                    let fullResponseText = '';
-
-                    while (true) {
-                        const { done, value } = await reader.read();
-                        if (done) break;
-                        const chunk = decoder.decode(value, { stream: true });
-                        fullResponseText += chunk;
-                        
-                        const lines = chunk.split('\n').filter(line => line.trim());
-                        for (const line of lines) {
-                            try {
-                                let data;
-                                if (line.startsWith('data: ')) {
-                                    data = JSON.parse(line.slice(6));
-                                } else {
-                                    data = JSON.parse(line);
-                                }
-                                
-                                if (data.code === -1 && data.msg) {
-                                    throw new Error(`API错误: ${data.msg}`);
-                                }
-                                
-                                if (data.progress !== undefined) {
-                                    updateProgressUI(data.progress);
-                                }
-                                if (data.status === 'succeeded') {
-                                    resultData = data;
-                                    break;
-                                } else if (data.status === 'failed') {
-                                    throw new Error(`生成失败: ${data.failure_reason || data.error || '未知错误'}`);
-                                }
-                            } catch (e) {
-                                console.warn('解析流式数据失败，跳过:', line, e);
-                            }
-                        }
-                        if (resultData) break;
-                    }
-                    if (!resultData) {
-                        console.warn('流式响应未找到明确的成功信号，尝试解析完整响应:', fullResponseText);
-                        try {
-                            const fullData = JSON.parse(fullResponseText);
-                            if (fullData.code === -1 && fullData.msg) {
-                                throw new Error(`API错误: ${fullData.msg}`);
-                            }
-                            if (fullData.url || (fullData.results && fullData.results.length > 0)) {
-                                resultData = fullData;
-                            } else {
-                               throw new Error('流式响应未包含有效结果');
-                            }
-                        } catch (e) {
-                            throw new Error('流式响应解析失败或不完整。' + (e.message ? ' ' + e.message : ''));
-                        }
+                        throw new Error(`API 未能返回任务ID: ${initialResponse.msg || '未知错误'}`);
                     }
                 }
                 
+                console.log('生成结果:', resultData);
                 handleSuccessfulResult(resultData, currentApiKeyIndex);
 
             } catch (error) {
@@ -1134,7 +1335,7 @@
             const imageUrl = appState.generatedImages[0].url;
             
             elements.previewResult.innerHTML = `
-                <img src="${imageUrl}" alt="生成结果" class="max-w-full max-h-[300px] object-contain rounded-lg preview-shadow">
+                <img src="${imageUrl}" alt="生成结果" class="max-w-full max-h-[300px] object-contain rounded-lg preview-shadow zoomable-image">
             `;
             elements.resultActions.classList.remove('hidden');
             
@@ -1152,18 +1353,11 @@
             switch(model) {
                 case 'gpt':
                     return 400; // GPT模型消耗400积分
-                case 'flux':
-                    // Flux模型根据子模型消耗不同积分
-                    const fluxSubModel = elements.fluxSubModel.value;
-                    if (fluxSubModel === 'flux-kontext-pro') return 700;
-                    if (fluxSubModel === 'flux-kontext-max') return 1400;
-                    return 700; // 默认使用pro的积分
                 case 'banana':
                     // Banana模型根据子模型消耗不同积分
                     if (appState.selectedBananaSubModel === 'nano-banana-pro') return 3000;
                     if (appState.selectedBananaSubModel === 'nano-banana') return 1400;
-                    if (appState.selectedBananaSubModel === 'nano-banana-fast') return 440;
-                    return 440; // 默认使用fast的积分
+                    return 1400; // 默认使用banana的积分
                 default:
                     return 10;
             }
@@ -1173,6 +1367,7 @@
             const cost = getModelCost(model);
             appState.apiKeys[apiKeyIndex].credits = Math.max(0, appState.apiKeys[apiKeyIndex].credits - cost);
             updateCreditDisplay();
+            updateCreditStatistics();
             localStorage.setItem('apiKeys', JSON.stringify(appState.apiKeys));
         }
 
@@ -1211,7 +1406,7 @@
                 const historyItem = document.createElement('div');
                 historyItem.className = 'relative rounded-lg overflow-hidden border border-gray-200 hover:shadow-md transition-shadow';
                 historyItem.innerHTML = `
-                    <img src="${item.url}" alt="历史记录 ${index + 1}" class="w-full h-16 object-cover">
+                    <img src="${item.url}" alt="历史记录 ${index + 1}" class="w-full h-16 object-cover zoomable-image">
                     <div class="absolute inset-0 bg-black/50 opacity-0 hover:opacity-100 transition-opacity flex items-center justify-center gap-1">
                         <button class="view-history bg-white/90 text-dark p-1 rounded-full hover:bg-white" data-item='${JSON.stringify(item)}'>
                             <i class="fa fa-eye text-xs"></i>
@@ -1224,7 +1419,7 @@
                 historyItem.querySelector('.view-history').addEventListener('click', (e) => {
                     const item = JSON.parse(e.currentTarget.dataset.item);
                     elements.previewResult.innerHTML = `
-                        <img src="${item.url}" alt="历史记录" class="max-w-full max-h-[300px] object-contain rounded-lg preview-shadow">
+                        <img src="${item.url}" alt="历史记录" class="max-w-full max-h-[300px] object-contain rounded-lg preview-shadow zoomable-image">
                     `;
                     appState.generatedImages = [{ url: item.url }];
                     elements.resultActions.classList.remove('hidden');
