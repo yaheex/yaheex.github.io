@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>万物皆可AI</title>
+    <title>万物皆可AI - 智能图像生成</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script>
         tailwind.config = {
             theme: {
@@ -49,6 +49,18 @@
                 70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(139, 92, 246, 0); }
                 100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(139, 92, 246, 0); }
             }
+            .gradient-bg {
+                background: linear-gradient(135deg, #8B5CF6 0%, #3B82F6 100%);
+            }
+            .api-key-active {
+                @apply border-2 border-success bg-success/5;
+            }
+            .upload-progress {
+                @apply w-full bg-gray-200 rounded-full h-1.5;
+            }
+            .upload-progress-bar {
+                @apply bg-primary h-1.5 rounded-full transition-all duration-300;
+            }
         }
     </style>
 </head>
@@ -62,8 +74,8 @@
             <div class="flex items-center gap-4">
                 <div id="creditDisplay" class="flex items-center gap-1 text-sm text-secondary">
                     <i class="fa fa-credit-card text-primary"></i>
-                    <span>当前积分: <span id="creditCount">--</span></span>
-                    <span id="totalCredit" class="ml-2">(总积分: <span id="totalCreditCount">--</span>)</span>
+                    <span>当前积分: <span id="creditCount" class="font-bold">--</span></span>
+                    <span id="totalCredit" class="ml-2">(总积分: <span id="totalCreditCount" class="font-bold">--</span>)</span>
                     <div id="creditStatus" class="ml-2 hidden"></div>
                 </div>
                 <button id="apiSettingBtn" class="flex items-center gap-1 text-secondary hover:text-primary btn-hover px-3 py-1.5 rounded-lg">
@@ -78,9 +90,6 @@
                     <i class="fa fa-bullhorn"></i>
                     <span class="hidden sm:inline">广告报价</span>
                 </a>
-                <div class="memory-indicator hidden" id="memoryIndicator">
-                    <i class="fa fa-microchip"></i> 内存: <span id="memoryUsage">--</span>
-                </div>
             </div>
         </div>
     </header>
@@ -157,14 +166,14 @@
                             <div>
                                 <label for="bananaSubModel" class="block text-sm font-medium text-gray-600 mb-2">Banana 子模型：</label>
                                 <select id="bananaSubModel" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary">
-                                    <option value="nano-banana-pro">banana-pro ~~~ 1800积分/次 - ￥0.09~￥0.18/次</option>
-									<option value="nano-banana-fast">banana-fast ~~~ 440/次 - ￥0.022~￥0.044/次</option>
+                                    <option value="nano-banana-fast">banana-fast ~~~ 440/次 - ￥0.022~￥0.044/次</option>
                                     <option value="nano-banana">banana ~~~ 1400积分/次 - ￥0.07~￥0.14/次</option>
+                                    <option value="nano-banana-pro">banana-pro ~~~ 1800积分/次 - ￥0.09~￥0.18/次</option>
                                 </select>
                             </div>
-                            <!-- 新增图像大小选择，仅对pro模型显示 -->
-                            <div id="bananaImageSizeContainer" class="mt-2">
-                                <label for="bananaImageSize" class="block text-sm font-medium text-gray-600 mb-2">图像大小 (仅Pro模型)：</label>
+                            <!-- 图像大小选择，仅对pro模型显示 -->
+                            <div id="bananaImageSizeContainer" class="mt-2 hidden">
+                                <label for="bananaImageSize" class="block text-sm font-medium text-gray-600 mb-2">图像分辨率 (仅Pro模型)：</label>
                                 <select id="bananaImageSize" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary">
                                     <option value="1K" selected>1K</option>
                                     <option value="2K">2K</option>
@@ -185,11 +194,12 @@
                                 <option value="4:3">4:3（传统电视）</option>
                                 <option value="3:4">3:4（竖屏照片）</option>
                                 <option value="5:4">5:4（打印照片）</option>
+                                <option value="4:5">4:5（竖屏照片）</option>
                                 <option value="21:9">21:9（电影宽屏）</option>
                             </select>
                         </div>
 
-                        <button id="generateBtn" class="w-full bg-primary text-white font-medium py-2.5 px-4 rounded-lg btn-hover flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
+                        <button id="generateBtn" class="w-full gradient-bg text-white font-medium py-2.5 px-4 rounded-lg btn-hover flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
                             <i class="fa fa-magic"></i>
                             <span>开始生成</span>
                         </button>
@@ -202,17 +212,45 @@
                         <i class="fa fa-upload text-primary"></i>
                         上传参考图片
                     </h2>
-                    <div id="uploadArea" class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-primary transition-colors cursor-pointer bg-gray-50">
-                        <input type="file" id="imageUpload" accept="image/*" multiple class="hidden">
-                        <i class="fa fa-picture-o text-4xl text-gray-400 mb-3"></i>
-                        <p class="text-secondary mb-2">点击或拖拽图片至此处上传</p>
-                        <p class="text-xs text-gray-500">支持JPG、PNG格式，最多上传5张</p>
+                    
+                    <!-- 图床上传区域 -->
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-600 mb-2">上传图片到图床：</label>
+                        <div id="uploadArea" class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-primary transition-colors cursor-pointer bg-gray-50">
+                            <input type="file" id="imageUpload" accept="image/*" multiple class="hidden">
+                            <i class="fa fa-cloud-upload text-4xl text-gray-400 mb-3"></i>
+                            <p class="text-secondary mb-2">点击或拖拽图片至此处上传</p>
+                            <p class="text-xs text-gray-500">支持JPG、PNG格式，最多上传5张</p>
+                        </div>
+                        <div id="uploadProgress" class="mt-2 hidden">
+                            <div class="flex justify-between text-xs text-gray-600 mb-1">
+                                <span>上传进度:</span>
+                                <span id="uploadProgressText">0%</span>
+                            </div>
+                            <div class="upload-progress">
+                                <div id="uploadProgressBar" class="upload-progress-bar" style="width: 0%"></div>
+                            </div>
+                        </div>
                     </div>
-                    <div id="previewContainer" class="mt-4 grid grid-cols-3 gap-2 hidden">
-                        <h3 class="col-span-3 text-sm font-medium text-gray-600 mb-2">预览图：</h3>
-                        <div id="previewList" class="col-span-3 grid grid-cols-3 gap-2"></div>
+                    
+                    <!-- 上传后的图片URL显示 -->
+                    <div id="uploadedUrlsContainer" class="hidden">
+                        <label class="block text-sm font-medium text-gray-600 mb-2">已上传图片URL：</label>
+                        <div id="uploadedUrlsList" class="space-y-2 max-h-40 overflow-y-auto p-2 bg-gray-50 rounded-lg"></div>
+                        <button id="copyAllUrlsBtn" class="w-full mt-2 bg-primary/10 text-primary px-3 py-1.5 rounded-lg btn-hover flex items-center justify-center gap-1 text-sm">
+                            <i class="fa fa-copy"></i>
+                            <span>复制所有URL</span>
+                        </button>
                     </div>
-                    <div id="referenceInfo" class="mt-2 text-xs text-gray-500 hidden">
+                    
+                    <!-- 手动输入URL区域 -->
+                    <div class="mt-4">
+                        <label for="referenceUrls" class="block text-sm font-medium text-gray-600 mb-2">或手动输入图片URL：</label>
+                        <textarea id="referenceUrls" rows="3" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary" placeholder="请输入参考图片的URL，每行一个"></textarea>
+                        <p class="text-xs text-gray-500 mt-1">支持JPG、PNG格式的网络图片URL</p>
+                    </div>
+                    
+                    <div id="referenceInfo" class="mt-2 text-xs text-gray-500">
                         <i class="fa fa-info-circle text-primary mr-1"></i>
                         <span>上传的图片将作为生成参考，帮助AI更好地理解您的需求</span>
                     </div>
@@ -364,7 +402,7 @@
 
     <footer class="bg-white border-t border-gray-200 py-4 mt-6">
         <div class="container mx-auto px-4 text-center text-sm text-gray-500">
-            <p>YaHee, Studio. - 描述词优化版</p>
+            <p>YaHee, Studio.</p>
         </div>
     </footer>
 
@@ -396,13 +434,17 @@
                         <div id="modalTotalCredit" class="font-bold text-success">0</div>
                     </div>
                     <div class="text-center p-2 bg-white rounded border">
-                        <div class="text-gray-500">最高积分</div>
-                        <div id="maxCredit" class="font-bold text-warning">0</div>
+                        <div class="text-gray-500">当前积分</div>
+                        <div id="currentApiCredit" class="font-bold text-warning">0</div>
                     </div>
                     <div class="text-center p-2 bg-white rounded border">
                         <div class="text-gray-500">最低积分</div>
                         <div id="minCredit" class="font-bold text-danger">0</div>
                     </div>
+                </div>
+                <div class="mt-2 text-xs text-gray-600">
+                    <i class="fa fa-info-circle mr-1"></i>
+                    <span>当前积分显示正在使用的API Key积分，总积分显示所有API Key积分总和</span>
                 </div>
             </div>
             
@@ -451,12 +493,17 @@
             selectedTags: new Set(),
             apiKeys: [],
             credits: {}, // 存储每个API Key的积分
+            currentApiKey: null, // 当前使用的API Key
             currentServer: 'china', // 默认使用国内服务器
             currentTaskId: null, // 当前生成任务ID
             isGenerating: false, // 是否正在生成中
-            uploadedImages: [], // 存储上传的图片
-            imageUrls: [] // 存储上传图片的URL
+            uploadedImageUrls: [], // 存储上传到图床的图片URL
+            currentImageUrl: null // 当前生成的图片URL
         };
+
+        // ImgBB API 配置
+        const IMGBB_API_KEY = 'e8bf0d415745ca4f4ceee30dd5745e16';
+        const IMGBB_UPLOAD_URL = 'https://api.imgbb.com/1/upload';
 
         // API服务器配置
         const apiServers = {
@@ -481,7 +528,7 @@
             apiKeyList: document.getElementById('apiKeyList'),
             validApiCount: document.getElementById('validApiCount'),
             modalTotalCredit: document.getElementById('modalTotalCredit'),
-            maxCredit: document.getElementById('maxCredit'),
+            currentApiCredit: document.getElementById('currentApiCredit'),
             minCredit: document.getElementById('minCredit'),
             creditCount: document.getElementById('creditCount'),
             totalCreditCount: document.getElementById('totalCreditCount'),
@@ -497,9 +544,13 @@
             regenerateBtn: document.getElementById('regenerateBtn'),
             uploadArea: document.getElementById('uploadArea'),
             imageUpload: document.getElementById('imageUpload'),
-            previewContainer: document.getElementById('previewContainer'),
-            previewList: document.getElementById('previewList'),
-            referenceInfo: document.getElementById('referenceInfo')
+            uploadProgress: document.getElementById('uploadProgress'),
+            uploadProgressBar: document.getElementById('uploadProgressBar'),
+            uploadProgressText: document.getElementById('uploadProgressText'),
+            uploadedUrlsContainer: document.getElementById('uploadedUrlsContainer'),
+            uploadedUrlsList: document.getElementById('uploadedUrlsList'),
+            copyAllUrlsBtn: document.getElementById('copyAllUrlsBtn'),
+            referenceUrls: document.getElementById('referenceUrls')
         };
 
         // 初始化函数
@@ -509,6 +560,14 @@
             loadServerSetting(); // 加载服务器设置
             updateCreditDisplay(); // 更新积分显示
             updateHistoryDisplay(); // 更新历史记录显示
+            
+            // 监听Banana子模型变化
+            document.getElementById('bananaSubModel').addEventListener('change', (e) => {
+                updateImageSizeVisibility(e.target.value);
+            });
+            
+            // 初始化图像大小选择显示状态
+            updateImageSizeVisibility(document.getElementById('bananaSubModel').value);
         }
 
         // 绑定事件
@@ -634,20 +693,30 @@
                 saveToHistory();
             });
 
+            // 清空历史记录按钮
+            document.getElementById('clearHistoryBtn').addEventListener('click', () => {
+                clearHistory();
+            });
+
             // 上传图片区域点击事件
             elements.uploadArea.addEventListener('click', () => {
                 elements.imageUpload.click();
             });
 
             // 文件选择事件
-            elements.imageUpload.addEventListener('change', handleImageUpload);
-
-            // 清空历史记录按钮
-            document.getElementById('clearHistoryBtn').addEventListener('click', () => {
-                clearHistory();
+            elements.imageUpload.addEventListener('change', (event) => {
+                const files = event.target.files;
+                if (files && files.length > 0) {
+                    handleDroppedFiles(files);
+                }
             });
 
-            // API Key 列表事件委托（用于删除按钮）
+            // 复制所有URL按钮事件
+            elements.copyAllUrlsBtn.addEventListener('click', () => {
+                copyAllImageUrls();
+            });
+
+            // API Key 列表事件委托（用于删除按钮和选择按钮）
             elements.apiKeyList.addEventListener('click', (e) => {
                 if (e.target.closest('.fa-trash')) {
                     const item = e.target.closest('.api-key-item');
@@ -660,9 +729,31 @@
                             delete appState.credits[apiKey];
                         }
                         
+                        // 如果删除的是当前使用的API Key，重置当前API Key
+                        if (apiKey === appState.currentApiKey) {
+                            appState.currentApiKey = null;
+                        }
+                        
                         item.remove();
                         showToast('API Key 已删除', 'success');
                         updateCreditStats(); // 更新积分统计
+                    }
+                }
+                
+                // 选择API Key按钮事件
+                if (e.target.closest('.select-api-btn')) {
+                    const item = e.target.closest('.api-key-item');
+                    if (item) {
+                        const input = item.querySelector('.api-key-input');
+                        const apiKey = input.value.trim();
+                        
+                        if (apiKey) {
+                            setCurrentApiKey(apiKey);
+                            showToast('已设为当前使用API Key', 'success');
+                            
+                            // 更新所有API Key项的选择状态
+                            updateApiKeySelectionState();
+                        }
                     }
                 }
             });
@@ -694,68 +785,237 @@
                 elements.uploadArea.classList.remove('border-primary', 'bg-primary/5');
                 const files = e.dataTransfer.files;
                 if (files.length > 0) {
-                    handleFiles(files);
+                    handleDroppedFiles(files);
                 }
             });
         }
 
-        // 处理拖放的文件
-        function handleFiles(files) {
+        // 处理拖放的文件 - 使用真实的ImgBB API上传
+        function handleDroppedFiles(files) {
+            if (!files || files.length === 0) return;
+            
             // 限制最多5张图片
             const fileCount = Math.min(files.length, 5);
             if (files.length > 5) {
                 showToast('最多只能上传5张图片', 'warning');
             }
             
-            // 清空之前的预览
-            elements.previewList.innerHTML = '';
-            appState.uploadedImages = [];
-            appState.imageUrls = [];
+            // 显示上传进度
+            elements.uploadProgress.classList.remove('hidden');
             
+            // 上传所有图片
+            let validFileCount = 0;
             for (let i = 0; i < fileCount; i++) {
                 const file = files[i];
-                if (!file.type.match('image.*')) {
+                
+                // 安全的文件类型检查
+                if (!file || !file.type || !file.type.startsWith('image/')) {
+                    console.warn('跳过非图片文件:', file?.name);
                     continue;
                 }
                 
-                const reader = new FileReader();
-                
-                reader.onload = (e) => {
-                    // 创建预览图
-                    const previewItem = document.createElement('div');
-                    previewItem.className = 'relative';
-                    previewItem.innerHTML = `
-                        <img src="${e.target.result}" class="w-full h-20 object-cover rounded-lg">
-                        <button class="absolute top-0 right-0 bg-danger text-white rounded-full w-5 h-5 flex items-center justify-center text-xs" data-index="${i}">
-                            <i class="fa fa-times"></i>
-                        </button>
-                    `;
-                    elements.previewList.appendChild(previewItem);
-                    
-                    // 为删除按钮添加事件
-                    previewItem.querySelector('button').addEventListener('click', (e) => {
-                        e.stopPropagation();
-                        const index = parseInt(e.target.closest('button').dataset.index);
-                        removeUploadedImage(index);
-                    });
-                    
-                    // 保存图片数据
-                    appState.uploadedImages.push({
-                        dataUrl: e.target.result,
-                        file: file
-                    });
-                    
-                    // 保存图片URL用于API请求
-                    appState.imageUrls.push(e.target.result);
-                };
-                
-                reader.readAsDataURL(file);
+                uploadImageToImgBB(file, validFileCount, fileCount);
+                validFileCount++;
             }
             
-            // 显示预览容器
-            elements.previewContainer.classList.remove('hidden');
-            elements.referenceInfo.classList.remove('hidden');
-            showToast(`已上传 ${fileCount} 张图片`, 'success');
+            // 如果没有有效的图片文件，隐藏进度条
+            if (validFileCount === 0) {
+                elements.uploadProgress.classList.add('hidden');
+                showToast('没有找到有效的图片文件', 'warning');
+            }
+        }
+
+        // 使用ImgBB API上传图片到图床
+        async function uploadImageToImgBB(file, index, total) {
+            // 安全检查
+            if (!file || !file.type) {
+                console.error('Invalid file object in uploadImageToImgBB');
+                return;
+            }
+            
+            // 再次确认是图片文件
+            if (!file.type.startsWith('image/')) {
+                console.error('File is not an image:', file.type);
+                return;
+            }
+            
+            try {
+                // 创建FormData对象
+                const formData = new FormData();
+                formData.append('key', IMGBB_API_KEY);
+                formData.append('image', file);
+                
+                // 显示上传进度
+                updateUploadProgress(0, index, total);
+                
+                // 发送请求到ImgBB API
+                const response = await fetch(IMGBB_UPLOAD_URL, {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    // 获取图片URL
+                    const imageUrl = result.data.url;
+                    
+                    // 添加到已上传图片列表
+                    appState.uploadedImageUrls.push(imageUrl);
+                    
+                    // 更新UI显示
+                    updateUploadedUrlsList();
+                    
+                    // 完成进度
+                    updateUploadProgress(100, index, total);
+                    
+                    showToast(`图片 ${index + 1}/${total} 上传成功`, 'success');
+                    
+                } else {
+                    throw new Error(result.error?.message || '上传失败');
+                }
+                
+            } catch (error) {
+                console.error('图片上传失败:', error);
+                showToast(`图片 ${index + 1}/${total} 上传失败: ${error.message}`, 'error');
+                
+                // 如果所有图片都上传完成，隐藏进度条
+                if (index === total - 1) {
+                    setTimeout(() => {
+                        elements.uploadProgress.classList.add('hidden');
+                    }, 1000);
+                }
+            }
+        }
+
+        // 更新上传进度
+        function updateUploadProgress(progress, currentIndex, total) {
+            // 计算总体进度
+            const overallProgress = Math.round((currentIndex / total) * 100 + (progress / total));
+            
+            elements.uploadProgressBar.style.width = `${overallProgress}%`;
+            elements.uploadProgressText.textContent = `${overallProgress}%`;
+            
+            // 如果所有图片都上传完成，隐藏进度条
+            if (overallProgress >= 100) {
+                setTimeout(() => {
+                    elements.uploadProgress.classList.add('hidden');
+                }, 1000);
+            }
+        }
+
+        // 更新已上传图片URL列表
+        function updateUploadedUrlsList() {
+            elements.uploadedUrlsList.innerHTML = '';
+            
+            appState.uploadedImageUrls.forEach((url, index) => {
+                const urlItem = document.createElement('div');
+                urlItem.className = 'flex items-center justify-between p-2 bg-white rounded border border-gray-200';
+                urlItem.innerHTML = `
+                    <div class="flex items-center gap-2 flex-1 min-w-0">
+                        <div class="w-8 h-8 bg-gray-200 rounded flex items-center justify-center">
+                            <i class="fa fa-image text-gray-400"></i>
+                        </div>
+                        <div class="text-xs text-gray-600 truncate flex-1">${url}</div>
+                    </div>
+                    <div class="flex gap-1">
+                        <button class="text-primary hover:text-primary/70 copy-url-btn" data-url="${url}" title="复制URL">
+                            <i class="fa fa-copy"></i>
+                        </button>
+                        <button class="text-danger hover:text-danger/70 remove-url-btn" data-index="${index}" title="删除">
+                            <i class="fa fa-trash"></i>
+                        </button>
+                    </div>
+                `;
+                elements.uploadedUrlsList.appendChild(urlItem);
+            });
+            
+            // 添加复制和删除按钮事件
+            elements.uploadedUrlsList.querySelectorAll('.copy-url-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const url = e.currentTarget.dataset.url;
+                    navigator.clipboard.writeText(url).then(() => {
+                        showToast('URL已复制到剪贴板', 'success');
+                    });
+                });
+            });
+            
+            elements.uploadedUrlsList.querySelectorAll('.remove-url-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const index = parseInt(e.currentTarget.dataset.index);
+                    appState.uploadedImageUrls.splice(index, 1);
+                    updateUploadedUrlsList();
+                    showToast('URL已删除', 'success');
+                });
+            });
+            
+            // 显示/隐藏URL列表容器
+            if (appState.uploadedImageUrls.length > 0) {
+                elements.uploadedUrlsContainer.classList.remove('hidden');
+            } else {
+                elements.uploadedUrlsContainer.classList.add('hidden');
+            }
+        }
+
+        // 复制所有图片URL
+        function copyAllImageUrls() {
+            const urls = appState.uploadedImageUrls.join('\n');
+            navigator.clipboard.writeText(urls).then(() => {
+                showToast('所有URL已复制到剪贴板', 'success');
+            });
+        }
+
+        // 控制图像大小选择的显示/隐藏
+        function updateImageSizeVisibility(subModel) {
+            const imageSizeContainer = document.getElementById('bananaImageSizeContainer');
+            if (subModel === 'nano-banana-pro') {
+                imageSizeContainer.classList.remove('hidden');
+            } else {
+                imageSizeContainer.classList.add('hidden');
+            }
+        }
+
+        // 设置当前使用的API Key
+        function setCurrentApiKey(apiKey) {
+            appState.currentApiKey = apiKey;
+            localStorage.setItem('currentApiKey', apiKey);
+            updateCreditDisplay();
+            updateApiKeySelectionState();
+        }
+
+        // 获取当前使用的API Key
+        function getCurrentApiKey() {
+            // 如果已设置当前API Key，则返回
+            if (appState.currentApiKey && appState.credits[appState.currentApiKey]) {
+                return appState.currentApiKey;
+            }
+            
+            // 否则返回积分最高的API Key
+            return getBestApiKey();
+        }
+
+        // 更新API Key选择状态显示
+        function updateApiKeySelectionState() {
+            const currentApiKey = getCurrentApiKey();
+            elements.apiKeyList.querySelectorAll('.api-key-item').forEach(item => {
+                const input = item.querySelector('.api-key-input');
+                const selectBtn = item.querySelector('.select-api-btn');
+                const icon = selectBtn.querySelector('i');
+                
+                if (input.value.trim() === currentApiKey) {
+                    item.classList.add('api-key-active');
+                    icon.className = 'fa fa-check-circle text-success';
+                    selectBtn.title = '当前使用中';
+                } else {
+                    item.classList.remove('api-key-active');
+                    icon.className = 'fa fa-check-circle text-gray-400';
+                    selectBtn.title = '设为当前使用';
+                }
+            });
         }
 
         // 更新图片比例选项为GPT专用
@@ -807,6 +1067,7 @@
                 { value: '4:3', text: '4:3（传统电视）' },
                 { value: '3:4', text: '3:4（竖屏照片）' },
                 { value: '5:4', text: '5:4（打印照片）' },
+                { value: '4:5', text: '4:5（竖屏照片）' },
                 { value: '21:9', text: '21:9（电影宽屏）' }
             ];
             
@@ -858,49 +1119,6 @@
             if (savedServer) {
                 setServer(savedServer);
             }
-        }
-
-        // 处理图片上传
-        function handleImageUpload(event) {
-            const files = event.target.files;
-            if (!files || files.length === 0) return;
-            handleFiles(files);
-        }
-
-        // 删除上传的图片
-        function removeUploadedImage(index) {
-            appState.uploadedImages.splice(index, 1);
-            appState.imageUrls.splice(index, 1);
-            renderPreviewImages();
-            
-            if (appState.uploadedImages.length === 0) {
-                elements.previewContainer.classList.add('hidden');
-                elements.referenceInfo.classList.add('hidden');
-            }
-        }
-
-        // 重新渲染预览图片
-        function renderPreviewImages() {
-            elements.previewList.innerHTML = '';
-            
-            appState.uploadedImages.forEach((image, index) => {
-                const previewItem = document.createElement('div');
-                previewItem.className = 'relative';
-                previewItem.innerHTML = `
-                    <img src="${image.dataUrl}" class="w-full h-20 object-cover rounded-lg">
-                    <button class="absolute top-0 right-0 bg-danger text-white rounded-full w-5 h-5 flex items-center justify-center text-xs" data-index="${index}">
-                        <i class="fa fa-times"></i>
-                    </button>
-                `;
-                elements.previewList.appendChild(previewItem);
-                
-                // 为删除按钮添加事件
-                previewItem.querySelector('button').addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    const index = parseInt(e.target.closest('button').dataset.index);
-                    removeUploadedImage(index);
-                });
-            });
         }
 
         // 显示 API 设置模态框
@@ -967,6 +1185,9 @@
             const item = document.createElement('div');
             item.className = 'flex items-center gap-2 mb-2 p-2 border border-gray-200 rounded-lg api-key-item';
             item.innerHTML = `
+                <button class="text-gray-400 hover:text-primary select-api-btn" title="设为当前使用">
+                    <i class="fa fa-check-circle"></i>
+                </button>
                 <input type="password" class="flex-1 border-none outline-none api-key-input" placeholder="sk-..." value="${value}">
                 <span class="text-xs bg-gray-200 px-2 py-1 rounded credit-display">积分: --</span>
                 <button class="text-danger hover:text-red-600">
@@ -980,6 +1201,9 @@
                 const input = item.querySelector('.api-key-input');
                 updateApiKeyCredit(input);
             }
+            
+            // 更新选择状态
+            updateApiKeySelectionState();
         }
 
         // 获取API积分
@@ -1035,12 +1259,19 @@
                     creditDisplay.className = 'text-xs bg-red-100 text-red-800 px-2 py-1 rounded credit-display';
                 }
                 
-                // 检查积分是否低于400，如果是则自动删除
-                if (credit < 400) {
+                // 检查积分是否低于最低要求，如果是则自动删除
+                const minCreditRequired = 400;
+                if (credit < minCreditRequired) {
                     const item = inputElement.closest('.api-key-item');
                     if (item) {
                         item.remove();
                         delete appState.credits[apiKey];
+                        
+                        // 如果删除的是当前使用的API Key，重置当前API Key
+                        if (apiKey === appState.currentApiKey) {
+                            appState.currentApiKey = null;
+                        }
+                        
                         showToast(`API Key 积分不足 (${credit})，已自动删除`, 'warning');
                         updateCreditStats(); // 更新积分统计
                     }
@@ -1096,33 +1327,63 @@
             
             if (credits.length > 0) {
                 const total = credits.reduce((sum, credit) => sum + credit, 0);
-                const max = Math.max(...credits);
                 const min = Math.min(...credits);
                 
+                // 获取当前使用的API Key积分
+                const currentApiKey = getCurrentApiKey();
+                const currentCredit = currentApiKey ? appState.credits[currentApiKey] : 0;
+                
                 elements.modalTotalCredit.textContent = total;
-                elements.maxCredit.textContent = max;
+                elements.currentApiCredit.textContent = currentCredit;
                 elements.minCredit.textContent = min;
                 
                 // 更新页面顶部的积分显示
-                updateCreditDisplay(total);
+                updateCreditDisplay();
             } else {
                 elements.modalTotalCredit.textContent = '0';
-                elements.maxCredit.textContent = '0';
+                elements.currentApiCredit.textContent = '0';
                 elements.minCredit.textContent = '0';
-                updateCreditDisplay(0);
+                updateCreditDisplay();
             }
         }
 
         // 更新页面顶部积分显示
-        function updateCreditDisplay(totalCredit = null) {
-            if (totalCredit !== null) {
-                elements.creditCount.textContent = totalCredit;
-                elements.totalCreditCount.textContent = totalCredit;
+        function updateCreditDisplay() {
+            // 获取当前使用的API Key积分
+            const currentApiKey = getCurrentApiKey();
+            const currentCredit = currentApiKey ? appState.credits[currentApiKey] : 0;
+            
+            // 计算所有API Key的总积分
+            const total = Object.values(appState.credits).reduce((sum, credit) => sum + credit, 0);
+            
+            // 更新显示
+            elements.creditCount.textContent = currentCredit;
+            elements.totalCreditCount.textContent = total;
+            
+            // 更新积分状态指示器
+            updateCreditStatus(currentCredit);
+        }
+
+        // 更新积分状态指示器
+        function updateCreditStatus(currentCredit) {
+            const creditStatus = document.getElementById('creditStatus');
+            
+            // 计算不同模型所需的最小积分
+            const minBananaFast = 440;
+            const minBanana = 1400;
+            const minBananaPro = 1800;
+            const minGpt = 400;
+            
+            const minRequired = Math.min(minBananaFast, minBanana, minBananaPro, minGpt);
+            
+            if (currentCredit < minRequired) {
+                creditStatus.innerHTML = '<i class="fa fa-exclamation-triangle text-warning"></i> 积分不足';
+                creditStatus.classList.remove('hidden');
+            } else if (currentCredit < 2000) {
+                creditStatus.innerHTML = '<i class="fa fa-info-circle text-warning"></i> 积分较低';
+                creditStatus.classList.remove('hidden');
             } else {
-                // 计算总积分
-                const total = Object.values(appState.credits).reduce((sum, credit) => sum + credit, 0);
-                elements.creditCount.textContent = total;
-                elements.totalCreditCount.textContent = total;
+                creditStatus.classList.add('hidden');
             }
         }
 
@@ -1168,6 +1429,15 @@
                     apiKeys.forEach(key => {
                         addApiKeyInput(key);
                     });
+                    
+                    // 加载当前使用的API Key
+                    const savedCurrentApiKey = localStorage.getItem('currentApiKey');
+                    if (savedCurrentApiKey) {
+                        appState.currentApiKey = savedCurrentApiKey;
+                    }
+                    
+                    // 更新选择状态
+                    updateApiKeySelectionState();
                     
                     // 加载完成后获取所有积分
                     setTimeout(() => {
@@ -1224,18 +1494,52 @@
                 return;
             }
             
-            // 获取API Key（选择积分最高的）
-            const apiKey = getBestApiKey();
-            if (!apiKey) {
+            // 获取当前使用的API Key
+            const currentApiKey = getCurrentApiKey();
+            if (!currentApiKey) {
                 showToast('没有可用的API Key', 'error');
                 return;
             }
+            
+            // 检查积分是否足够
+            const currentCredit = appState.credits[currentApiKey];
+            let requiredCredit;
+            if (mainModel === 'banana') {
+                if (subModel === 'nano-banana-fast') {
+                    requiredCredit = 440;
+                } else if (subModel === 'nano-banana') {
+                    requiredCredit = 1400;
+                } else if (subModel === 'nano-banana-pro') {
+                    requiredCredit = 1800;
+                }
+            } else {
+                requiredCredit = 400;
+            }
+            
+            if (currentCredit < requiredCredit) {
+                showToast(`当前API Key积分不足 (${currentCredit})，需要${requiredCredit}积分`, 'error');
+                return;
+            }
+            
+            // 获取参考图片URL（从图床上传的和手动输入的）
+            const referenceUrlsText = elements.referenceUrls.value.trim();
+            let referenceUrls = [];
+            
+            // 添加手动输入的URL
+            if (referenceUrlsText) {
+                referenceUrls = referenceUrlsText.split('\n')
+                    .map(url => url.trim())
+                    .filter(url => url && (url.startsWith('http://') || url.startsWith('https://')));
+            }
+            
+            // 添加上传到图床的URL
+            referenceUrls = [...referenceUrls, ...appState.uploadedImageUrls];
             
             // 构建请求参数
             let requestData, url;
             
             if (mainModel === 'banana') {
-                // Banana模型请求
+                // 使用新的Nano Banana API调用方式
                 requestData = {
                     model: subModel,
                     prompt: prompt,
@@ -1249,9 +1553,16 @@
                     requestData.imageSize = imageSize;
                 }
                 
+                // 如果有参考图片URL，添加urls参数
+                if (referenceUrls.length > 0) {
+                    requestData.urls = referenceUrls;
+                    showToast(`已使用 ${referenceUrls.length} 张参考图片`, 'success');
+                }
+                
                 url = `${apiServers[appState.currentServer]}/v1/draw/nano-banana`;
+                
             } else {
-                // GPT模型请求
+                // GPT模型请求保持不变
                 requestData = {
                     model: subModel,
                     prompt: prompt,
@@ -1261,10 +1572,10 @@
                     shutProgress: false
                 };
                 
-                // 如果有上传的图片，添加urls参数
-                if (appState.imageUrls.length > 0) {
-                    requestData.urls = appState.imageUrls;
-                    showToast(`已使用 ${appState.imageUrls.length} 张参考图片`, 'success');
+                // 如果有参考图片URL，添加urls参数
+                if (referenceUrls.length > 0) {
+                    requestData.urls = referenceUrls;
+                    showToast(`已使用 ${referenceUrls.length} 张参考图片`, 'success');
                 }
                 
                 url = `${apiServers[appState.currentServer]}/v1/draw/completions`;
@@ -1279,7 +1590,9 @@
                     <i class="fa fa-spinner fa-spin text-4xl text-primary mb-3"></i>
                     <p class="text-secondary mb-1">正在生成图片，请稍候...</p>
                     <p class="text-xs text-gray-500">这可能需要30秒到2分钟</p>
-                    ${appState.imageUrls.length > 0 ? `<p class="text-xs text-primary mt-2">使用 ${appState.imageUrls.length} 张参考图片</p>` : ''}
+                    ${referenceUrls.length > 0 ? `<p class="text-xs text-primary mt-2">使用 ${referenceUrls.length} 张参考图片</p>` : ''}
+                    <p class="text-xs text-gray-500 mt-2">当前API Key积分: ${currentCredit}</p>
+                    <p class="text-xs text-warning mt-1">预计消耗: ${requiredCredit} 积分</p>
                 </div>
             `;
             elements.resultActions.classList.add('hidden');
@@ -1290,7 +1603,7 @@
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${apiKey}`
+                        'Authorization': `Bearer ${currentApiKey}`
                     },
                     body: JSON.stringify(requestData)
                 });
@@ -1306,7 +1619,7 @@
                     appState.currentTaskId = result.data.id;
                     
                     // 开始轮询结果
-                    pollResult(apiKey);
+                    pollResult(currentApiKey);
                 } else {
                     throw new Error(result.msg || '生成失败');
                 }
@@ -1353,6 +1666,8 @@
                             </div>
                             <p class="text-secondary mb-1">生成进度: ${data.progress}%</p>
                             <p class="text-xs text-gray-500">状态: ${data.status}</p>
+                            ${data.failure_reason ? `<p class="text-xs text-danger mt-1">失败原因: ${data.failure_reason}</p>` : ''}
+                            ${data.error ? `<p class="text-xs text-danger mt-1">错误信息: ${data.error}</p>` : ''}
                         </div>
                     `;
                     
@@ -1360,9 +1675,12 @@
                     if (data.status === 'succeeded' && data.results && data.results.length > 0) {
                         // 显示生成的图片（显示第一张）
                         const imageUrl = data.results[0].url;
+                        const imageContent = data.results[0].content || '生成完成';
+                        
                         elements.previewResult.innerHTML = `
                             <img src="${imageUrl}" alt="生成的图片" class="max-w-full max-h-[300px] object-contain rounded-lg zoomable-image" id="generatedImage">
-                            <p class="text-xs text-gray-500 mt-2">生成完成 - 已自动保存到历史记录</p>
+                            <p class="text-xs text-gray-500 mt-2">${imageContent}</p>
+                            <p class="text-xs text-success mt-1">生成完成 - 已自动保存到历史记录</p>
                         `;
                         elements.resultActions.classList.remove('hidden');
                         resetGenerationState();
@@ -1380,8 +1698,19 @@
                         saveToHistory(true);
                         
                         showToast('图片生成成功，已自动保存到历史记录', 'success');
+                        
+                        // 刷新积分显示
+                        updateCreditDisplay();
+                        
                     } else if (data.status === 'failed') {
-                        throw new Error(data.failure_reason || data.error || '生成失败');
+                        let errorMessage = '生成失败';
+                        if (data.failure_reason) {
+                            errorMessage += `: ${data.failure_reason}`;
+                        }
+                        if (data.error) {
+                            errorMessage += ` (${data.error})`;
+                        }
+                        throw new Error(errorMessage);
                     } else {
                         // 继续轮询
                         setTimeout(() => pollResult(apiKey), 2000);
