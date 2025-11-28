@@ -1308,6 +1308,29 @@
             }
         }
 
+        // 寻找可用的API Key（积分足够的）
+        function findAvailableApiKey(requiredCredit) {
+            let bestApiKey = null;
+            let maxCredits = 0;
+            
+            for (const [apiKey, credits] of Object.entries(appState.credits)) {
+                if (credits >= requiredCredit) {
+                    // 优先选择积分足够的API Key中积分最高的
+                    if (credits > maxCredits) {
+                        maxCredits = credits;
+                        bestApiKey = apiKey;
+                    }
+                }
+            }
+            
+            return bestApiKey;
+        }
+
+        // 获取所有API Key中的最高积分
+        function getMaxCredit() {
+            return Math.max(...Object.values(appState.credits), 0);
+        }
+
         // 更新积分统计
         function updateCreditStats() {
             const apiKeys = [];
@@ -1502,8 +1525,7 @@
                 return;
             }
             
-            // 检查积分是否足够
-            const currentCredit = appState.credits[currentApiKey];
+            // 计算所需积分
             let requiredCredit;
             if (mainModel === 'banana') {
                 if (subModel === 'nano-banana-fast') {
@@ -1517,8 +1539,26 @@
                 requiredCredit = 400;
             }
             
+            // 检查当前API Key积分，如果不足则自动切换
+            let finalApiKey = currentApiKey;
+            let currentCredit = appState.credits[currentApiKey];
+
             if (currentCredit < requiredCredit) {
-                showToast(`当前API Key积分不足 (${currentCredit})，需要${requiredCredit}积分`, 'error');
+                // 尝试寻找其他可用的API Key
+                const availableApiKey = findAvailableApiKey(requiredCredit);
+                if (availableApiKey) {
+                    finalApiKey = availableApiKey;
+                    currentCredit = appState.credits[availableApiKey];
+                    setCurrentApiKey(availableApiKey);
+                    showToast(`当前API Key积分不足，已自动切换到可用API Key (积分: ${currentCredit})`, 'warning');
+                } else {
+                    showToast(`所有API Key积分都不足，需要${requiredCredit}积分，当前最高积分: ${getMaxCredit()}`, 'error');
+                    return;
+                }
+            }
+
+            if (currentCredit < requiredCredit) {
+                showToast(`API Key积分不足 (${currentCredit})，需要${requiredCredit}积分`, 'error');
                 return;
             }
             
@@ -1599,12 +1639,12 @@
             elements.resultActions.classList.add('hidden');
             
             try {
-                // 发送请求
+                // 发送请求，使用 finalApiKey
                 const response = await fetch(url, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${currentApiKey}`
+                        'Authorization': `Bearer ${finalApiKey}`
                     },
                     body: JSON.stringify(requestData)
                 });
@@ -1619,8 +1659,8 @@
                     // 保存任务ID
                     appState.currentTaskId = result.data.id;
                     
-                    // 开始轮询结果
-                    pollResult(currentApiKey);
+                    // 开始轮询结果，使用 finalApiKey
+                    pollResult(finalApiKey);
                 } else {
                     throw new Error(result.msg || '生成失败');
                 }
