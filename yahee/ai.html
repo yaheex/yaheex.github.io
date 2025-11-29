@@ -290,8 +290,9 @@
                             <span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="消除布纹，优化布纹处细节，移除噪点，色块平滑">去布纹</span>
                             <span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="移除背景，改为白色背景">白色背景</span>
                             <span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="透明背景">透明背景(GPT)</span>
-                            <span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="将图像中的所有设计元素完全分离，转换为独立的平面设计素材。每个元素必须：1) 完全独立无连接；2) 元素间保持至少20像素的最小间距；3) 采用严格的网格化布局排列；4) 所有元素正面朝向，无角度倾斜；5) 按元素类型和大小智能分组排列；6) 浅灰色(#f5f5f5)极简背景，无任何装饰元素；7) 元素排列遵循从左到右、从上到下的阅读顺序；8) 如元素过多则自动创建多行多列布局，确保所有元素完整可见；9) 生成前进行重叠检测，如有重叠风险则自动调整元素位置和大小。">拆分元素(banana-pro)</span>
-							<span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="按照要求的比例，重新布局图中元素，保持元素不变。">改变布局(banana-pro)</span>
+                            <span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="将图像中的所有设计元素完全分离，转换为独立的平面设计素材。每个元素必须：1) 完全独立无连接；2) 元素间保持至少20像素的最小间距；3) 采用严格的网格化布局排列；4) 所有元素正面朝向，无角度倾斜；5) 按元素类型和大小智能分组排列；6) 浅灰色(#f5f5f5)极简背景，无任何装饰元素；7) 元素排列遵循从左到右、从上到下的阅读顺序；8) 如元素过多则自动创建多行多列布局，确保所有元素完整可见；9) 生成前进行重叠检测，如有重叠风险则自动调整元素位置和大小。">拆分元素(PRO)</span>
+							<span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="按照要求的比例，重新布局图中元素，保持元素不变。">改变布局(PRO)</span>
+							<span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="把照片变清晰。">图片变清晰(PRO)</span>
                             <span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="修复并为这张照片上色">照片上色</span>
                             <span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="改为夜间亮化效果图">改为夜间亮化效果图</span>
                             <span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="发光字">发光字</span>
@@ -300,7 +301,7 @@
                     </div>
                     <div class="mb-4">
                         <label for="customPrompt" class="block text-sm font-medium text-gray-600 mb-2">自定义描述词：</label>
-                        <textarea id="customPrompt" rows="4" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary" placeholder="请输入图片描述，越详细生成效果越好..."></textarea>
+                        <textarea id="customPrompt" rows="4" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary" placeholder="A4/A3—3:4.4，40x60—2:3，60x90—2:3，60x160—3:8，80x180—4:9，120x200—1:1.67，80x200—1:2.5"></textarea>
                     </div>
                     <div id="selectedTagsContainer" class="mb-2 hidden">
                         <h3 class="text-sm font-medium text-gray-600 mb-2">已选描述词：</h3>
@@ -1791,21 +1792,75 @@
             return bestApiKey;
         }
 
-        // 下载图片
-        function downloadImage() {
+        // 下载图片 - 修复版本，添加文件名前缀
+        async function downloadImage() {
             if (!appState.currentImageUrl) {
                 showToast('没有可下载的图片', 'warning');
                 return;
             }
             
-            const a = document.createElement('a');
-            a.href = appState.currentImageUrl;
-            a.download = 'generated-image.jpg';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            
-            showToast('图片已开始下载', 'success');
+            try {
+                // 显示下载状态
+                elements.downloadBtn.disabled = true;
+                elements.downloadBtn.innerHTML = '<i class="fa fa-spinner fa-spin"></i><span>下载中...</span>';
+                
+                // 获取图片数据
+                const response = await fetch(appState.currentImageUrl);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const blob = await response.blob();
+                
+                // 创建下载链接
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.style.display = 'none';
+                a.href = url;
+                
+                // 从URL提取文件名，如果没有则使用默认名称
+                const urlParts = appState.currentImageUrl.split('/');
+                let filename = 'generated-image.jpg';
+                if (urlParts.length > 0) {
+                    const lastPart = urlParts[urlParts.length - 1];
+                    if (lastPart.includes('.')) {
+                        filename = lastPart;
+                    }
+                }
+                
+                // 添加前缀 "YaHee-"
+                filename = `YaHee-${filename}`;
+                
+                a.download = filename;
+                document.body.appendChild(a);
+                a.click();
+                
+                // 清理
+                window.URL.revokeObjectURL(url);
+                document.body.removeChild(a);
+                
+                showToast('图片下载成功', 'success');
+            } catch (error) {
+                console.error('下载图片失败:', error);
+                
+                // 如果下载失败，尝试使用原始方法
+                showToast('直接下载失败，尝试备用方法...', 'warning');
+                
+                // 备用方法：直接打开图片链接
+                const a = document.createElement('a');
+                a.href = appState.currentImageUrl;
+                a.target = '_blank';
+                a.rel = 'noopener noreferrer';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                
+                showToast('已在新标签页打开图片，请右键另存为', 'info');
+            } finally {
+                // 恢复按钮状态
+                elements.downloadBtn.disabled = false;
+                elements.downloadBtn.innerHTML = '<i class="fa fa-download"></i><span>下载图片</span>';
+            }
         }
 
         // 保存到历史
