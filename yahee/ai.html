@@ -1140,9 +1140,9 @@
         elements.batchApiKeys.value = '';
         
         if (addedCount > 0) {
-            showToast(`成功添加 ${addedCount} 个 API Key${duplicateCount > 0 ? `，跳过 ${duplicateCount} 个重复的 API Key` : ''}`, 'success');
+            showToast(`成功添加 ${addedCount} 个 Key${duplicateCount > 0 ? `，跳过 ${duplicateCount} 个重复的 API Key` : ''}`, 'success');
         } else if (duplicateCount > 0) {
-            showToast(`所有 ${duplicateCount} 个 API Key 都已存在，未添加重复项`, 'warning');
+            showToast(`所有 ${duplicateCount} 个 Key 都已存在，未添加重复项`, 'warning');
         }
         
         // 批量获取积分
@@ -1189,7 +1189,7 @@
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
         
-        showToast(`已导出 ${apiKeys.length} 个 API Key 到TXT文件`, 'success');
+        showToast(`已导出 ${apiKeys.length} 个 Key 到TXT文件`, 'success');
     }
 
     // 添加 API Key 输入框
@@ -1444,7 +1444,7 @@
         });
 
         if (uniqueApiKeys.length === 0) {
-            showToast('请至少添加一个 API Key', 'warning');
+            showToast('请至少添加一个 Key', 'warning');
             return;
         }
 
@@ -1464,7 +1464,7 @@
             });
             
             // 显示保存成功的提示，包括去重信息
-            let message = `已保存 ${uniqueApiKeys.length} 个 API Key`;
+            let message = `已保存 ${uniqueApiKeys.length} 个 Key`;
             if (removedDuplicates > 0) {
                 message += `，自动删除 ${removedDuplicates} 个重复项`;
             }
