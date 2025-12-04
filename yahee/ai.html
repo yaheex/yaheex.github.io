@@ -166,7 +166,6 @@
                             <div>
                                 <label for="bananaSubModel" class="block text-sm font-medium text-gray-600 mb-2">Banana 子模型：</label>
                                 <select id="bananaSubModel" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary">
-                                    <option value="nano-banana-fast">banana-fast ~~~ 440/次 - ￥0.022~￥0.044/次</option>
                                     <option value="nano-banana">banana ~~~ 1400积分/次 - ￥0.07~￥0.14/次</option>
                                     <option value="nano-banana-pro">banana-pro ~~~ 1800积分/次 - ￥0.09~￥0.18/次</option>
                                 </select>
@@ -215,7 +214,6 @@
                     
                     <!-- 图床上传区域 -->
                     <div class="mb-4">
-                        <label class="block text-sm font-medium text-gray-600 mb-2">上传图片到图床：</label>
                         <div id="uploadArea" class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-primary transition-colors cursor-pointer bg-gray-50">
                             <input type="file" id="imageUpload" accept="image/*" multiple class="hidden">
                             <i class="fa fa-cloud-upload text-4xl text-gray-400 mb-3"></i>
@@ -247,12 +245,6 @@
                     <div class="mt-4">
                         <label for="referenceUrls" class="block text-sm font-medium text-gray-600 mb-2">或手动输入图片URL：</label>
                         <textarea id="referenceUrls" rows="3" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary" placeholder="请输入参考图片的URL，每行一个"></textarea>
-                        <p class="text-xs text-gray-500 mt-1">支持JPG、PNG格式的网络图片URL</p>
-                    </div>
-                    
-                    <div id="referenceInfo" class="mt-2 text-xs text-gray-500">
-                        <i class="fa fa-info-circle text-primary mr-1"></i>
-                        <span>上传的图片将作为生成参考，帮助AI更好地理解您的需求</span>
                     </div>
                 </div>
             </div>
@@ -288,15 +280,13 @@
                             <span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="消除布纹，优化布纹处细节，移除噪点，色块平滑">去布纹</span>
                             <span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="移除背景，改为白色背景">白色背景</span>
                             <span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="修复并为这张照片上色">照片上色</span>
-                            <span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="改为夜间亮化效果图">夜间亮化效果图</span>
-                            <span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="发光字">发光字</span>
-                            <span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="发光灯带">发光灯带</span>
-                            <span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="将图像中的所有设计元素完全分离，转换为独立的平面设计素材。每个元素必须：1) 完全独立无连接；2) 元素间保持至少20像素的最小间距；3) 采用严格的网格化布局排列；4) 所有元素正面朝向，无角度倾斜；5) 按元素类型和大小智能分组排列；6) 浅灰色(#f5f5f5)极简背景，无任何装饰元素；7) 元素排列遵循从左到右、从上到下的阅读顺序；8) 如元素过多则自动创建多行多列布局，确保所有元素完整可见；9) 生成前进行重叠检测，如有重叠风险则自动调整元素位置和大小。">拆分元素</span>
-							<span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="把每个元素提取出来，先从左往右依次排列，放不下了再从上到下依次把每个元素平铺排列在9:21的灰色画布上。要求每个元素完整展示，元素之间不要重叠，元素与元素之间留一定间距。去掉装饰的气球。保证展开图我能直接使用！">拆分元素2</span>
+                            <span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="改为夜间亮化效果图，发光字，发光灯带">夜间亮化效果图</span>
+                            <span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="将图像中的所有设计元素完全分离，转换为独立的平面设计素材。每个元素必须：1) 完全独立无连接；2) 元素间保持至少20像素的最小间距；3) 采用严格的网格化布局排列；4) 所有元素正面朝向，无角度倾斜；5) 按元素类型和大小智能分组排列；6) 浅灰色(#f5f5f5)极简背景，无任何装饰元素；7) 元素排列遵循从左到右、从上到下的阅读顺序；8) 如元素过多则自动创建多行多列布局，确保所有元素完整可见；9) 生成前进行重叠检测，如有重叠风险则自动调整元素位置和大小。">拆分（大件）</span>
+							<span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="把每个元素提取出来，先从左往右依次排列，放不下了再从上到下依次把每个元素平铺排列在9:21的灰色画布上。要求每个元素完整展示，元素之间不要重叠，元素与元素之间留一定间距。去掉装饰的气球。保证展开图我能直接使用！">拆分（细小）</span>
 							<span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="按照要求的比例，重新布局图中元素，保持元素不变。">改变布局</span>
-							<span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="把图片变清晰，还原原图中的的所有细节。">变清晰</span>
+							<span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="把图片变清晰，还原图中的所有细节。">变清晰</span>
 							<span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="这是一张拍摄的照片，移除所有破损划痕和噪点，按照要求的比例把他变成电子版海报。">转电子版</span>
-							<span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="去除所有黑色文字，保持红色图案完整性，白色背景，图片变清晰">提取压字红章</span>
+							<span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="去除所有黑色文字，保持图章文字的完整性，白色背景，图片变清晰">提取图章</span>
 							<span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="按照要求的比例让画面完整显示，补充缺失部分。">补全画面</span>
 							<span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="按照要求的比例根据我提供的菜品名称菜品价格及备注要求，不要更改内容和添加内容，所有内容合理排版，设计一个点菜单海报，风格根据菜品类型智能选择。参考图是手写的菜品目录，识别文字和价格，确定文字正确性，所有内容合理排版，不要更改内容和添加内容海报，配图要真实的摄影照片。">手写菜单</span>
                         </div>
@@ -366,47 +356,11 @@
                         </div>
                     </div>
                 </div>
-
-                <!-- 案例展示 -->
-                <div class="bg-white rounded-xl p-5 shadow-sm card-shadow">
-                    <h2 class="text-lg font-semibold mb-4 flex items-center gap-2">
-                        <i class="fa fa-th-large text-primary"></i>
-                        案例展示
-                    </h2>
-                    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3" id="casesContainer">
-                        <div class="rounded-lg overflow-hidden border border-gray-200 hover:shadow-md transition-shadow cursor-pointer case-item" data-img="https://aisearch.cdn.bcebos.com/fileManager/n-JQzIHmOAQdZItDkjSd3Q/1763617170801z6GbUq.jpg" title="案例1">
-                            <img src="https://aisearch.cdn.bcebos.com/fileManager/n-JQzIHmOAQdZItDkjSd3Q/1763617170801z6GbUq.jpg" alt="案例1" class="w-full h-24 object-cover zoomable-image">
-                        </div>
-                        <div class="rounded-lg overflow-hidden border border-gray-200 hover:shadow-md transition-shadow cursor-pointer case-item" data-img="https://aisearch.cdn.bcebos.com/fileManager/n-JQzIHmOAQdZItDkjSd3Q/1763617170808ubntSM.jpg" title="案例2">
-                            <img src="https://aisearch.cdn.bcebos.com/fileManager/n-JQzIHmOAQdZItDkjSd3Q/1763617170808ubntSM.jpg" alt="案例2" class="w-full h-24 object-cover zoomable-image">
-                        </div>
-                        <div class="rounded-lg overflow-hidden border border-gray-200 hover:shadow-md transition-shadow cursor-pointer case-item" data-img="https://aisearch.cdn.bcebos.com/fileManager/n-JQzIHmOAQdZItDkjSd3Q/17636171708098d5xv1.jpg" title="案例3">
-                            <img src="https://aisearch.cdn.bcebos.com/fileManager/n-JQzIHmOAQdZItDkjSd3Q/17636171708098d5xv1.jpg" alt="案例3" class="w-full h-24 object-cover zoomable-image">
-                        </div>
-                        <div class="rounded-lg overflow-hidden border border-gray-200 hover:shadow-md transition-shadow cursor-pointer case-item" data-img="https://aisearch.cdn.bcebos.com/fileManager/n-JQzIHmOAQdZItDkjSd3Q/1763617170810zjAXwx.jpg" title="案例4">
-                            <img src="https://aisearch.cdn.bcebos.com/fileManager/n-JQzIHmOAQdZItDkjSd3Q/1763617170810zjAXwx.jpg" alt="案例4" class="w-full h-24 object-cover zoomable-image">
-                        </div>
-                        <div class="rounded-lg overflow-hidden border border-gray-200 hover:shadow-md transition-shadow cursor-pointer case-item" data-img="https://aisearch.cdn.bcebos.com/fileManager/n-JQzIHmOAQdZItDkjSd3Q/1763617170812GWectp.jpg" title="案例5">
-                            <img src="https://aisearch.cdn.bcebos.com/fileManager/n-JQzIHmOAQdZItDkjSd3Q/1763617170812GWectp.jpg" alt="案例5" class="w-full h-24 object-cover zoomable-image">
-                        </div> 
-                        <div class="rounded-lg overflow-hidden border border-gray-200 hover:shadow-md transition-shadow cursor-pointer case-item" data-img="https://aisearch.cdn.bcebos.com/fileManager/n-JQzIHmOAQdZItDkjSd3Q/176394894500339KVZA.jpg" title="案例6">
-                            <img src="https://aisearch.cdn.bcebos.com/fileManager/n-JQzIHmOAQdZItDkjSd3Q/176394894500339KVZA.jpg" alt="案例6" class="w-full h-24 object-cover zoomable-image">
-                        </div>
-                        <div class="rounded-lg overflow-hidden border border-gray-200 hover:shadow-md transition-shadow cursor-pointer case-item" data-img="https://aisearch.cdn.bcebos.com/fileManager/n-JQzIHmOAQdZItDkjSd3Q/1763995382495FZfKkG.jpg" title="案例7">
-                            <img src="https://aisearch.cdn.bcebos.com/fileManager/n-JQzIHmOAQdZItDkjSd3Q/1763995382495FZfKkG.jpg" alt="案例7" class="w-full h-24 object-cover zoomable-image">
-                        </div>
-                        <div class="rounded-lg overflow-hidden border border-gray-200 hover:shadow-md transition-shadow cursor-pointer case-item" data-img="https://aisearch.cdn.bcebos.com/fileManager/n-JQzIHmOAQdZItDkjSd3Q/1763718210978aP6ZD2.jpg" title="案例8">
-                            <img src="https://aisearch.cdn.bcebos.com/fileManager/n-JQzIHmOAQdZItDkjSd3Q/1763718210978aP6ZD2.jpg" alt="案例8" class="w-full h-24 object-cover zoomable-image">
-                        </div>				
-                    </div>
-                </div>
-            </div>
-        </div>
+				
     </main>
-
     <footer class="bg-white border-t border-gray-200 py-4 mt-6">
         <div class="container mx-auto px-4 text-center text-sm text-gray-500">
-            <p>YaHee, Studio.</p>
+            <p>YaHee, Studio.  - 滴滴 滴滴滴  起飞咯~~~~~</p>
         </div>
     </footer>
 
@@ -491,1556 +445,1638 @@
         <img id="previewModalImg" src="" alt="放大预览" class="max-w-[90%] max-h-[90vh] object-contain">
     </div>
 
-    <script>
-        // 应用状态
-        const appState = {
-            selectedTags: new Set(),
-            apiKeys: [],
-            credits: {}, // 存储每个API Key的积分
-            currentApiKey: null, // 当前使用的API Key
-            currentServer: 'china', // 默认使用国内服务器
-            currentTaskId: null, // 当前生成任务ID
-            isGenerating: false, // 是否正在生成中
-            uploadedImageUrls: [], // 存储上传到图床的图片URL
-            currentImageUrl: null // 当前生成的图片URL
-        };
+<script>
+    // 应用状态
+    const appState = {
+        selectedTags: new Set(),
+        apiKeys: [],
+        credits: {}, // 存储每个API Key的积分
+        currentApiKey: null, // 当前使用的API Key
+        currentServer: 'china', // 默认使用国内服务器
+        currentTaskId: null, // 当前生成任务ID
+        isGenerating: false, // 是否正在生成中
+        uploadedImageUrls: [], // 存储上传到图床的图片URL
+        currentImageUrl: null // 当前生成的图片URL
+    };
 
-        // ImgBB API 配置
-        const IMGBB_API_KEY = 'e8bf0d415745ca4f4ceee30dd5745e16';
-        const IMGBB_UPLOAD_URL = 'https://api.imgbb.com/1/upload';
+    // ImgBB API 配置
+    const IMGBB_API_KEY = 'e8bf0d415745ca4f4ceee30dd5745e16';
+    const IMGBB_UPLOAD_URL = 'https://api.imgbb.com/1/upload';
 
-        // API服务器配置
-        const apiServers = {
-            china: 'https://grsai.dakka.com.cn',
-            oversea: 'https://api.grsai.com'
-        };
+    // API服务器配置
+    const apiServers = {
+        china: 'https://grsai.dakka.com.cn',
+        oversea: 'https://api.grsai.com'
+    };
 
-        // DOM 元素
-        const elements = {
-            presetTags: document.getElementById('presetTags'),
-            selectedTagsContainer: document.getElementById('selectedTagsContainer'),
-            selectedTags: document.getElementById('selectedTags'),
-            apiSettingBtn: document.getElementById('apiSettingBtn'),
-            apiModal: document.getElementById('apiModal'),
-            closeApiModal: document.getElementById('closeApiModal'),
-            batchAddBtn: document.getElementById('batchAddBtn'),
-            batchExportBtn: document.getElementById('batchExportBtn'),
-            addApiKeyBtn: document.getElementById('addApiKeyBtn'),
-            saveApiSetting: document.getElementById('saveApiSetting'),
-            refreshCredits: document.getElementById('refreshCredits'),
-            batchApiKeys: document.getElementById('batchApiKeys'),
-            apiKeyList: document.getElementById('apiKeyList'),
-            validApiCount: document.getElementById('validApiCount'),
-            modalTotalCredit: document.getElementById('modalTotalCredit'),
-            currentApiCredit: document.getElementById('currentApiCredit'),
-            minCredit: document.getElementById('minCredit'),
-            creditCount: document.getElementById('creditCount'),
-            totalCreditCount: document.getElementById('totalCreditCount'),
-            useChinaServer: document.getElementById('useChinaServer'),
-            useOverseaServer: document.getElementById('useOverseaServer'),
-            currentServer: document.getElementById('currentServer'),
-            generateBtn: document.getElementById('generateBtn'),
-            generationStatus: document.getElementById('generationStatus'),
-            previewResult: document.getElementById('previewResult'),
-            resultActions: document.getElementById('resultActions'),
-            downloadBtn: document.getElementById('downloadBtn'),
-            saveHistoryBtn: document.getElementById('saveHistoryBtn'),
-            regenerateBtn: document.getElementById('regenerateBtn'),
-            uploadArea: document.getElementById('uploadArea'),
-            imageUpload: document.getElementById('imageUpload'),
-            uploadProgress: document.getElementById('uploadProgress'),
-            uploadProgressBar: document.getElementById('uploadProgressBar'),
-            uploadProgressText: document.getElementById('uploadProgressText'),
-            uploadedUrlsContainer: document.getElementById('uploadedUrlsContainer'),
-            uploadedUrlsList: document.getElementById('uploadedUrlsList'),
-            copyAllUrlsBtn: document.getElementById('copyAllUrlsBtn'),
-            referenceUrls: document.getElementById('referenceUrls')
-        };
+    // DOM 元素
+    const elements = {
+        presetTags: document.getElementById('presetTags'),
+        selectedTagsContainer: document.getElementById('selectedTagsContainer'),
+        selectedTags: document.getElementById('selectedTags'),
+        apiSettingBtn: document.getElementById('apiSettingBtn'),
+        apiModal: document.getElementById('apiModal'),
+        closeApiModal: document.getElementById('closeApiModal'),
+        batchAddBtn: document.getElementById('batchAddBtn'),
+        batchExportBtn: document.getElementById('batchExportBtn'),
+        addApiKeyBtn: document.getElementById('addApiKeyBtn'),
+        saveApiSetting: document.getElementById('saveApiSetting'),
+        refreshCredits: document.getElementById('refreshCredits'),
+        batchApiKeys: document.getElementById('batchApiKeys'),
+        apiKeyList: document.getElementById('apiKeyList'),
+        validApiCount: document.getElementById('validApiCount'),
+        modalTotalCredit: document.getElementById('modalTotalCredit'),
+        currentApiCredit: document.getElementById('currentApiCredit'),
+        minCredit: document.getElementById('minCredit'),
+        creditCount: document.getElementById('creditCount'),
+        totalCreditCount: document.getElementById('totalCreditCount'),
+        useChinaServer: document.getElementById('useChinaServer'),
+        useOverseaServer: document.getElementById('useOverseaServer'),
+        currentServer: document.getElementById('currentServer'),
+        generateBtn: document.getElementById('generateBtn'),
+        generationStatus: document.getElementById('generationStatus'),
+        previewResult: document.getElementById('previewResult'),
+        resultActions: document.getElementById('resultActions'),
+        downloadBtn: document.getElementById('downloadBtn'),
+        saveHistoryBtn: document.getElementById('saveHistoryBtn'),
+        regenerateBtn: document.getElementById('regenerateBtn'),
+        uploadArea: document.getElementById('uploadArea'),
+        imageUpload: document.getElementById('imageUpload'),
+        uploadProgress: document.getElementById('uploadProgress'),
+        uploadProgressBar: document.getElementById('uploadProgressBar'),
+        uploadProgressText: document.getElementById('uploadProgressText'),
+        uploadedUrlsContainer: document.getElementById('uploadedUrlsContainer'),
+        uploadedUrlsList: document.getElementById('uploadedUrlsList'),
+        copyAllUrlsBtn: document.getElementById('copyAllUrlsBtn'),
+        referenceUrls: document.getElementById('referenceUrls')
+    };
 
-        // 初始化函数
-        function init() {
-            bindEvents();
-            loadApiKeys(); // 加载已保存的API Keys
-            loadServerSetting(); // 加载服务器设置
-            updateCreditDisplay(); // 更新积分显示
-            updateHistoryDisplay(); // 更新历史记录显示
-            
-            // 监听Banana子模型变化
-            document.getElementById('bananaSubModel').addEventListener('change', (e) => {
-                updateImageSizeVisibility(e.target.value);
-            });
-            
-            // 初始化图像大小选择显示状态
-            updateImageSizeVisibility(document.getElementById('bananaSubModel').value);
-        }
+    // 初始化函数
+    function init() {
+        bindEvents();
+        loadApiKeys(); // 加载已保存的API Keys
+        loadServerSetting(); // 加载服务器设置
+        updateCreditDisplay(); // 更新积分显示
+        updateHistoryDisplay(); // 更新历史记录显示
+        
+        // 监听Banana子模型变化
+        document.getElementById('bananaSubModel').addEventListener('change', (e) => {
+            updateImageSizeVisibility(e.target.value);
+        });
+        
+        // 初始化图像大小选择显示状态
+        updateImageSizeVisibility(document.getElementById('bananaSubModel').value);
+    }
 
-        // 绑定事件
-        function bindEvents() {
-            // 预设描述词点击事件
-            elements.presetTags.addEventListener('click', (e) => {
-                if (e.target.tagName === 'SPAN' && e.target.dataset.tag) {
-                    toggleTag(e.target.dataset.tag);
-                }
-            });
-
-            // API 设置按钮点击事件
-            elements.apiSettingBtn.addEventListener('click', () => {
-                showApiModal();
-            });
-
-            // 关闭 API 模态框事件
-            elements.closeApiModal.addEventListener('click', () => {
-                hideApiModal();
-            });
-
-            // 点击模态框背景关闭
-            elements.apiModal.addEventListener('click', (e) => {
-                if (e.target === elements.apiModal) {
-                    hideApiModal();
-                }
-            });
-
-            // 添加键盘事件监听
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape' && !elements.apiModal.classList.contains('hidden')) {
-                    hideApiModal();
-                }
-            });
-
-            // 模型选择器事件
-            document.querySelectorAll('.model-card').forEach(card => {
-                card.addEventListener('click', () => {
-                    document.querySelectorAll('.model-card').forEach(c => {
-                        c.classList.remove('active');
-                        c.querySelector('.fa-check-circle').classList.add('hidden');
-                    });
-                    card.classList.add('active');
-                    card.querySelector('.fa-check-circle').classList.remove('hidden');
-                    
-                    // 显示/隐藏相关配置
-                    const model = card.dataset.model;
-                    if (model === 'gpt') {
-                        document.getElementById('gptConfig').classList.remove('hidden');
-                        document.getElementById('bananaConfig').classList.add('hidden');
-                        // 切换到GPT专用的图片比例选项
-                        updateImageSizeOptionsForGPT();
-                    } else if (model === 'banana') {
-                        document.getElementById('gptConfig').classList.add('hidden');
-                        document.getElementById('bananaConfig').classList.remove('hidden');
-                        // 恢复所有图片比例选项
-                        updateImageSizeOptionsForBanana();
-                    }
-                });
-            });
-
-            // 案例展示图片点击事件
-            document.querySelectorAll('.case-item').forEach(item => {
-                item.addEventListener('click', () => {
-                    const imgSrc = item.dataset.img;
-                    document.getElementById('previewModalImg').src = imgSrc;
-                    document.getElementById('imagePreviewModal').classList.remove('hidden');
-                });
-            });
-
-            // 关闭图片预览模态框
-            document.getElementById('closePreviewModal').addEventListener('click', () => {
-                document.getElementById('imagePreviewModal').classList.add('hidden');
-            });
-
-            // API 设置模态框内按钮事件
-            elements.batchAddBtn.addEventListener('click', () => {
-                handleBatchAdd();
-            });
-
-            elements.batchExportBtn.addEventListener('click', () => {
-                handleBatchExport();
-            });
-
-            elements.addApiKeyBtn.addEventListener('click', () => {
-                addApiKeyInput();
-            });
-
-            elements.saveApiSetting.addEventListener('click', () => {
-                saveApiSettings();
-            });
-
-            elements.refreshCredits.addEventListener('click', () => {
-                refreshAllCredits();
-            });
-
-            // 服务器选择按钮事件
-            elements.useChinaServer.addEventListener('click', () => {
-                setServer('china');
-            });
-
-            elements.useOverseaServer.addEventListener('click', () => {
-                setServer('oversea');
-            });
-
-            // 生成按钮点击事件
-            elements.generateBtn.addEventListener('click', () => {
-                generateImage();
-            });
-
-            // 重新生成按钮点击事件
-            elements.regenerateBtn.addEventListener('click', () => {
-                generateImage();
-            });
-
-            // 下载按钮点击事件
-            elements.downloadBtn.addEventListener('click', () => {
-                downloadImage();
-            });
-
-            // 保存历史按钮点击事件
-            elements.saveHistoryBtn.addEventListener('click', () => {
-                saveToHistory();
-            });
-
-            // 清空历史记录按钮
-            document.getElementById('clearHistoryBtn').addEventListener('click', () => {
-                clearHistory();
-            });
-
-            // 上传图片区域点击事件
-            elements.uploadArea.addEventListener('click', () => {
-                elements.imageUpload.click();
-            });
-
-            // 文件选择事件
-            elements.imageUpload.addEventListener('change', (event) => {
-                const files = event.target.files;
-                if (files && files.length > 0) {
-                    handleDroppedFiles(files);
-                }
-            });
-
-            // 复制所有URL按钮事件
-            elements.copyAllUrlsBtn.addEventListener('click', () => {
-                copyAllImageUrls();
-            });
-
-            // API Key 列表事件委托（用于删除按钮和选择按钮）
-            elements.apiKeyList.addEventListener('click', (e) => {
-                if (e.target.closest('.fa-trash')) {
-                    const item = e.target.closest('.api-key-item');
-                    if (item) {
-                        const input = item.querySelector('.api-key-input');
-                        const apiKey = input.value.trim();
-                        
-                        // 从状态中移除积分记录
-                        if (apiKey && appState.credits[apiKey]) {
-                            delete appState.credits[apiKey];
-                        }
-                        
-                        // 如果删除的是当前使用的API Key，重置当前API Key
-                        if (apiKey === appState.currentApiKey) {
-                            appState.currentApiKey = null;
-                        }
-                        
-                        item.remove();
-                        showToast('API Key 已删除', 'success');
-                        updateCreditStats(); // 更新积分统计
-                    }
-                }
-                
-                // 选择API Key按钮事件
-                if (e.target.closest('.select-api-btn')) {
-                    const item = e.target.closest('.api-key-item');
-                    if (item) {
-                        const input = item.querySelector('.api-key-input');
-                        const apiKey = input.value.trim();
-                        
-                        if (apiKey) {
-                            setCurrentApiKey(apiKey);
-                            showToast('已设为当前使用API Key', 'success');
-                            
-                            // 更新所有API Key项的选择状态
-                            updateApiKeySelectionState();
-                        }
-                    }
-                }
-            });
-
-            // API Key 输入框更改事件（用于实时更新积分）
-            elements.apiKeyList.addEventListener('input', (e) => {
-                if (e.target.type === 'password' && e.target.value.trim()) {
-                    // 延迟执行，避免频繁请求
-                    clearTimeout(e.target._timeout);
-                    e.target._timeout = setTimeout(() => {
-                        updateApiKeyCredit(e.target);
-                    }, 800);
-                }
-            });
-
-            // 拖放功能
-            elements.uploadArea.addEventListener('dragover', (e) => {
-                e.preventDefault();
-                elements.uploadArea.classList.add('border-primary', 'bg-primary/5');
-            });
-
-            elements.uploadArea.addEventListener('dragleave', (e) => {
-                e.preventDefault();
-                elements.uploadArea.classList.remove('border-primary', 'bg-primary/5');
-            });
-
-            elements.uploadArea.addEventListener('drop', (e) => {
-                e.preventDefault();
-                elements.uploadArea.classList.remove('border-primary', 'bg-primary/5');
-                const files = e.dataTransfer.files;
-                if (files.length > 0) {
-                    handleDroppedFiles(files);
-                }
-            });
-        }
-
-        // 处理拖放的文件 - 使用真实的ImgBB API上传
-        function handleDroppedFiles(files) {
-            if (!files || files.length === 0) return;
-            
-            // 限制最多5张图片
-            const fileCount = Math.min(files.length, 5);
-            if (files.length > 5) {
-                showToast('最多只能上传5张图片', 'warning');
+    // 绑定事件
+    function bindEvents() {
+        // 预设描述词点击事件
+        elements.presetTags.addEventListener('click', (e) => {
+            if (e.target.tagName === 'SPAN' && e.target.dataset.tag) {
+                toggleTag(e.target.dataset.tag);
             }
+        });
+
+        // API 设置按钮点击事件
+        elements.apiSettingBtn.addEventListener('click', () => {
+            showApiModal();
+        });
+
+        // 关闭 API 模态框事件
+        elements.closeApiModal.addEventListener('click', () => {
+            hideApiModal();
+        });
+
+        // 点击模态框背景关闭
+        elements.apiModal.addEventListener('click', (e) => {
+            if (e.target === elements.apiModal) {
+                hideApiModal();
+            }
+        });
+
+        // 添加键盘事件监听
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && !elements.apiModal.classList.contains('hidden')) {
+                hideApiModal();
+            }
+        });
+
+        // 模型选择器事件
+        document.querySelectorAll('.model-card').forEach(card => {
+            card.addEventListener('click', () => {
+                document.querySelectorAll('.model-card').forEach(c => {
+                    c.classList.remove('active');
+                    c.querySelector('.fa-check-circle').classList.add('hidden');
+                });
+                card.classList.add('active');
+                card.querySelector('.fa-check-circle').classList.remove('hidden');
+                
+                // 显示/隐藏相关配置
+                const model = card.dataset.model;
+                if (model === 'gpt') {
+                    document.getElementById('gptConfig').classList.remove('hidden');
+                    document.getElementById('bananaConfig').classList.add('hidden');
+                    // 切换到GPT专用的图片比例选项
+                    updateImageSizeOptionsForGPT();
+                } else if (model === 'banana') {
+                    document.getElementById('gptConfig').classList.add('hidden');
+                    document.getElementById('bananaConfig').classList.remove('hidden');
+                    // 恢复所有图片比例选项
+                    updateImageSizeOptionsForBanana();
+                }
+            });
+        });
+
+        // 案例展示图片点击事件
+        document.querySelectorAll('.case-item').forEach(item => {
+            item.addEventListener('click', () => {
+                const imgSrc = item.dataset.img;
+                document.getElementById('previewModalImg').src = imgSrc;
+                document.getElementById('imagePreviewModal').classList.remove('hidden');
+            });
+        });
+
+        // 关闭图片预览模态框
+        document.getElementById('closePreviewModal').addEventListener('click', () => {
+            document.getElementById('imagePreviewModal').classList.add('hidden');
+        });
+
+        // API 设置模态框内按钮事件
+        elements.batchAddBtn.addEventListener('click', () => {
+            handleBatchAdd();
+        });
+
+        elements.batchExportBtn.addEventListener('click', () => {
+            handleBatchExport();
+        });
+
+        elements.addApiKeyBtn.addEventListener('click', () => {
+            addApiKeyInput();
+        });
+
+        elements.saveApiSetting.addEventListener('click', () => {
+            saveApiSettings();
+        });
+
+        elements.refreshCredits.addEventListener('click', () => {
+            refreshAllCredits();
+        });
+
+        // 服务器选择按钮事件
+        elements.useChinaServer.addEventListener('click', () => {
+            setServer('china');
+        });
+
+        elements.useOverseaServer.addEventListener('click', () => {
+            setServer('oversea');
+        });
+
+        // 生成按钮点击事件
+        elements.generateBtn.addEventListener('click', () => {
+            generateImage();
+        });
+
+        // 重新生成按钮点击事件
+        elements.regenerateBtn.addEventListener('click', () => {
+            generateImage();
+        });
+
+        // 下载按钮点击事件
+        elements.downloadBtn.addEventListener('click', () => {
+            downloadImage();
+        });
+
+        // 保存历史按钮点击事件
+        elements.saveHistoryBtn.addEventListener('click', () => {
+            saveToHistory();
+        });
+
+        // 清空历史记录按钮
+        document.getElementById('clearHistoryBtn').addEventListener('click', () => {
+            clearHistory();
+        });
+
+        // 上传图片区域点击事件
+        elements.uploadArea.addEventListener('click', () => {
+            elements.imageUpload.click();
+        });
+
+        // 文件选择事件
+        elements.imageUpload.addEventListener('change', (event) => {
+            const files = event.target.files;
+            if (files && files.length > 0) {
+                handleDroppedFiles(files);
+            }
+        });
+
+        // 复制所有URL按钮事件
+        elements.copyAllUrlsBtn.addEventListener('click', () => {
+            copyAllImageUrls();
+        });
+
+        // API Key 列表事件委托（用于删除按钮和选择按钮）
+        elements.apiKeyList.addEventListener('click', (e) => {
+            if (e.target.closest('.fa-trash')) {
+                const item = e.target.closest('.api-key-item');
+                if (item) {
+                    const input = item.querySelector('.api-key-input');
+                    const apiKey = input.value.trim();
+                    
+                    // 从状态中移除积分记录
+                    if (apiKey && appState.credits[apiKey]) {
+                        delete appState.credits[apiKey];
+                    }
+                    
+                    // 如果删除的是当前使用的API Key，重置当前API Key
+                    if (apiKey === appState.currentApiKey) {
+                        appState.currentApiKey = null;
+                    }
+                    
+                    item.remove();
+                    showToast('API Key 已删除', 'success');
+                    updateCreditStats(); // 更新积分统计
+                }
+            }
+            
+            // 选择API Key按钮事件
+            if (e.target.closest('.select-api-btn')) {
+                const item = e.target.closest('.api-key-item');
+                if (item) {
+                    const input = item.querySelector('.api-key-input');
+                    const apiKey = input.value.trim();
+                    
+                    if (apiKey) {
+                        setCurrentApiKey(apiKey);
+                        showToast('已设为当前使用API Key', 'success');
+                        
+                        // 更新所有API Key项的选择状态
+                        updateApiKeySelectionState();
+                    }
+                }
+            }
+        });
+
+        // API Key 输入框更改事件（用于实时更新积分）
+        elements.apiKeyList.addEventListener('input', (e) => {
+            if (e.target.type === 'password' && e.target.value.trim()) {
+                // 延迟执行，避免频繁请求
+                clearTimeout(e.target._timeout);
+                e.target._timeout = setTimeout(() => {
+                    updateApiKeyCredit(e.target);
+                }, 800);
+            }
+        });
+
+        // 拖放功能
+        elements.uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            elements.uploadArea.classList.add('border-primary', 'bg-primary/5');
+        });
+
+        elements.uploadArea.addEventListener('dragleave', (e) => {
+            e.preventDefault();
+            elements.uploadArea.classList.remove('border-primary', 'bg-primary/5');
+        });
+
+        elements.uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            elements.uploadArea.classList.remove('border-primary', 'bg-primary/5');
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                handleDroppedFiles(files);
+            }
+        });
+    }
+
+    // 处理拖放的文件 - 使用真实的ImgBB API上传
+    function handleDroppedFiles(files) {
+        if (!files || files.length === 0) return;
+        
+        // 限制最多5张图片
+        const fileCount = Math.min(files.length, 5);
+        if (files.length > 5) {
+            showToast('最多只能上传5张图片', 'warning');
+        }
+        
+        // 显示上传进度
+        elements.uploadProgress.classList.remove('hidden');
+        
+        // 上传所有图片
+        let validFileCount = 0;
+        for (let i = 0; i < fileCount; i++) {
+            const file = files[i];
+            
+            // 安全的文件类型检查
+            if (!file || !file.type || !file.type.startsWith('image/')) {
+                console.warn('跳过非图片文件:', file?.name);
+                continue;
+            }
+            
+            uploadImageToImgBB(file, validFileCount, fileCount);
+            validFileCount++;
+        }
+        
+        // 如果没有有效的图片文件，隐藏进度条
+        if (validFileCount === 0) {
+            elements.uploadProgress.classList.add('hidden');
+            showToast('没有找到有效的图片文件', 'warning');
+        }
+    }
+
+    // 使用ImgBB API上传图片到图床
+    async function uploadImageToImgBB(file, index, total) {
+        // 安全检查
+        if (!file || !file.type) {
+            console.error('Invalid file object in uploadImageToImgBB');
+            return;
+        }
+        
+        // 再次确认是图片文件
+        if (!file.type.startsWith('image/')) {
+            console.error('File is not an image:', file.type);
+            return;
+        }
+        
+        try {
+            // 创建FormData对象
+            const formData = new FormData();
+            formData.append('key', IMGBB_API_KEY);
+            formData.append('image', file);
             
             // 显示上传进度
-            elements.uploadProgress.classList.remove('hidden');
+            updateUploadProgress(0, index, total);
             
-            // 上传所有图片
-            let validFileCount = 0;
-            for (let i = 0; i < fileCount; i++) {
-                const file = files[i];
-                
-                // 安全的文件类型检查
-                if (!file || !file.type || !file.type.startsWith('image/')) {
-                    console.warn('跳过非图片文件:', file?.name);
-                    continue;
-                }
-                
-                uploadImageToImgBB(file, validFileCount, fileCount);
-                validFileCount++;
+            // 发送请求到ImgBB API
+            const response = await fetch(IMGBB_UPLOAD_URL, {
+                method: 'POST',
+                body: formData
+            });
+            
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
             }
             
-            // 如果没有有效的图片文件，隐藏进度条
-            if (validFileCount === 0) {
-                elements.uploadProgress.classList.add('hidden');
-                showToast('没有找到有效的图片文件', 'warning');
-            }
-        }
-
-        // 使用ImgBB API上传图片到图床
-        async function uploadImageToImgBB(file, index, total) {
-            // 安全检查
-            if (!file || !file.type) {
-                console.error('Invalid file object in uploadImageToImgBB');
-                return;
-            }
+            const result = await response.json();
             
-            // 再次确认是图片文件
-            if (!file.type.startsWith('image/')) {
-                console.error('File is not an image:', file.type);
-                return;
-            }
-            
-            try {
-                // 创建FormData对象
-                const formData = new FormData();
-                formData.append('key', IMGBB_API_KEY);
-                formData.append('image', file);
+            if (result.success) {
+                // 获取图片URL
+                const imageUrl = result.data.url;
                 
-                // 显示上传进度
-                updateUploadProgress(0, index, total);
+                // 添加到已上传图片列表
+                appState.uploadedImageUrls.push(imageUrl);
                 
-                // 发送请求到ImgBB API
-                const response = await fetch(IMGBB_UPLOAD_URL, {
-                    method: 'POST',
-                    body: formData
-                });
+                // 更新UI显示
+                updateUploadedUrlsList();
                 
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
+                // 完成进度
+                updateUploadProgress(100, index, total);
                 
-                const result = await response.json();
+                showToast(`图片 ${index + 1}/${total} 上传成功`, 'success');
                 
-                if (result.success) {
-                    // 获取图片URL
-                    const imageUrl = result.data.url;
-                    
-                    // 添加到已上传图片列表
-                    appState.uploadedImageUrls.push(imageUrl);
-                    
-                    // 更新UI显示
-                    updateUploadedUrlsList();
-                    
-                    // 完成进度
-                    updateUploadProgress(100, index, total);
-                    
-                    showToast(`图片 ${index + 1}/${total} 上传成功`, 'success');
-                    
-                    // 修复：上传成功后重置文件输入框
-                    elements.imageUpload.value = '';
-                    
-                } else {
-                    throw new Error(result.error?.message || '上传失败');
-                }
-                
-            } catch (error) {
-                console.error('图片上传失败:', error);
-                showToast(`图片 ${index + 1}/${total} 上传失败: ${error.message}`, 'error');
-                
-                // 修复：上传失败后也重置文件输入框
+                // 修复：上传成功后重置文件输入框
                 elements.imageUpload.value = '';
                 
-                // 如果所有图片都上传完成，隐藏进度条
-                if (index === total - 1) {
-                    setTimeout(() => {
-                        elements.uploadProgress.classList.add('hidden');
-                    }, 1000);
-                }
+            } else {
+                throw new Error(result.error?.message || '上传失败');
             }
-        }
-
-        // 更新上传进度
-        function updateUploadProgress(progress, currentIndex, total) {
-            // 计算总体进度
-            const overallProgress = Math.round((currentIndex / total) * 100 + (progress / total));
             
-            elements.uploadProgressBar.style.width = `${overallProgress}%`;
-            elements.uploadProgressText.textContent = `${overallProgress}%`;
+        } catch (error) {
+            console.error('图片上传失败:', error);
+            showToast(`图片 ${index + 1}/${total} 上传失败: ${error.message}`, 'error');
+            
+            // 修复：上传失败后也重置文件输入框
+            elements.imageUpload.value = '';
             
             // 如果所有图片都上传完成，隐藏进度条
-            if (overallProgress >= 100) {
+            if (index === total - 1) {
                 setTimeout(() => {
                     elements.uploadProgress.classList.add('hidden');
                 }, 1000);
             }
         }
+    }
 
-        // 更新已上传图片URL列表
-        function updateUploadedUrlsList() {
-            elements.uploadedUrlsList.innerHTML = '';
-            
-            appState.uploadedImageUrls.forEach((url, index) => {
-                const urlItem = document.createElement('div');
-                urlItem.className = 'flex items-center justify-between p-2 bg-white rounded border border-gray-200';
-                urlItem.innerHTML = `
-                    <div class="flex items-center gap-2 flex-1 min-w-0">
-                        <div class="w-8 h-8 bg-gray-200 rounded flex items-center justify-center">
-                            <i class="fa fa-image text-gray-400"></i>
-                        </div>
-                        <div class="text-xs text-gray-600 truncate flex-1">${url}</div>
+    // 更新上传进度
+    function updateUploadProgress(progress, currentIndex, total) {
+        // 计算总体进度
+        const overallProgress = Math.round((currentIndex / total) * 100 + (progress / total));
+        
+        elements.uploadProgressBar.style.width = `${overallProgress}%`;
+        elements.uploadProgressText.textContent = `${overallProgress}%`;
+        
+        // 如果所有图片都上传完成，隐藏进度条
+        if (overallProgress >= 100) {
+            setTimeout(() => {
+                elements.uploadProgress.classList.add('hidden');
+            }, 1000);
+        }
+    }
+
+    // 更新已上传图片URL列表
+    function updateUploadedUrlsList() {
+        elements.uploadedUrlsList.innerHTML = '';
+        
+        appState.uploadedImageUrls.forEach((url, index) => {
+            const urlItem = document.createElement('div');
+            urlItem.className = 'flex items-center justify-between p-2 bg-white rounded border border-gray-200';
+            urlItem.innerHTML = `
+                <div class="flex items-center gap-2 flex-1 min-w-0">
+                    <div class="w-8 h-8 bg-gray-200 rounded flex items-center justify-center">
+                        <i class="fa fa-image text-gray-400"></i>
                     </div>
-                    <div class="flex gap-1">
-                        <button class="text-primary hover:text-primary/70 copy-url-btn" data-url="${url}" title="复制URL">
-                            <i class="fa fa-copy"></i>
-                        </button>
-                        <button class="text-danger hover:text-danger/70 remove-url-btn" data-index="${index}" title="删除">
-                            <i class="fa fa-trash"></i>
-                        </button>
-                    </div>
-                `;
-                elements.uploadedUrlsList.appendChild(urlItem);
-            });
-            
-            // 添加复制和删除按钮事件
-            elements.uploadedUrlsList.querySelectorAll('.copy-url-btn').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    const url = e.currentTarget.dataset.url;
-                    navigator.clipboard.writeText(url).then(() => {
-                        showToast('URL已复制到剪贴板', 'success');
-                    });
-                });
-            });
-            
-            elements.uploadedUrlsList.querySelectorAll('.remove-url-btn').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    const index = parseInt(e.currentTarget.dataset.index);
-                    appState.uploadedImageUrls.splice(index, 1);
-                    updateUploadedUrlsList();
-                    showToast('URL已删除', 'success');
-                    
-                    // 修复：重置文件输入框，允许重新选择相同文件
-                    elements.imageUpload.value = '';
-                });
-            });
-            
-            // 显示/隐藏URL列表容器
-            if (appState.uploadedImageUrls.length > 0) {
-                elements.uploadedUrlsContainer.classList.remove('hidden');
-            } else {
-                elements.uploadedUrlsContainer.classList.add('hidden');
-            }
-        }
-
-        // 复制所有图片URL
-        function copyAllImageUrls() {
-            const urls = appState.uploadedImageUrls.join('\n');
-            navigator.clipboard.writeText(urls).then(() => {
-                showToast('所有URL已复制到剪贴板', 'success');
-            });
-        }
-
-        // 控制图像大小选择的显示/隐藏
-        function updateImageSizeVisibility(subModel) {
-            const imageSizeContainer = document.getElementById('bananaImageSizeContainer');
-            if (subModel === 'nano-banana-pro') {
-                imageSizeContainer.classList.remove('hidden');
-            } else {
-                imageSizeContainer.classList.add('hidden');
-            }
-        }
-
-        // 设置当前使用的API Key
-        function setCurrentApiKey(apiKey) {
-            appState.currentApiKey = apiKey;
-            localStorage.setItem('currentApiKey', apiKey);
-            updateCreditDisplay();
-            updateApiKeySelectionState();
-        }
-
-        // 获取当前使用的API Key
-        function getCurrentApiKey() {
-            // 如果已设置当前API Key，则返回
-            if (appState.currentApiKey && appState.credits[appState.currentApiKey]) {
-                return appState.currentApiKey;
-            }
-            
-            // 否则返回积分最高的API Key
-            return getBestApiKey();
-        }
-
-        // 更新API Key选择状态显示
-        function updateApiKeySelectionState() {
-            const currentApiKey = getCurrentApiKey();
-            elements.apiKeyList.querySelectorAll('.api-key-item').forEach(item => {
-                const input = item.querySelector('.api-key-input');
-                const selectBtn = item.querySelector('.select-api-btn');
-                const icon = selectBtn.querySelector('i');
-                
-                if (input.value.trim() === currentApiKey) {
-                    item.classList.add('api-key-active');
-                    icon.className = 'fa fa-check-circle text-success';
-                    selectBtn.title = '当前使用中';
-                } else {
-                    item.classList.remove('api-key-active');
-                    icon.className = 'fa fa-check-circle text-gray-400';
-                    selectBtn.title = '设为当前使用';
-                }
-            });
-        }
-
-        // 更新图片比例选项为GPT专用
-        function updateImageSizeOptionsForGPT() {
-            const imageSizeSelect = document.getElementById('imageSize');
-            const currentValue = imageSizeSelect.value;
-            
-            // GPT支持的尺寸选项
-            const gptOptions = [
-                { value: 'auto', text: '自动' },
-                { value: '1:1', text: '1:1（正方形）' },
-                { value: '3:2', text: '3:2（横屏）' },
-                { value: '2:3', text: '2:3（竖屏）' }
-            ];
-            
-            // 清空现有选项
-            imageSizeSelect.innerHTML = '';
-            
-            // 添加GPT专用选项
-            gptOptions.forEach(option => {
-                const optionElement = document.createElement('option');
-                optionElement.value = option.value;
-                optionElement.textContent = option.text;
-                if (option.value === currentValue && gptOptions.some(opt => opt.value === currentValue)) {
-                    optionElement.selected = true;
-                }
-                imageSizeSelect.appendChild(optionElement);
-            });
-            
-            // 如果当前值不在GPT选项中，设置为auto
-            if (!gptOptions.some(opt => opt.value === currentValue)) {
-                imageSizeSelect.value = 'auto';
-            }
-        }
-
-        // 恢复所有图片比例选项（用于Banana模型）
-        function updateImageSizeOptionsForBanana() {
-            const imageSizeSelect = document.getElementById('imageSize');
-            const currentValue = imageSizeSelect.value;
-            
-            // Banana支持的所有尺寸选项
-            const bananaOptions = [
-                { value: 'auto', text: '自动' },
-                { value: '1:1', text: '1:1（正方形）' },
-                { value: '3:2', text: '3:2（横屏）' },
-                { value: '2:3', text: '2:3（竖屏）' },
-                { value: '16:9', text: '16:9（宽屏）' },
-                { value: '9:16', text: '9:16（竖屏视频）' },
-                { value: '4:3', text: '4:3（传统电视）' },
-                { value: '3:4', text: '3:4（竖屏照片）' },
-                { value: '5:4', text: '5:4（打印照片）' },
-                { value: '4:5', text: '4:5（竖屏照片）' },
-                { value: '21:9', text: '21:9（电影宽屏）' }
-            ];
-            
-            // 清空现有选项
-            imageSizeSelect.innerHTML = '';
-            
-            // 添加所有选项
-            bananaOptions.forEach(option => {
-                const optionElement = document.createElement('option');
-                optionElement.value = option.value;
-                optionElement.textContent = option.text;
-                if (option.value === currentValue) {
-                    optionElement.selected = true;
-                }
-                imageSizeSelect.appendChild(optionElement);
-            });
-        }
-
-        // 设置服务器
-        function setServer(serverType) {
-            appState.currentServer = serverType;
-            
-            // 更新按钮样式
-            if (serverType === 'china') {
-                elements.useChinaServer.classList.remove('bg-gray-100', 'text-gray-700');
-                elements.useChinaServer.classList.add('bg-primary', 'text-white');
-                elements.useOverseaServer.classList.remove('bg-primary', 'text-white');
-                elements.useOverseaServer.classList.add('bg-gray-100', 'text-gray-700');
-                elements.currentServer.textContent = '国内服务器';
-            } else {
-                elements.useOverseaServer.classList.remove('bg-gray-100', 'text-gray-700');
-                elements.useOverseaServer.classList.add('bg-primary', 'text-white');
-                elements.useChinaServer.classList.remove('bg-primary', 'text-white');
-                elements.useChinaServer.classList.add('bg-gray-100', 'text-gray-700');
-                elements.currentServer.textContent = '海外服务器';
-            }
-            
-            // 保存设置
-            localStorage.setItem('aiApiServer', serverType);
-            showToast(`已切换到${serverType === 'china' ? '国内' : '海外'}服务器`, 'success');
-            
-            // 刷新所有积分
-            refreshAllCredits();
-        }
-
-        // 加载服务器设置
-        function loadServerSetting() {
-            const savedServer = localStorage.getItem('aiApiServer');
-            if (savedServer) {
-                setServer(savedServer);
-            }
-        }
-
-        // 显示 API 设置模态框
-        function showApiModal() {
-            elements.apiModal.classList.remove('hidden');
-            updateCreditStats(); // 更新积分统计
-        }
-
-        // 隐藏 API 设置模态框
-        function hideApiModal() {
-            elements.apiModal.classList.add('hidden');
-        }
-
-        // 批量添加 API Key
-        function handleBatchAdd() {
-            const keysText = elements.batchApiKeys.value.trim();
-            if (!keysText) {
-                showToast('请输入要添加的 API Key', 'warning');
-                return;
-            }
-
-            const keys = keysText.split('\n').filter(key => key.trim());
-            if (keys.length === 0) {
-                showToast('没有检测到有效的 API Key', 'warning');
-                return;
-            }
-
-            keys.forEach(key => {
-                addApiKeyInput(key);
-            });
-
-            elements.batchApiKeys.value = '';
-            showToast(`成功添加 ${keys.length} 个 API Key`, 'success');
-            
-            // 批量获取积分
-            refreshAllCredits();
-        }
-
-        // 批量导出 API Key
-        function handleBatchExport() {
-            const apiKeys = [];
-            elements.apiKeyList.querySelectorAll('input').forEach(input => {
-                if (input.value.trim()) {
-                    apiKeys.push(input.value.trim());
-                }
-            });
-
-            if (apiKeys.length === 0) {
-                showToast('没有可导出的 API Key', 'warning');
-                return;
-            }
-
-            const text = apiKeys.join('\n');
-            navigator.clipboard.writeText(text).then(() => {
-                showToast(`已复制 ${apiKeys.length} 个 API Key 到剪贴板`, 'success');
-            }).catch(err => {
-                console.error('复制失败:', err);
-                showToast('复制失败，请手动复制', 'error');
-            });
-        }
-
-        // 添加 API Key 输入框
-        function addApiKeyInput(value = '') {
-            const item = document.createElement('div');
-            item.className = 'flex items-center gap-2 mb-2 p-2 border border-gray-200 rounded-lg api-key-item';
-            item.innerHTML = `
-                <button class="text-gray-400 hover:text-primary select-api-btn" title="设为当前使用">
-                    <i class="fa fa-check-circle"></i>
-                </button>
-                <input type="password" class="flex-1 border-none outline-none api-key-input" placeholder="sk-..." value="${value}">
-                <span class="text-xs bg-gray-200 px-2 py-1 rounded credit-display">积分: --</span>
-                <button class="text-danger hover:text-red-600">
-                    <i class="fa fa-trash"></i>
-                </button>
-            `;
-            elements.apiKeyList.appendChild(item);
-            
-            // 如果提供了值，立即获取积分
-            if (value.trim()) {
-                const input = item.querySelector('.api-key-input');
-                updateApiKeyCredit(input);
-            }
-            
-            // 更新选择状态
-            updateApiKeySelectionState();
-        }
-
-        // 获取API积分
-        async function getApiCredit(apiKey) {
-            try {
-                // 构建请求URL
-                const baseURL = apiServers[appState.currentServer];
-                const url = `${baseURL}/client/common/getCredits?apikey=${encodeURIComponent(apiKey)}`;
-                
-                const response = await fetch(url);
-                const result = await response.json();
-                
-                if (result.code === 0) {
-                    return result.data.credits;
-                } else {
-                    throw new Error(result.msg || '获取积分失败');
-                }
-            } catch (error) {
-                console.error('获取积分失败:', error);
-                throw error;
-            }
-        }
-
-        // 更新单个 API Key 的积分显示
-        async function updateApiKeyCredit(inputElement) {
-            const creditDisplay = inputElement.parentNode.querySelector('.credit-display');
-            const apiKey = inputElement.value.trim();
-            
-            if (!apiKey) {
-                creditDisplay.textContent = '积分: --';
-                creditDisplay.className = 'text-xs bg-gray-200 px-2 py-1 rounded credit-display';
-                return;
-            }
-            
-            // 显示加载状态
-            creditDisplay.textContent = '积分: 获取中...';
-            creditDisplay.className = 'text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded credit-display';
-            
-            try {
-                const credit = await getApiCredit(apiKey);
-                
-                // 保存积分到状态
-                appState.credits[apiKey] = credit;
-                
-                creditDisplay.textContent = `积分: ${credit}`;
-                
-                // 根据积分值设置不同的颜色
-                if (credit > 5000) {
-                    creditDisplay.className = 'text-xs bg-green-100 text-green-800 px-2 py-1 rounded credit-display';
-                } else if (credit > 2000) {
-                    creditDisplay.className = 'text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded credit-display';
-                } else {
-                    creditDisplay.className = 'text-xs bg-red-100 text-red-800 px-2 py-1 rounded credit-display';
-                }
-                
-                // 检查积分是否低于最低要求，如果是则自动删除
-                const minCreditRequired = 400;
-                if (credit < minCreditRequired) {
-                    const item = inputElement.closest('.api-key-item');
-                    if (item) {
-                        item.remove();
-                        delete appState.credits[apiKey];
-                        
-                        // 如果删除的是当前使用的API Key，重置当前API Key
-                        if (apiKey === appState.currentApiKey) {
-                            appState.currentApiKey = null;
-                        }
-                        
-                        showToast(`API Key 积分不足 (${credit})，已自动删除`, 'warning');
-                        updateCreditStats(); // 更新积分统计
-                    }
-                } else {
-                    // 更新积分统计
-                    updateCreditStats();
-                }
-            } catch (error) {
-                creditDisplay.textContent = '积分: 获取失败';
-                creditDisplay.className = 'text-xs bg-red-100 text-red-800 px-2 py-1 rounded credit-display';
-                console.error('获取积分失败:', error);
-            }
-        }
-
-        // 刷新所有API Key的积分
-        async function refreshAllCredits() {
-            showToast('正在刷新所有积分...', 'info');
-            
-            const inputs = elements.apiKeyList.querySelectorAll('.api-key-input');
-            const promises = [];
-            
-            inputs.forEach(input => {
-                if (input.value.trim()) {
-                    promises.push(updateApiKeyCredit(input));
-                }
-            });
-            
-            try {
-                await Promise.all(promises);
-                showToast('积分已全部刷新', 'success');
-            } catch (error) {
-                showToast('部分积分刷新失败', 'warning');
-            }
-        }
-
-        // 寻找可用的API Key（积分足够的）
-        function findAvailableApiKey(requiredCredit) {
-            let bestApiKey = null;
-            let maxCredits = 0;
-            
-            for (const [apiKey, credits] of Object.entries(appState.credits)) {
-                if (credits >= requiredCredit) {
-                    // 优先选择积分足够的API Key中积分最高的
-                    if (credits > maxCredits) {
-                        maxCredits = credits;
-                        bestApiKey = apiKey;
-                    }
-                }
-            }
-            
-            return bestApiKey;
-        }
-
-        // 获取所有API Key中的最高积分
-        function getMaxCredit() {
-            return Math.max(...Object.values(appState.credits), 0);
-        }
-
-        // 更新积分统计
-        function updateCreditStats() {
-            const apiKeys = [];
-            const credits = [];
-            
-            elements.apiKeyList.querySelectorAll('.api-key-item').forEach(item => {
-                const input = item.querySelector('.api-key-input');
-                const apiKey = input.value.trim();
-                
-                if (apiKey && appState.credits[apiKey]) {
-                    apiKeys.push(apiKey);
-                    credits.push(appState.credits[apiKey]);
-                }
-            });
-            
-            // 更新统计显示
-            elements.validApiCount.textContent = apiKeys.length;
-            
-            if (credits.length > 0) {
-                const total = credits.reduce((sum, credit) => sum + credit, 0);
-                const min = Math.min(...credits);
-                
-                // 获取当前使用的API Key积分
-                const currentApiKey = getCurrentApiKey();
-                const currentCredit = currentApiKey ? appState.credits[currentApiKey] : 0;
-                
-                elements.modalTotalCredit.textContent = total;
-                elements.currentApiCredit.textContent = currentCredit;
-                elements.minCredit.textContent = min;
-                
-                // 更新页面顶部的积分显示
-                updateCreditDisplay();
-            } else {
-                elements.modalTotalCredit.textContent = '0';
-                elements.currentApiCredit.textContent = '0';
-                elements.minCredit.textContent = '0';
-                updateCreditDisplay();
-            }
-        }
-
-        // 更新页面顶部积分显示
-        function updateCreditDisplay() {
-            // 获取当前使用的API Key积分
-            const currentApiKey = getCurrentApiKey();
-            const currentCredit = currentApiKey ? appState.credits[currentApiKey] : 0;
-            
-            // 计算所有API Key的总积分
-            const total = Object.values(appState.credits).reduce((sum, credit) => sum + credit, 0);
-            
-            // 更新显示
-            elements.creditCount.textContent = currentCredit;
-            elements.totalCreditCount.textContent = total;
-            
-            // 更新积分状态指示器
-            updateCreditStatus(currentCredit);
-        }
-
-        // 更新积分状态指示器
-        function updateCreditStatus(currentCredit) {
-            const creditStatus = document.getElementById('creditStatus');
-            
-            // 计算不同模型所需的最小积分
-            const minBananaFast = 440;
-            const minBanana = 1400;
-            const minBananaPro = 1800;
-            const minGpt = 400;
-            
-            const minRequired = Math.min(minBananaFast, minBanana, minBananaPro, minGpt);
-            
-            if (currentCredit < minRequired) {
-                creditStatus.innerHTML = '<i class="fa fa-exclamation-triangle text-warning"></i> 积分不足';
-                creditStatus.classList.remove('hidden');
-            } else if (currentCredit < 2000) {
-                creditStatus.innerHTML = '<i class="fa fa-info-circle text-warning"></i> 积分较低';
-                creditStatus.classList.remove('hidden');
-            } else {
-                creditStatus.classList.add('hidden');
-            }
-        }
-
-        // 保存 API 设置
-        function saveApiSettings() {
-            const apiKeys = [];
-            elements.apiKeyList.querySelectorAll('.api-key-input').forEach(input => {
-                if (input.value.trim()) {
-                    apiKeys.push(input.value.trim());
-                }
-            });
-
-            if (apiKeys.length === 0) {
-                showToast('请至少添加一个 API Key', 'warning');
-                return;
-            }
-
-            // 将 API Keys 保存到本地存储
-            try {
-                localStorage.setItem('aiApiKeys', JSON.stringify(apiKeys));
-                appState.apiKeys = apiKeys;
-                showToast(`已保存 ${apiKeys.length} 个 API Key`, 'success');
-                updateCreditDisplay(); // 更新积分显示
-                hideApiModal();
-            } catch (error) {
-                console.error('保存失败:', error);
-                showToast('保存失败，请重试', 'error');
-            }
-        }
-
-        // 加载已保存的 API Keys
-        function loadApiKeys() {
-            try {
-                const savedKeys = localStorage.getItem('aiApiKeys');
-                if (savedKeys) {
-                    const apiKeys = JSON.parse(savedKeys);
-                    appState.apiKeys = apiKeys;
-                    
-                    // 清空当前列表
-                    elements.apiKeyList.innerHTML = '';
-                    
-                    // 添加保存的 API Keys
-                    apiKeys.forEach(key => {
-                        addApiKeyInput(key);
-                    });
-                    
-                    // 加载当前使用的API Key
-                    const savedCurrentApiKey = localStorage.getItem('currentApiKey');
-                    if (savedCurrentApiKey) {
-                        appState.currentApiKey = savedCurrentApiKey;
-                    }
-                    
-                    // 更新选择状态
-                    updateApiKeySelectionState();
-                    
-                    // 加载完成后获取所有积分
-                    setTimeout(() => {
-                        refreshAllCredits();
-                    }, 500);
-                }
-            } catch (error) {
-                console.error('加载 API Keys 失败:', error);
-            }
-        }
-
-        // 生成图片
-        async function generateImage() {
-            if (appState.isGenerating) {
-                showToast('正在生成中，请稍候...', 'warning');
-                return;
-            }
-
-            // 检查是否有可用的API Key
-            if (appState.apiKeys.length === 0) {
-                showToast('请先添加API Key', 'warning');
-                showApiModal();
-                return;
-            }
-
-            // 收集生成参数
-            const modelCard = document.querySelector('.model-card.active');
-            const mainModel = modelCard ? modelCard.dataset.model : 'banana';
-            
-            let subModel, imageSize, prompt, variants, aspectRatio;
-            
-            if (mainModel === 'banana') {
-                subModel = document.getElementById('bananaSubModel').value;
-                imageSize = document.getElementById('bananaImageSize').value;
-                variants = 1; // Banana模型固定生成1张
-                aspectRatio = document.getElementById('imageSize').value;
-            } else {
-                subModel = 'sora-image'; // GPT模型使用sora-image
-                variants = parseInt(document.getElementById('gptVariants').value);
-                aspectRatio = document.getElementById('imageSize').value;
-                imageSize = null; // GPT模型不使用imageSize参数
-            }
-            
-            // 构建提示词
-            const customPrompt = document.getElementById('customPrompt').value.trim();
-            const selectedTags = Array.from(appState.selectedTags).join(', ');
-            prompt = customPrompt;
-            if (selectedTags) {
-                prompt = selectedTags + (customPrompt ? ', ' + customPrompt : '');
-            }
-            
-            if (!prompt) {
-                showToast('请输入描述词', 'warning');
-                return;
-            }
-            
-            // 获取当前使用的API Key
-            const currentApiKey = getCurrentApiKey();
-            if (!currentApiKey) {
-                showToast('没有可用的API Key', 'error');
-                return;
-            }
-            
-            // 计算所需积分
-            let requiredCredit;
-            if (mainModel === 'banana') {
-                if (subModel === 'nano-banana-fast') {
-                    requiredCredit = 440;
-                } else if (subModel === 'nano-banana') {
-                    requiredCredit = 1400;
-                } else if (subModel === 'nano-banana-pro') {
-                    requiredCredit = 1800;
-                }
-            } else {
-                requiredCredit = 400;
-            }
-            
-            // 检查当前API Key积分，如果不足则自动切换
-            let finalApiKey = currentApiKey;
-            let currentCredit = appState.credits[currentApiKey];
-
-            if (currentCredit < requiredCredit) {
-                // 尝试寻找其他可用的API Key
-                const availableApiKey = findAvailableApiKey(requiredCredit);
-                if (availableApiKey) {
-                    finalApiKey = availableApiKey;
-                    currentCredit = appState.credits[availableApiKey];
-                    setCurrentApiKey(availableApiKey);
-                    showToast(`当前API Key积分不足，已自动切换到可用API Key (积分: ${currentCredit})`, 'warning');
-                } else {
-                    showToast(`所有API Key积分都不足，需要${requiredCredit}积分，当前最高积分: ${getMaxCredit()}`, 'error');
-                    return;
-                }
-            }
-
-            if (currentCredit < requiredCredit) {
-                showToast(`API Key积分不足 (${currentCredit})，需要${requiredCredit}积分`, 'error');
-                return;
-            }
-            
-            // 获取参考图片URL（从图床上传的和手动输入的）
-            const referenceUrlsText = elements.referenceUrls.value.trim();
-            let referenceUrls = [];
-            
-            // 添加手动输入的URL
-            if (referenceUrlsText) {
-                referenceUrls = referenceUrlsText.split('\n')
-                    .map(url => url.trim())
-                    .filter(url => url && (url.startsWith('http://') || url.startsWith('https://')));
-            }
-            
-            // 添加上传到图床的URL
-            referenceUrls = [...referenceUrls, ...appState.uploadedImageUrls];
-            
-            // 构建请求参数
-            let requestData, url;
-            
-            if (mainModel === 'banana') {
-                // 使用新的Nano Banana API调用方式
-                requestData = {
-                    model: subModel,
-                    prompt: prompt,
-                    aspectRatio: aspectRatio,
-                    webHook: "-1",
-                    shutProgress: false
-                };
-                
-                // 仅当使用pro模型时添加imageSize参数
-                if (subModel === 'nano-banana-pro') {
-                    requestData.imageSize = imageSize;
-                }
-                
-                // 如果有参考图片URL，添加urls参数
-                if (referenceUrls.length > 0) {
-                    requestData.urls = referenceUrls;
-                    showToast(`已使用 ${referenceUrls.length} 张参考图片`, 'success');
-                }
-                
-                url = `${apiServers[appState.currentServer]}/v1/draw/nano-banana`;
-                
-            } else {
-                // GPT模型请求保持不变
-                requestData = {
-                    model: subModel,
-                    prompt: prompt,
-                    size: aspectRatio,
-                    variants: variants,
-                    webHook: "-1",
-                    shutProgress: false
-                };
-                
-                // 如果有参考图片URL，添加urls参数
-                if (referenceUrls.length > 0) {
-                    requestData.urls = referenceUrls;
-                    showToast(`已使用 ${referenceUrls.length} 张参考图片`, 'success');
-                }
-                
-                url = `${apiServers[appState.currentServer]}/v1/draw/completions`;
-            }
-            
-            // 设置生成状态
-            appState.isGenerating = true;
-            elements.generateBtn.disabled = true;
-            elements.generationStatus.classList.remove('hidden');
-            elements.previewResult.innerHTML = `
-                <div class="flex flex-col items-center">
-                    <i class="fa fa-spinner fa-spin text-4xl text-primary mb-3"></i>
-                    <p class="text-secondary mb-1">正在生成图片，请稍候...</p>
-                    <p class="text-xs text-gray-500">这可能需要30秒到2分钟</p>
-                    ${referenceUrls.length > 0 ? `<p class="text-xs text-primary mt-2">使用 ${referenceUrls.length} 张参考图片</p>` : ''}
-                    <p class="text-xs text-gray-500 mt-2">当前API Key积分: ${currentCredit}</p>
-                    <p class="text-xs text-warning mt-1">预计消耗: ${requiredCredit} 积分</p>
+                    <div class="text-xs text-gray-600 truncate flex-1">${url}</div>
+                </div>
+                <div class="flex gap-1">
+                    <button class="text-primary hover:text-primary/70 copy-url-btn" data-url="${url}" title="复制URL">
+                        <i class="fa fa-copy"></i>
+                    </button>
+                    <button class="text-danger hover:text-danger/70 remove-url-btn" data-index="${index}" title="删除">
+                        <i class="fa fa-trash"></i>
+                    </button>
                 </div>
             `;
-            elements.resultActions.classList.add('hidden');
-            
-            try {
-                // 发送请求，使用 finalApiKey
-                const response = await fetch(url, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${finalApiKey}`
-                    },
-                    body: JSON.stringify(requestData)
+            elements.uploadedUrlsList.appendChild(urlItem);
+        });
+        
+        // 添加复制和删除按钮事件
+        elements.uploadedUrlsList.querySelectorAll('.copy-url-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const url = e.currentTarget.dataset.url;
+                navigator.clipboard.writeText(url).then(() => {
+                    showToast('URL已复制到剪贴板', 'success');
                 });
+            });
+        });
+        
+        elements.uploadedUrlsList.querySelectorAll('.remove-url-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const index = parseInt(e.currentTarget.dataset.index);
+                appState.uploadedImageUrls.splice(index, 1);
+                updateUploadedUrlsList();
+                showToast('URL已删除', 'success');
                 
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                
-                const result = await response.json();
-                
-                if (result.code === 0) {
-                    // 保存任务ID
-                    appState.currentTaskId = result.data.id;
-                    
-                    // 开始轮询结果，使用 finalApiKey
-                    pollResult(finalApiKey);
-                } else {
-                    throw new Error(result.msg || '生成失败');
-                }
-            } catch (error) {
-                console.error('生成图片失败:', error);
-                showToast('生成失败: ' + error.message, 'error');
-                resetGenerationState();
+                // 修复：重置文件输入框，允许重新选择相同文件
+                elements.imageUpload.value = '';
+            });
+        });
+        
+        // 显示/隐藏URL列表容器
+        if (appState.uploadedImageUrls.length > 0) {
+            elements.uploadedUrlsContainer.classList.remove('hidden');
+        } else {
+            elements.uploadedUrlsContainer.classList.add('hidden');
+        }
+    }
+
+    // 复制所有图片URL
+    function copyAllImageUrls() {
+        const urls = appState.uploadedImageUrls.join('\n');
+        navigator.clipboard.writeText(urls).then(() => {
+            showToast('所有URL已复制到剪贴板', 'success');
+        });
+    }
+
+    // 控制图像大小选择的显示/隐藏
+    function updateImageSizeVisibility(subModel) {
+        const imageSizeContainer = document.getElementById('bananaImageSizeContainer');
+        if (subModel === 'nano-banana-pro') {
+            imageSizeContainer.classList.remove('hidden');
+        } else {
+            imageSizeContainer.classList.add('hidden');
+        }
+    }
+
+    // 设置当前使用的API Key
+    function setCurrentApiKey(apiKey) {
+        appState.currentApiKey = apiKey;
+        localStorage.setItem('currentApiKey', apiKey);
+        updateCreditDisplay();
+        updateApiKeySelectionState();
+    }
+
+    // 获取当前使用的API Key
+    function getCurrentApiKey() {
+        // 如果已设置当前API Key，则返回
+        if (appState.currentApiKey && appState.credits[appState.currentApiKey]) {
+            return appState.currentApiKey;
+        }
+        
+        // 否则返回积分最高的API Key
+        return getBestApiKey();
+    }
+
+    // 更新API Key选择状态显示
+    function updateApiKeySelectionState() {
+        const currentApiKey = getCurrentApiKey();
+        elements.apiKeyList.querySelectorAll('.api-key-item').forEach(item => {
+            const input = item.querySelector('.api-key-input');
+            const selectBtn = item.querySelector('.select-api-btn');
+            const icon = selectBtn.querySelector('i');
+            
+            if (input.value.trim() === currentApiKey) {
+                item.classList.add('api-key-active');
+                icon.className = 'fa fa-check-circle text-success';
+                selectBtn.title = '当前使用中';
+            } else {
+                item.classList.remove('api-key-active');
+                icon.className = 'fa fa-check-circle text-gray-400';
+                selectBtn.title = '设为当前使用';
+            }
+        });
+    }
+
+    // 检查API Key是否重复
+    function isApiKeyDuplicate(apiKey, excludeIndex = -1) {
+        const inputs = elements.apiKeyList.querySelectorAll('.api-key-input');
+        for (let i = 0; i < inputs.length; i++) {
+            if (i === excludeIndex) continue;
+            if (inputs[i].value.trim() === apiKey) {
+                return true;
             }
         }
+        return false;
+    }
 
-        // 轮询生成结果
-        async function pollResult(apiKey) {
-            if (!appState.currentTaskId) return;
-            
-            try {
-                const baseURL = apiServers[appState.currentServer];
-                const url = `${baseURL}/v1/draw/result`;
-                
-                const response = await fetch(url, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${apiKey}`
-                    },
-                    body: JSON.stringify({
-                        id: appState.currentTaskId
-                    })
+    // 更新图片比例选项为GPT专用
+    function updateImageSizeOptionsForGPT() {
+        const imageSizeSelect = document.getElementById('imageSize');
+        const currentValue = imageSizeSelect.value;
+        
+        // GPT支持的尺寸选项
+        const gptOptions = [
+            { value: 'auto', text: '自动' },
+            { value: '1:1', text: '1:1（正方形）' },
+            { value: '3:2', text: '3:2（横屏）' },
+            { value: '2:3', text: '2:3（竖屏）' }
+        ];
+        
+        // 清空现有选项
+        imageSizeSelect.innerHTML = '';
+        
+        // 添加GPT专用选项
+        gptOptions.forEach(option => {
+            const optionElement = document.createElement('option');
+            optionElement.value = option.value;
+            optionElement.textContent = option.text;
+            if (option.value === currentValue && gptOptions.some(opt => opt.value === currentValue)) {
+                optionElement.selected = true;
+            }
+            imageSizeSelect.appendChild(optionElement);
+        });
+        
+        // 如果当前值不在GPT选项中，设置为auto
+        if (!gptOptions.some(opt => opt.value === currentValue)) {
+            imageSizeSelect.value = 'auto';
+        }
+    }
+
+    // 恢复所有图片比例选项（用于Banana模型）
+    function updateImageSizeOptionsForBanana() {
+        const imageSizeSelect = document.getElementById('imageSize');
+        const currentValue = imageSizeSelect.value;
+        
+        // Banana支持的所有尺寸选项
+        const bananaOptions = [
+            { value: 'auto', text: '自动' },
+            { value: '1:1', text: '1:1（正方形）' },
+            { value: '3:2', text: '3:2（横屏）' },
+            { value: '2:3', text: '2:3（竖屏）' },
+            { value: '16:9', text: '16:9（宽屏）' },
+            { value: '9:16', text: '9:16（竖屏视频）' },
+            { value: '4:3', text: '4:3（传统电视）' },
+            { value: '3:4', text: '3:4（竖屏照片）' },
+            { value: '5:4', text: '5:4（打印照片）' },
+            { value: '4:5', text: '4:5（竖屏照片）' },
+            { value: '21:9', text: '21:9（电影宽屏）' }
+        ];
+        
+        // 清空现有选项
+        imageSizeSelect.innerHTML = '';
+        
+        // 添加所有选项
+        bananaOptions.forEach(option => {
+            const optionElement = document.createElement('option');
+            optionElement.value = option.value;
+            optionElement.textContent = option.text;
+            if (option.value === currentValue) {
+                optionElement.selected = true;
+            }
+            imageSizeSelect.appendChild(optionElement);
+        });
+    }
+
+    // 设置服务器
+    function setServer(serverType) {
+        appState.currentServer = serverType;
+        
+        // 更新按钮样式
+        if (serverType === 'china') {
+            elements.useChinaServer.classList.remove('bg-gray-100', 'text-gray-700');
+            elements.useChinaServer.classList.add('bg-primary', 'text-white');
+            elements.useOverseaServer.classList.remove('bg-primary', 'text-white');
+            elements.useOverseaServer.classList.add('bg-gray-100', 'text-gray-700');
+            elements.currentServer.textContent = '国内服务器';
+        } else {
+            elements.useOverseaServer.classList.remove('bg-gray-100', 'text-gray-700');
+            elements.useOverseaServer.classList.add('bg-primary', 'text-white');
+            elements.useChinaServer.classList.remove('bg-primary', 'text-white');
+            elements.useChinaServer.classList.add('bg-gray-100', 'text-gray-700');
+            elements.currentServer.textContent = '海外服务器';
+        }
+        
+        // 保存设置
+        localStorage.setItem('aiApiServer', serverType);
+        showToast(`已切换到${serverType === 'china' ? '国内' : '海外'}服务器`, 'success');
+        
+        // 刷新所有积分
+        refreshAllCredits();
+    }
+
+    // 加载服务器设置
+    function loadServerSetting() {
+        const savedServer = localStorage.getItem('aiApiServer');
+        if (savedServer) {
+            setServer(savedServer);
+        }
+    }
+
+    // 显示 API 设置模态框
+    function showApiModal() {
+        elements.apiModal.classList.remove('hidden');
+        updateCreditStats(); // 更新积分统计
+    }
+
+    // 隐藏 API 设置模态框
+    function hideApiModal() {
+        elements.apiModal.classList.add('hidden');
+    }
+
+    // 批量添加 API Key
+    function handleBatchAdd() {
+        const keysText = elements.batchApiKeys.value.trim();
+        if (!keysText) {
+            showToast('请输入要添加的 API Key', 'warning');
+            return;
+        }
+
+        const keys = keysText.split('\n').filter(key => key.trim());
+        if (keys.length === 0) {
+            showToast('没有检测到有效的 API Key', 'warning');
+            return;
+        }
+
+        let addedCount = 0;
+        let duplicateCount = 0;
+        
+        keys.forEach(key => {
+            if (isApiKeyDuplicate(key)) {
+                duplicateCount++;
+            } else {
+                addApiKeyInput(key);
+                addedCount++;
+            }
+        });
+
+        elements.batchApiKeys.value = '';
+        
+        if (addedCount > 0) {
+            showToast(`成功添加 ${addedCount} 个 API Key${duplicateCount > 0 ? `，跳过 ${duplicateCount} 个重复的 API Key` : ''}`, 'success');
+        } else if (duplicateCount > 0) {
+            showToast(`所有 ${duplicateCount} 个 API Key 都已存在，未添加重复项`, 'warning');
+        }
+        
+        // 批量获取积分
+        refreshAllCredits();
+    }
+
+    // 批量导出 API Key 为 TXT 文件
+    function handleBatchExport() {
+        const apiKeys = [];
+        elements.apiKeyList.querySelectorAll('.api-key-item').forEach((item, index) => {
+            const input = item.querySelector('.api-key-input');
+            const apiKey = input.value.trim();
+            if (apiKey) {
+                apiKeys.push({
+                    number: index + 1,
+                    key: apiKey,
+                    credit: appState.credits[apiKey] || '未知'
                 });
-                
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                
-                const result = await response.json();
-                
-                if (result.code === 0) {
-                    const data = result.data;
+            }
+        });
+
+        if (apiKeys.length === 0) {
+            showToast('没有可导出的 API Key', 'warning');
+            return;
+        }
+
+        // 创建TXT文件内容
+        let txtContent = `YaHee, Keys \n`;
+        txtContent += `时间：${new Date().toLocaleString()}\n`;
+        txtContent += `总计：${apiKeys.length} 个API Key\n`;
+        
+        apiKeys.forEach(item => {
+            txtContent += `${item.key}\n`;
+        });
+
+        // 创建Blob对象并下载
+        const blob = new Blob([txtContent], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `YaHee_AI_API_Keys_${new Date().toISOString().slice(0, 10)}.txt`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        
+        showToast(`已导出 ${apiKeys.length} 个 API Key 到TXT文件`, 'success');
+    }
+
+    // 添加 API Key 输入框
+    function addApiKeyInput(value = '') {
+        // 检查是否重复
+        if (value && isApiKeyDuplicate(value)) {
+            showToast(`API Key "${value}" 已存在，跳过添加`, 'warning');
+            return;
+        }
+        
+        const item = document.createElement('div');
+        item.className = 'flex items-center gap-2 mb-2 p-2 border border-gray-200 rounded-lg api-key-item';
+        item.innerHTML = `
+            <button class="text-gray-400 hover:text-primary select-api-btn" title="设为当前使用">
+                <i class="fa fa-check-circle"></i>
+            </button>
+            <input type="password" class="flex-1 border-none outline-none api-key-input" placeholder="sk-..." value="${value}">
+            <span class="text-xs bg-gray-200 px-2 py-1 rounded credit-display">积分: --</span>
+            <button class="text-danger hover:text-red-600">
+                <i class="fa fa-trash"></i>
+            </button>
+        `;
+        elements.apiKeyList.appendChild(item);
+        
+        // 如果提供了值，立即获取积分
+        if (value.trim()) {
+            const input = item.querySelector('.api-key-input');
+            updateApiKeyCredit(input);
+        }
+        
+        // 更新选择状态
+        updateApiKeySelectionState();
+    }
+
+    // 获取API积分
+    async function getApiCredit(apiKey) {
+        try {
+            // 构建请求URL
+            const baseURL = apiServers[appState.currentServer];
+            const url = `${baseURL}/client/common/getCredits?apikey=${encodeURIComponent(apiKey)}`;
+            
+            const response = await fetch(url);
+            const result = await response.json();
+            
+            if (result.code === 0) {
+                return result.data.credits;
+            } else {
+                throw new Error(result.msg || '获取积分失败');
+            }
+        } catch (error) {
+            console.error('获取积分失败:', error);
+            throw error;
+        }
+    }
+
+    // 更新单个 API Key 的积分显示
+    async function updateApiKeyCredit(inputElement) {
+        const creditDisplay = inputElement.parentNode.querySelector('.credit-display');
+        const apiKey = inputElement.value.trim();
+        
+        if (!apiKey) {
+            creditDisplay.textContent = '积分: --';
+            creditDisplay.className = 'text-xs bg-gray-200 px-2 py-1 rounded credit-display';
+            return;
+        }
+        
+        // 显示加载状态
+        creditDisplay.textContent = '积分: 获取中...';
+        creditDisplay.className = 'text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded credit-display';
+        
+        try {
+            const credit = await getApiCredit(apiKey);
+            
+            // 保存积分到状态
+            appState.credits[apiKey] = credit;
+            
+            creditDisplay.textContent = `积分: ${credit}`;
+            
+            // 根据积分值设置不同的颜色
+            if (credit > 5000) {
+                creditDisplay.className = 'text-xs bg-green-100 text-green-800 px-2 py-1 rounded credit-display';
+            } else if (credit > 2000) {
+                creditDisplay.className = 'text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded credit-display';
+            } else {
+                creditDisplay.className = 'text-xs bg-red-100 text-red-800 px-2 py-1 rounded credit-display';
+            }
+            
+            // 检查积分是否低于最低要求，如果是则自动删除
+            const minCreditRequired = 400;
+            if (credit < minCreditRequired) {
+                const item = inputElement.closest('.api-key-item');
+                if (item) {
+                    item.remove();
+                    delete appState.credits[apiKey];
                     
-                    // 更新进度显示
-                    elements.previewResult.innerHTML = `
-                        <div class="flex flex-col items-center">
-                            <div class="w-full bg-gray-200 rounded-full h-2.5 mb-4">
-                                <div class="bg-primary h-2.5 rounded-full" style="width: ${data.progress}%"></div>
-                            </div>
-                            <p class="text-secondary mb-1">生成进度: ${data.progress}%</p>
-                            <p class="text-xs text-gray-500">状态: ${data.status}</p>
-                            ${data.failure_reason ? `<p class="text-xs text-danger mt-1">失败原因: ${data.failure_reason}</p>` : ''}
-                            ${data.error ? `<p class="text-xs text-danger mt-1">错误信息: ${data.error}</p>` : ''}
-                        </div>
-                    `;
-                    
-                    // 检查是否完成
-                    if (data.status === 'succeeded' && data.results && data.results.length > 0) {
-                        // 显示生成的图片（显示第一张）
-                        const imageUrl = data.results[0].url;
-                        const imageContent = data.results[0].content || '生成完成';
-                        
-                        elements.previewResult.innerHTML = `
-                            <img src="${imageUrl}" alt="生成的图片" class="max-w-full max-h-[300px] object-contain rounded-lg zoomable-image" id="generatedImage">
-                            <p class="text-xs text-gray-500 mt-2">${imageContent}</p>
-                            <p class="text-xs text-success mt-1">生成完成 - 已自动保存到历史记录</p>
-                        `;
-                        elements.resultActions.classList.remove('hidden');
-                        resetGenerationState();
-                        
-                        // 保存生成的图片URL
-                        appState.currentImageUrl = imageUrl;
-                        
-                        // 为生成的图片添加点击放大功能
-                        document.getElementById('generatedImage').addEventListener('click', () => {
-                            document.getElementById('previewModalImg').src = imageUrl;
-                            document.getElementById('imagePreviewModal').classList.remove('hidden');
-                        });
-                        
-                        // 自动保存到历史记录
-                        saveToHistory(true);
-                        
-                        showToast('图片生成成功，已自动保存到历史记录', 'success');
-                        
-                        // 刷新积分显示
-                        updateCreditDisplay();
-                        
-                    } else if (data.status === 'failed') {
-                        let errorMessage = '生成失败';
-                        if (data.failure_reason) {
-                            errorMessage += `: ${data.failure_reason}`;
-                        }
-                        if (data.error) {
-                            errorMessage += ` (${data.error})`;
-                        }
-                        throw new Error(errorMessage);
-                    } else {
-                        // 继续轮询
-                        setTimeout(() => pollResult(apiKey), 2000);
+                    // 如果删除的是当前使用的API Key，重置当前API Key
+                    if (apiKey === appState.currentApiKey) {
+                        appState.currentApiKey = null;
                     }
-                } else if (result.code === -22) {
-                    // 任务不存在
-                    throw new Error('任务不存在或已过期');
-                } else {
-                    throw new Error(result.msg || '获取结果失败');
+                    
+                    showToast(`API Key 积分不足 (${credit})，已自动删除`, 'warning');
+                    updateCreditStats(); // 更新积分统计
                 }
-            } catch (error) {
-                console.error('轮询结果失败:', error);
-                showToast('获取结果失败: ' + error.message, 'error');
-                resetGenerationState();
+            } else {
+                // 更新积分统计
+                updateCreditStats();
             }
+        } catch (error) {
+            creditDisplay.textContent = '积分: 获取失败';
+            creditDisplay.className = 'text-xs bg-red-100 text-red-800 px-2 py-1 rounded credit-display';
+            console.error('获取积分失败:', error);
         }
+    }
 
-        // 重置生成状态
-        function resetGenerationState() {
-            appState.isGenerating = false;
-            elements.generateBtn.disabled = false;
-            elements.generationStatus.classList.add('hidden');
+    // 刷新所有API Key的积分
+    async function refreshAllCredits() {
+        showToast('正在刷新所有积分...', 'info');
+        
+        const inputs = elements.apiKeyList.querySelectorAll('.api-key-input');
+        const promises = [];
+        
+        inputs.forEach(input => {
+            if (input.value.trim()) {
+                promises.push(updateApiKeyCredit(input));
+            }
+        });
+        
+        try {
+            await Promise.all(promises);
+            showToast('积分已全部刷新', 'success');
+        } catch (error) {
+            showToast('部分积分刷新失败', 'warning');
         }
+    }
 
-        // 获取最佳API Key（积分最高的）
-        function getBestApiKey() {
-            let bestApiKey = null;
-            let maxCredits = 0;
-            
-            for (const [apiKey, credits] of Object.entries(appState.credits)) {
+    // 寻找可用的API Key（积分足够的）
+    function findAvailableApiKey(requiredCredit) {
+        let bestApiKey = null;
+        let maxCredits = 0;
+        
+        for (const [apiKey, credits] of Object.entries(appState.credits)) {
+            if (credits >= requiredCredit) {
+                // 优先选择积分足够的API Key中积分最高的
                 if (credits > maxCredits) {
                     maxCredits = credits;
                     bestApiKey = apiKey;
                 }
             }
+        }
+        
+        return bestApiKey;
+    }
+
+    // 获取所有API Key中的最高积分
+    function getMaxCredit() {
+        return Math.max(...Object.values(appState.credits), 0);
+    }
+
+    // 更新积分统计
+    function updateCreditStats() {
+        const apiKeys = [];
+        const credits = [];
+        
+        elements.apiKeyList.querySelectorAll('.api-key-item').forEach(item => {
+            const input = item.querySelector('.api-key-input');
+            const apiKey = input.value.trim();
             
-            return bestApiKey;
+            if (apiKey && appState.credits[apiKey]) {
+                apiKeys.push(apiKey);
+                credits.push(appState.credits[apiKey]);
+            }
+        });
+        
+        // 更新统计显示
+        elements.validApiCount.textContent = apiKeys.length;
+        
+        if (credits.length > 0) {
+            const total = credits.reduce((sum, credit) => sum + credit, 0);
+            const min = Math.min(...credits);
+            
+            // 获取当前使用的API Key积分
+            const currentApiKey = getCurrentApiKey();
+            const currentCredit = currentApiKey ? appState.credits[currentApiKey] : 0;
+            
+            elements.modalTotalCredit.textContent = total;
+            elements.currentApiCredit.textContent = currentCredit;
+            elements.minCredit.textContent = min;
+            
+            // 更新页面顶部的积分显示
+            updateCreditDisplay();
+        } else {
+            elements.modalTotalCredit.textContent = '0';
+            elements.currentApiCredit.textContent = '0';
+            elements.minCredit.textContent = '0';
+            updateCreditDisplay();
+        }
+    }
+
+    // 更新页面顶部积分显示
+    function updateCreditDisplay() {
+        // 获取当前使用的API Key积分
+        const currentApiKey = getCurrentApiKey();
+        const currentCredit = currentApiKey ? appState.credits[currentApiKey] : 0;
+        
+        // 计算所有API Key的总积分
+        const total = Object.values(appState.credits).reduce((sum, credit) => sum + credit, 0);
+        
+        // 更新显示
+        elements.creditCount.textContent = currentCredit;
+        elements.totalCreditCount.textContent = total;
+        
+        // 更新积分状态指示器
+        updateCreditStatus(currentCredit);
+    }
+
+    // 更新积分状态指示器
+    function updateCreditStatus(currentCredit) {
+        const creditStatus = document.getElementById('creditStatus');
+        
+        // 计算不同模型所需的最小积分
+        const minBanana = 1400;
+        const minBananaPro = 1800;
+        const minGpt = 400;
+        
+        const minRequired = Math.min(minBanana, minBananaPro, minGpt);
+        
+        if (currentCredit < minRequired) {
+            creditStatus.innerHTML = '<i class="fa fa-exclamation-triangle text-warning"></i> 积分不足';
+            creditStatus.classList.remove('hidden');
+        } else if (currentCredit < 2000) {
+            creditStatus.innerHTML = '<i class="fa fa-info-circle text-warning"></i> 积分较低';
+            creditStatus.classList.remove('hidden');
+        } else {
+            creditStatus.classList.add('hidden');
+        }
+    }
+
+    // 保存 API 设置 - 新增重复API自动删除功能
+    function saveApiSettings() {
+        const apiKeySet = new Set();
+        const uniqueApiKeys = [];
+        
+        // 收集所有API Key并去重
+        elements.apiKeyList.querySelectorAll('.api-key-input').forEach(input => {
+            const apiKey = input.value.trim();
+            if (apiKey) {
+                if (!apiKeySet.has(apiKey)) {
+                    apiKeySet.add(apiKey);
+                    uniqueApiKeys.push(apiKey);
+                }
+            }
+        });
+
+        if (uniqueApiKeys.length === 0) {
+            showToast('请至少添加一个 API Key', 'warning');
+            return;
         }
 
-        // 下载图片 - 修复版本，添加文件名前缀
-        async function downloadImage() {
-            if (!appState.currentImageUrl) {
-                showToast('没有可下载的图片', 'warning');
-                return;
+        // 检查是否有重复的API Key被移除
+        const totalInputs = elements.apiKeyList.querySelectorAll('.api-key-input').length;
+        const removedDuplicates = totalInputs - uniqueApiKeys.length;
+        
+        // 将 API Keys 保存到本地存储
+        try {
+            localStorage.setItem('aiApiKeys', JSON.stringify(uniqueApiKeys));
+            appState.apiKeys = uniqueApiKeys;
+            
+            // 重新渲染API Key列表（去重后）
+            elements.apiKeyList.innerHTML = '';
+            uniqueApiKeys.forEach(key => {
+                addApiKeyInput(key);
+            });
+            
+            // 显示保存成功的提示，包括去重信息
+            let message = `已保存 ${uniqueApiKeys.length} 个 API Key`;
+            if (removedDuplicates > 0) {
+                message += `，自动删除 ${removedDuplicates} 个重复项`;
+            }
+            showToast(message, 'success');
+            
+            updateCreditDisplay(); // 更新积分显示
+            updateCreditStats(); // 更新积分统计
+            
+            // 如果当前API Key被去重掉了，重新设置
+            if (appState.currentApiKey && !uniqueApiKeys.includes(appState.currentApiKey)) {
+                appState.currentApiKey = null;
+                updateApiKeySelectionState();
+                updateCreditDisplay();
             }
             
-            try {
-                // 显示下载状态
-                elements.downloadBtn.disabled = true;
-                elements.downloadBtn.innerHTML = '<i class="fa fa-spinner fa-spin"></i><span>下载中...</span>';
-                
-                // 获取图片数据
-                const response = await fetch(appState.currentImageUrl);
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                
-                const blob = await response.blob();
-                
-                // 创建下载链接
-                const url = window.URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.style.display = 'none';
-                a.href = url;
-                
-                // 从URL提取文件名，如果没有则使用默认名称
-                const urlParts = appState.currentImageUrl.split('/');
-                let filename = 'generated-image.jpg';
-                if (urlParts.length > 0) {
-                    const lastPart = urlParts[urlParts.length - 1];
-                    if (lastPart.includes('.')) {
-                        filename = lastPart;
-                    }
-                }
-                
-                // 添加前缀 "YaHee-"
-                filename = `YaHee-${filename}`;
-                
-                a.download = filename;
-                document.body.appendChild(a);
-                a.click();
-                
-                // 清理
-                window.URL.revokeObjectURL(url);
-                document.body.removeChild(a);
-                
-                showToast('图片下载成功', 'success');
-            } catch (error) {
-                console.error('下载图片失败:', error);
-                
-                // 如果下载失败，尝试使用原始方法
-                showToast('直接下载失败，尝试备用方法...', 'warning');
-                
-                // 备用方法：直接打开图片链接
-                const a = document.createElement('a');
-                a.href = appState.currentImageUrl;
-                a.target = '_blank';
-                a.rel = 'noopener noreferrer';
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                
-                showToast('已在新标签页打开图片，请右键另存为', 'info');
-            } finally {
-                // 恢复按钮状态
-                elements.downloadBtn.disabled = false;
-                elements.downloadBtn.innerHTML = '<i class="fa fa-download"></i><span>下载图片</span>';
-            }
+            hideApiModal();
+        } catch (error) {
+            console.error('保存失败:', error);
+            showToast('保存失败，请重试', 'error');
         }
+    }
 
-        // 保存到历史
-        function saveToHistory(autoSave = false) {
-            if (!appState.currentImageUrl) {
-                showToast('没有可保存的图片', 'warning');
-                return;
-            }
-            
-            // 获取历史记录
-            let history = JSON.parse(localStorage.getItem('aiGenerationHistory') || '[]');
-            
-            // 检查是否已存在相同图片
-            const existingIndex = history.findIndex(item => item.imageUrl === appState.currentImageUrl);
-            if (existingIndex !== -1) {
-                // 如果已存在，更新记录
-                history[existingIndex] = {
-                    id: history[existingIndex].id,
-                    imageUrl: history[existingIndex].imageUrl,
-                    prompt: document.getElementById('customPrompt').value,
-                    tags: Array.from(appState.selectedTags),
-                    timestamp: new Date().toISOString()
-                };
-            } else {
-                // 添加新记录
-                history.unshift({
-                    id: Date.now(),
-                    imageUrl: appState.currentImageUrl,
-                    prompt: document.getElementById('customPrompt').value,
-                    tags: Array.from(appState.selectedTags),
-                    timestamp: new Date().toISOString()
+    // 加载已保存的 API Keys
+    function loadApiKeys() {
+        try {
+            const savedKeys = localStorage.getItem('aiApiKeys');
+            if (savedKeys) {
+                const apiKeys = JSON.parse(savedKeys);
+                appState.apiKeys = apiKeys;
+                
+                // 清空当前列表
+                elements.apiKeyList.innerHTML = '';
+                
+                // 添加保存的 API Keys
+                apiKeys.forEach(key => {
+                    addApiKeyInput(key);
                 });
+                
+                // 加载当前使用的API Key
+                const savedCurrentApiKey = localStorage.getItem('currentApiKey');
+                if (savedCurrentApiKey) {
+                    appState.currentApiKey = savedCurrentApiKey;
+                }
+                
+                // 更新选择状态
+                updateApiKeySelectionState();
+                
+                // 加载完成后获取所有积分
+                setTimeout(() => {
+                    refreshAllCredits();
+                }, 500);
             }
-            
-            // 限制历史记录数量
-            if (history.length > 20) {
-                history = history.slice(0, 20);
+        } catch (error) {
+            console.error('加载 API Keys 失败:', error);
+        }
+    }
+
+    // 生成图片
+    async function generateImage() {
+        if (appState.isGenerating) {
+            showToast('正在生成中，请稍候...', 'warning');
+            return;
+        }
+
+        // 检查是否有可用的API Key
+        if (appState.apiKeys.length === 0) {
+            showToast('请先添加API Key', 'warning');
+            showApiModal();
+            return;
+        }
+
+        // 收集生成参数
+        const modelCard = document.querySelector('.model-card.active');
+        const mainModel = modelCard ? modelCard.dataset.model : 'banana';
+        
+        let subModel, imageSize, prompt, variants, aspectRatio;
+        
+        if (mainModel === 'banana') {
+            subModel = document.getElementById('bananaSubModel').value;
+            imageSize = document.getElementById('bananaImageSize').value;
+            variants = 1; // Banana模型固定生成1张
+            aspectRatio = document.getElementById('imageSize').value;
+        } else {
+            subModel = 'sora-image'; // GPT模型使用sora-image
+            variants = parseInt(document.getElementById('gptVariants').value);
+            aspectRatio = document.getElementById('imageSize').value;
+            imageSize = null; // GPT模型不使用imageSize参数
+        }
+        
+        // 构建提示词
+        const customPrompt = document.getElementById('customPrompt').value.trim();
+        const selectedTags = Array.from(appState.selectedTags).join(', ');
+        prompt = customPrompt;
+        if (selectedTags) {
+            prompt = selectedTags + (customPrompt ? ', ' + customPrompt : '');
+        }
+        
+        if (!prompt) {
+            showToast('请输入描述词', 'warning');
+            return;
+        }
+        
+        // 获取当前使用的API Key
+        const currentApiKey = getCurrentApiKey();
+        if (!currentApiKey) {
+            showToast('没有可用的API Key', 'error');
+            return;
+        }
+        
+        // 计算所需积分
+        let requiredCredit;
+        if (mainModel === 'banana') {
+            if (subModel === 'nano-banana') {
+                requiredCredit = 1400;
+            } else if (subModel === 'nano-banana-pro') {
+                requiredCredit = 1800;
             }
-            
-            // 保存到本地存储
-            localStorage.setItem('aiGenerationHistory', JSON.stringify(history));
-            
-            // 更新历史记录显示
-            updateHistoryDisplay();
-            
-            if (!autoSave) {
-                showToast('已保存到历史记录', 'success');
+        } else {
+            requiredCredit = 1400;
+        }
+        
+        // 检查当前API Key积分，如果不足则自动切换
+        let finalApiKey = currentApiKey;
+        let currentCredit = appState.credits[currentApiKey];
+
+        if (currentCredit < requiredCredit) {
+            // 尝试寻找其他可用的API Key
+            const availableApiKey = findAvailableApiKey(requiredCredit);
+            if (availableApiKey) {
+                finalApiKey = availableApiKey;
+                currentCredit = appState.credits[availableApiKey];
+                setCurrentApiKey(availableApiKey);
+                showToast(`当前API Key积分不足，已自动切换到可用API Key (积分: ${currentCredit})`, 'warning');
+            } else {
+                showToast(`所有API Key积分都不足，需要${requiredCredit}积分，当前最高积分: ${getMaxCredit()}`, 'error');
+                return;
             }
         }
 
-        // 更新历史记录显示
-        function updateHistoryDisplay() {
-            const historyContainer = document.getElementById('historyContainer');
-            const history = JSON.parse(localStorage.getItem('aiGenerationHistory') || '[]');
+        if (currentCredit < requiredCredit) {
+            showToast(`API Key积分不足 (${currentCredit})，需要${requiredCredit}积分`, 'error');
+            return;
+        }
+        
+        // 获取参考图片URL（从图床上传的和手动输入的）
+        const referenceUrlsText = elements.referenceUrls.value.trim();
+        let referenceUrls = [];
+        
+        // 添加手动输入的URL
+        if (referenceUrlsText) {
+            referenceUrls = referenceUrlsText.split('\n')
+                .map(url => url.trim())
+                .filter(url => url && (url.startsWith('http://') || url.startsWith('https://')));
+        }
+        
+        // 添加上传到图床的URL
+        referenceUrls = [...referenceUrls, ...appState.uploadedImageUrls];
+        
+        // 构建请求参数
+        let requestData, url;
+        
+        if (mainModel === 'banana') {
+            // 使用新的Nano Banana API调用方式
+            requestData = {
+                model: subModel,
+                prompt: prompt,
+                aspectRatio: aspectRatio,
+                webHook: "-1",
+                shutProgress: false
+            };
             
-            if (history.length === 0) {
-                historyContainer.innerHTML = `
-                    <div class="col-span-full text-center py-8 text-secondary">
-                        <i class="fa fa-folder-open-o text-3xl mb-3"></i>
-                        <p class="text-sm">暂无历史记录</p>
+            // 仅当使用pro模型时添加imageSize参数
+            if (subModel === 'nano-banana-pro') {
+                requestData.imageSize = imageSize;
+            }
+            
+            // 如果有参考图片URL，添加urls参数
+            if (referenceUrls.length > 0) {
+                requestData.urls = referenceUrls;
+                showToast(`已使用 ${referenceUrls.length} 张参考图片`, 'success');
+            }
+            
+            url = `${apiServers[appState.currentServer]}/v1/draw/nano-banana`;
+            
+        } else {
+            // GPT模型请求保持不变
+            requestData = {
+                model: subModel,
+                prompt: prompt,
+                size: aspectRatio,
+                variants: variants,
+                webHook: "-1",
+                shutProgress: false
+            };
+            
+            // 如果有参考图片URL，添加urls参数
+            if (referenceUrls.length > 0) {
+                requestData.urls = referenceUrls;
+                showToast(`已使用 ${referenceUrls.length} 张参考图片`, 'success');
+            }
+            
+            url = `${apiServers[appState.currentServer]}/v1/draw/completions`;
+        }
+        
+        // 设置生成状态
+        appState.isGenerating = true;
+        elements.generateBtn.disabled = true;
+        elements.generationStatus.classList.remove('hidden');
+        elements.previewResult.innerHTML = `
+            <div class="flex flex-col items-center">
+                <i class="fa fa-spinner fa-spin text-4xl text-primary mb-3"></i>
+                <p class="text-secondary mb-1">正在生成图片，请稍候...</p>
+                <p class="text-xs text-gray-500">这可能需要30秒到2分钟</p>
+                ${referenceUrls.length > 0 ? `<p class="text-xs text-primary mt-2">使用 ${referenceUrls.length} 张参考图片</p>` : ''}
+                <p class="text-xs text-gray-500 mt-2">当前API Key积分: ${currentCredit}</p>
+                <p class="text-xs text-warning mt-1">预计消耗: ${requiredCredit} 积分</p>
+            </div>
+        `;
+        elements.resultActions.classList.add('hidden');
+        
+        try {
+            // 发送请求，使用 finalApiKey
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${finalApiKey}`
+                },
+                body: JSON.stringify(requestData)
+            });
+            
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            
+            const result = await response.json();
+            
+            if (result.code === 0) {
+                // 保存任务ID
+                appState.currentTaskId = result.data.id;
+                
+                // 开始轮询结果，使用 finalApiKey
+                pollResult(finalApiKey);
+            } else {
+                throw new Error(result.msg || '生成失败');
+            }
+        } catch (error) {
+            console.error('生成图片失败:', error);
+            showToast('生成失败: ' + error.message, 'error');
+            resetGenerationState();
+        }
+    }
+
+    // 轮询生成结果
+    async function pollResult(apiKey) {
+        if (!appState.currentTaskId) return;
+        
+        try {
+            const baseURL = apiServers[appState.currentServer];
+            const url = `${baseURL}/v1/draw/result`;
+            
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${apiKey}`
+                },
+                body: JSON.stringify({
+                    id: appState.currentTaskId
+                })
+            });
+            
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            
+            const result = await response.json();
+            
+            if (result.code === 0) {
+                const data = result.data;
+                
+                // 更新进度显示
+                elements.previewResult.innerHTML = `
+                    <div class="flex flex-col items-center">
+                        <div class="w-full bg-gray-200 rounded-full h-2.5 mb-4">
+                            <div class="bg-primary h-2.5 rounded-full" style="width: ${data.progress}%"></div>
+                        </div>
+                        <p class="text-secondary mb-1">生成进度: ${data.progress}%</p>
+                        <p class="text-xs text-gray-500">状态: ${data.status}</p>
+                        ${data.failure_reason ? `<p class="text-xs text-danger mt-1">失败原因: ${data.failure_reason}</p>` : ''}
+                        ${data.error ? `<p class="text-xs text-danger mt-1">错误信息: ${data.error}</p>` : ''}
                     </div>
                 `;
-                return;
+                
+                // 检查是否完成
+                if (data.status === 'succeeded' && data.results && data.results.length > 0) {
+                    // 显示生成的图片（显示第一张）
+                    const imageUrl = data.results[0].url;
+                    const imageContent = data.results[0].content || '生成完成';
+                    
+                    elements.previewResult.innerHTML = `
+                        <img src="${imageUrl}" alt="生成的图片" class="max-w-full max-h-[300px] object-contain rounded-lg zoomable-image" id="generatedImage">
+                        <p class="text-xs text-gray-500 mt-2">${imageContent}</p>
+                        <p class="text-xs text-success mt-1">生成完成 - 已自动保存到历史记录</p>
+                    `;
+                    elements.resultActions.classList.remove('hidden');
+                    resetGenerationState();
+                    
+                    // 保存生成的图片URL
+                    appState.currentImageUrl = imageUrl;
+                    
+                    // 为生成的图片添加点击放大功能
+                    document.getElementById('generatedImage').addEventListener('click', () => {
+                        document.getElementById('previewModalImg').src = imageUrl;
+                        document.getElementById('imagePreviewModal').classList.remove('hidden');
+                    });
+                    
+                    // 自动保存到历史记录
+                    saveToHistory(true);
+                    
+                    showToast('图片生成成功，已自动保存到历史记录', 'success');
+                    
+                    // 刷新积分显示
+                    updateCreditDisplay();
+                    
+                } else if (data.status === 'failed') {
+                    let errorMessage = '生成失败';
+                    if (data.failure_reason) {
+                        errorMessage += `: ${data.failure_reason}`;
+                    }
+                    if (data.error) {
+                        errorMessage += ` (${data.error})`;
+                    }
+                    throw new Error(errorMessage);
+                } else {
+                    // 继续轮询
+                    setTimeout(() => pollResult(apiKey), 2000);
+                }
+            } else if (result.code === -22) {
+                // 任务不存在
+                throw new Error('任务不存在或已过期');
+            } else {
+                throw new Error(result.msg || '获取结果失败');
+            }
+        } catch (error) {
+            console.error('轮询结果失败:', error);
+            showToast('获取结果失败: ' + error.message, 'error');
+            resetGenerationState();
+        }
+    }
+
+    // 重置生成状态
+    function resetGenerationState() {
+        appState.isGenerating = false;
+        elements.generateBtn.disabled = false;
+        elements.generationStatus.classList.add('hidden');
+    }
+
+    // 获取最佳API Key（积分最高的）
+    function getBestApiKey() {
+        let bestApiKey = null;
+        let maxCredits = 0;
+        
+        for (const [apiKey, credits] of Object.entries(appState.credits)) {
+            if (credits > maxCredits) {
+                maxCredits = credits;
+                bestApiKey = apiKey;
+            }
+        }
+        
+        return bestApiKey;
+    }
+
+    // 下载图片 - 修复版本，添加文件名前缀
+    async function downloadImage() {
+        if (!appState.currentImageUrl) {
+            showToast('没有可下载的图片', 'warning');
+            return;
+        }
+        
+        try {
+            // 显示下载状态
+            elements.downloadBtn.disabled = true;
+            elements.downloadBtn.innerHTML = '<i class="fa fa-spinner fa-spin"></i><span>下载中...</span>';
+            
+            // 获取图片数据
+            const response = await fetch(appState.currentImageUrl);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
             }
             
-            historyContainer.innerHTML = '';
+            const blob = await response.blob();
             
-            history.forEach(item => {
-                const historyItem = document.createElement('div');
-                historyItem.className = 'rounded-lg overflow-hidden border border-gray-200 cursor-pointer';
-                historyItem.innerHTML = `
-                    <img src="${item.imageUrl}" alt="历史图片" class="w-full h-20 object-cover">
-                `;
-                historyItem.addEventListener('click', () => {
-                    document.getElementById('previewModalImg').src = item.imageUrl;
-                    document.getElementById('imagePreviewModal').classList.remove('hidden');
-                });
-                historyContainer.appendChild(historyItem);
+            // 创建下载链接
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.style.display = 'none';
+            a.href = url;
+            
+            // 从URL提取文件名，如果没有则使用默认名称
+            const urlParts = appState.currentImageUrl.split('/');
+            let filename = 'generated-image.jpg';
+            if (urlParts.length > 0) {
+                const lastPart = urlParts[urlParts.length - 1];
+                if (lastPart.includes('.')) {
+                    filename = lastPart;
+                }
+            }
+            
+            // 添加前缀 "YaHee-"
+            filename = `YaHee-${filename}`;
+            
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            
+            // 清理
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+            
+            showToast('图片下载成功', 'success');
+        } catch (error) {
+            console.error('下载图片失败:', error);
+            
+            // 如果下载失败，尝试使用原始方法
+            showToast('直接下载失败，尝试备用方法...', 'warning');
+            
+            // 备用方法：直接打开图片链接
+            const a = document.createElement('a');
+            a.href = appState.currentImageUrl;
+            a.target = '_blank';
+            a.rel = 'noopener noreferrer';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            
+            showToast('已在新标签页打开图片，请右键另存为', 'info');
+        } finally {
+            // 恢复按钮状态
+            elements.downloadBtn.disabled = false;
+            elements.downloadBtn.innerHTML = '<i class="fa fa-download"></i><span>下载图片</span>';
+        }
+    }
+
+    // 保存到历史
+    function saveToHistory(autoSave = false) {
+        if (!appState.currentImageUrl) {
+            showToast('没有可保存的图片', 'warning');
+            return;
+        }
+        
+        // 获取历史记录
+        let history = JSON.parse(localStorage.getItem('aiGenerationHistory') || '[]');
+        
+        // 检查是否已存在相同图片
+        const existingIndex = history.findIndex(item => item.imageUrl === appState.currentImageUrl);
+        if (existingIndex !== -1) {
+            // 如果已存在，更新记录
+            history[existingIndex] = {
+                id: history[existingIndex].id,
+                imageUrl: history[existingIndex].imageUrl,
+                prompt: document.getElementById('customPrompt').value,
+                tags: Array.from(appState.selectedTags),
+                timestamp: new Date().toISOString()
+            };
+        } else {
+            // 添加新记录
+            history.unshift({
+                id: Date.now(),
+                imageUrl: appState.currentImageUrl,
+                prompt: document.getElementById('customPrompt').value,
+                tags: Array.from(appState.selectedTags),
+                timestamp: new Date().toISOString()
             });
         }
+        
+        // 限制历史记录数量
+        if (history.length > 20) {
+            history = history.slice(0, 20);
+        }
+        
+        // 保存到本地存储
+        localStorage.setItem('aiGenerationHistory', JSON.stringify(history));
+        
+        // 更新历史记录显示
+        updateHistoryDisplay();
+        
+        if (!autoSave) {
+            showToast('已保存到历史记录', 'success');
+        }
+    }
 
-        // 清空历史记录
-        function clearHistory() {
-            if (confirm('确定要清空所有历史记录吗？此操作不可恢复。')) {
-                localStorage.removeItem('aiGenerationHistory');
-                updateHistoryDisplay();
-                showToast('历史记录已清空', 'success');
+    // 更新历史记录显示
+    function updateHistoryDisplay() {
+        const historyContainer = document.getElementById('historyContainer');
+        const history = JSON.parse(localStorage.getItem('aiGenerationHistory') || '[]');
+        
+        if (history.length === 0) {
+            historyContainer.innerHTML = `
+                <div class="col-span-full text-center py-8 text-secondary">
+                    <i class="fa fa-folder-open-o text-3xl mb-3"></i>
+                    <p class="text-sm">暂无历史记录</p>
+                </div>
+            `;
+            return;
+        }
+        
+        historyContainer.innerHTML = '';
+        
+        history.forEach(item => {
+            const historyItem = document.createElement('div');
+            historyItem.className = 'rounded-lg overflow-hidden border border-gray-200 cursor-pointer';
+            historyItem.innerHTML = `
+                <img src="${item.imageUrl}" alt="历史图片" class="w-full h-20 object-cover">
+            `;
+            historyItem.addEventListener('click', () => {
+                document.getElementById('previewModalImg').src = item.imageUrl;
+                document.getElementById('imagePreviewModal').classList.remove('hidden');
+            });
+            historyContainer.appendChild(historyItem);
+        });
+    }
+
+    // 清空历史记录
+    function clearHistory() {
+        if (confirm('确定要清空所有历史记录吗？此操作不可恢复。')) {
+            localStorage.removeItem('aiGenerationHistory');
+            updateHistoryDisplay();
+            showToast('历史记录已清空', 'success');
+        }
+    }
+
+    // 切换标签选中状态
+    function toggleTag(tag) {
+        if (appState.selectedTags.has(tag)) {
+            appState.selectedTags.delete(tag);
+            // 移除预设标签的选中样式
+            const presetTag = document.querySelector(`#presetTags span[data-tag="${tag}"]`);
+            if (presetTag) {
+                presetTag.classList.remove('tag-selected');
+            }
+        } else {
+            appState.selectedTags.add(tag);
+            // 添加预设标签的选中样式
+            const presetTag = document.querySelector(`#presetTags span[data-tag="${tag}"]`);
+            if (presetTag) {
+                presetTag.classList.add('tag-selected');
             }
         }
+        renderSelectedTags();
+    }
 
-        // 切换标签选中状态
-        function toggleTag(tag) {
-            if (appState.selectedTags.has(tag)) {
-                appState.selectedTags.delete(tag);
-                // 移除预设标签的选中样式
-                const presetTag = document.querySelector(`#presetTags span[data-tag="${tag}"]`);
-                if (presetTag) {
-                    presetTag.classList.remove('tag-selected');
-                }
-            } else {
-                appState.selectedTags.add(tag);
-                // 添加预设标签的选中样式
-                const presetTag = document.querySelector(`#presetTags span[data-tag="${tag}"]`);
-                if (presetTag) {
-                    presetTag.classList.add('tag-selected');
-                }
-            }
-            renderSelectedTags();
-        }
-
-        // 渲染已选标签
-        function renderSelectedTags() {
-            elements.selectedTags.innerHTML = '';
-            if (appState.selectedTags.size > 0) {
-                elements.selectedTagsContainer.classList.remove('hidden');
-                appState.selectedTags.forEach(tag => {
-                    const tagElement = document.createElement('span');
-                    tagElement.className = 'bg-primary/10 text-primary px-3 py-1 rounded-full text-sm flex items-center gap-1';
-                    tagElement.innerHTML = `
-                        ${tag}
-                        <button class="ml-1 text-primary/70 hover:text-primary" data-tag="${tag}">
-                            <i class="fa fa-times-circle"></i>
-                        </button>
-                    `;
-                    tagElement.querySelector('button').addEventListener('click', (e) => {
-                        toggleTag(e.currentTarget.dataset.tag);
-                    });
-                    elements.selectedTags.appendChild(tagElement);
+    // 渲染已选标签
+    function renderSelectedTags() {
+        elements.selectedTags.innerHTML = '';
+        if (appState.selectedTags.size > 0) {
+            elements.selectedTagsContainer.classList.remove('hidden');
+            appState.selectedTags.forEach(tag => {
+                const tagElement = document.createElement('span');
+                tagElement.className = 'bg-primary/10 text-primary px-3 py-1 rounded-full text-sm flex items-center gap-1';
+                tagElement.innerHTML = `
+                    ${tag}
+                    <button class="ml-1 text-primary/70 hover:text-primary" data-tag="${tag}">
+                        <i class="fa fa-times-circle"></i>
+                    </button>
+                `;
+                tagElement.querySelector('button').addEventListener('click', (e) => {
+                    toggleTag(e.currentTarget.dataset.tag);
                 });
-            } else {
-                elements.selectedTagsContainer.classList.add('hidden');
-            }
+                elements.selectedTags.appendChild(tagElement);
+            });
+        } else {
+            elements.selectedTagsContainer.classList.add('hidden');
         }
+    }
 
-        // 显示提示信息
-        function showToast(message, type = 'info') {
-            const toast = document.createElement('div');
-            toast.className = `fixed top-4 right-4 px-4 py-2 rounded-lg shadow-lg z-50 transition-all duration-300 transform translate-x-full`;
-            switch(type) {
-                case 'success':
-                    toast.classList.add('bg-success', 'text-white');
-                    toast.innerHTML = `<i class="fa fa-check-circle mr-2"></i>${message}`;
-                    break;
-                case 'warning':
-                    toast.classList.add('bg-warning', 'text-white');
-                    toast.innerHTML = `<i class="fa fa-exclamation-triangle mr-2"></i>${message}`;
-                    break;
-                case 'error':
-                    toast.classList.add('bg-danger', 'text-white');
-                    toast.innerHTML = `<i class="fa fa-times-circle mr-2"></i>${message}`;
-                    break;
-                default:
-                    toast.classList.add('bg-primary', 'text-white');
-                    toast.innerHTML = `<i class="fa fa-info-circle mr-2"></i>${message}`;
-            }
-            document.body.appendChild(toast);
-            setTimeout(() => {
-                toast.classList.remove('translate-x-full');
-                toast.classList.add('translate-x-0');
-            }, 100);
-            setTimeout(() => {
-                toast.classList.remove('translate-x-0');
-                toast.classList.add('translate-x-full');
-                setTimeout(() => document.body.removeChild(toast), 300);
-            }, 3000);
+    // 显示提示信息
+    function showToast(message, type = 'info') {
+        const toast = document.createElement('div');
+        toast.className = `fixed top-4 right-4 px-4 py-2 rounded-lg shadow-lg z-50 transition-all duration-300 transform translate-x-full`;
+        switch(type) {
+            case 'success':
+                toast.classList.add('bg-success', 'text-white');
+                toast.innerHTML = `<i class="fa fa-check-circle mr-2"></i>${message}`;
+                break;
+            case 'warning':
+                toast.classList.add('bg-warning', 'text-white');
+                toast.innerHTML = `<i class="fa fa-exclamation-triangle mr-2"></i>${message}`;
+                break;
+            case 'error':
+                toast.classList.add('bg-danger', 'text-white');
+                toast.innerHTML = `<i class="fa fa-times-circle mr-2"></i>${message}`;
+                break;
+            default:
+                toast.classList.add('bg-primary', 'text-white');
+                toast.innerHTML = `<i class="fa fa-info-circle mr-2"></i>${message}`;
         }
+        document.body.appendChild(toast);
+        setTimeout(() => {
+            toast.classList.remove('translate-x-full');
+            toast.classList.add('translate-x-0');
+        }, 100);
+        setTimeout(() => {
+            toast.classList.remove('translate-x-0');
+            toast.classList.add('translate-x-full');
+            setTimeout(() => document.body.removeChild(toast), 300);
+        }, 3000);
+    }
 
-        // 页面加载完成后初始化
-        document.addEventListener('DOMContentLoaded', init);
-    </script>
+    // 页面加载完成后初始化
+    document.addEventListener('DOMContentLoaded', init);
+</script>
 </body>
 </html>
+    <script>
