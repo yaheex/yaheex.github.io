@@ -127,7 +127,7 @@
                                     <div class="flex justify-between items-start">
                                         <div>
                                             <h4 class="font-medium flex items-center">
-                                                GPT
+                                                GPT (Sora-Image)
                                                 <span class="status-dot bg-success ml-2"></span>
                                                 <span class="text-xs text-gray-500 ml-1">正常</span>
                                             </h4>
@@ -157,6 +157,7 @@
                                 <label for="gptVariants" class="block text-sm font-medium text-gray-600 mb-2">生成数量：</label>
                                 <select id="gptVariants" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary">
                                     <option value="1">1张 ~~~ 400积分/次  ￥0.02~￥0.04/次</option>
+                                    <option value="2">2张 ~~~ 450积分/次  ￥0.0225~￥0.045/次</option>
                                 </select>
                                 <p class="text-xs text-gray-500 mt-1">滴滴 滴滴滴  哔哔 哔哔哔</p>
                             </div>
@@ -1006,7 +1007,7 @@
         const imageSizeSelect = document.getElementById('imageSize');
         const currentValue = imageSizeSelect.value;
         
-        // GPT支持的尺寸选项
+        // GPT支持的尺寸选项（根据API文档）
         const gptOptions = [
             { value: 'auto', text: '自动' },
             { value: '1:1', text: '1:1（正方形）' },
@@ -1526,7 +1527,7 @@
         }
     }
 
-    // 生成图片
+    // 生成图片 - 根据API文档更新GPT模型部分
     async function generateImage() {
         if (appState.isGenerating) {
             showToast('正在生成中，请稍候...', 'warning');
@@ -1552,7 +1553,7 @@
             variants = 1; // Banana模型固定生成1张
             aspectRatio = document.getElementById('imageSize').value;
         } else {
-            subModel = 'sora-image'; // GPT模型使用sora-image
+            subModel = 'sora-image'; // GPT模型使用sora-image（根据API文档）
             variants = parseInt(document.getElementById('gptVariants').value);
             aspectRatio = document.getElementById('imageSize').value;
             imageSize = null; // GPT模型不使用imageSize参数
@@ -1587,7 +1588,8 @@
                 requiredCredit = 1800;
             }
         } else {
-            requiredCredit = 1400;
+            // GPT模型：基础400积分 + 额外图片积分（每增加一张图额外消耗50积分）
+            requiredCredit = 400 + (variants - 1) * 50;
         }
         
         // 检查当前API Key积分，如果不足则自动切换
@@ -1654,7 +1656,7 @@
             url = `${apiServers[appState.currentServer]}/v1/draw/nano-banana`;
             
         } else {
-            // GPT模型请求保持不变
+            // GPT模型请求（根据API文档）
             requestData = {
                 model: subModel,
                 prompt: prompt,
@@ -1664,7 +1666,7 @@
                 shutProgress: false
             };
             
-            // 如果有参考图片URL，添加urls参数
+            // 如果有参考图片URL，添加urls参数（根据API文档）
             if (referenceUrls.length > 0) {
                 requestData.urls = referenceUrls;
                 showToast(`已使用 ${referenceUrls.length} 张参考图片`, 'success');
@@ -2083,4 +2085,3 @@
 </script>
 </body>
 </html>
-    <script>
