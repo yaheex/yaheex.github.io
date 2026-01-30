@@ -3,10 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>报价、计价、计算系统　　　　　　YaHee, Studio.</title>
+    <title>报价计算系统　 YaHee, Studio.</title>
     <!-- 外部资源引入 -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <style>
+        .section-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+        .section-content.expanded {
+            max-height: 5000px;
+        }
+        .toggle-section-btn {
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        .toggle-section-btn.expanded {
+            transform: rotate(180deg);
+        }
+    </style>
     
     <!-- Tailwind 自定义配置 -->
     <script>
@@ -63,10 +80,10 @@
 <body class="font-inter bg-gray-50 text-dark min-h-screen">
     <!-- 页面头部 -->
     <header class="bg-white shadow-sm sticky top-0 z-10 transition-all duration-300">
-        <div class="container mx-auto px-4 py-2.5 sm:px-6 lg:px-8">
+        <div class="container mx-auto px-4 py-1.5 sm:px-6 lg:px-8">
             <div class="flex flex-wrap justify-between items-center">
-                <h1 class="text-[clamp(1.5rem,3vw,2rem)] font-bold text-primary flex items-center">
-                    <i class="fa fa-calculator mr-3"></i>报价、计价、计算系统　　　　　　YaHee, Studio.
+                <h1 class="text-[clamp(1.2rem,2vw,1.5rem)] font-bold text-primary flex items-center">
+                    <i class="fa fa-calculator mr-2"></i>报价、计价、计算系统　YaHee, Studio.
                 </h1>
                 <div class="flex items-center space-x-4 mt-3 sm:mt-0">
                     <!-- 客户管理区域 -->
@@ -89,12 +106,18 @@
     <!-- 主要内容区 -->
     <main class="container mx-auto px-4 py-8 sm:px-6 lg:px-8">
         <div class="space-y-8">
-            <!-- 一、打印复印 -->
+            <!-- 黑白/彩色打印 / 图纸 -->
             <section class="bg-white rounded-xl p-6 card-shadow" data-section="printing">
-                <h2 class="text-xl font-semibold mb-6 flex items-center border-b pb-3">
-                    <i class="fa fa-print text-primary mr-2"></i>一、打印复印
+                <h2 class="text-xl font-semibold mb-6 flex items-center justify-between border-b pb-3">
+                    <div class="flex items-center">
+                        <i class="fa fa-print text-primary mr-2"></i>黑白/彩色打印 / 图纸
+                    </div>
+                    <button class="toggle-section-btn text-primary hover:text-primary/80 transition-colors">
+                        <i class="fa fa-chevron-down"></i>
+                    </button>
                 </h2>
                 
+                <div class="section-content">
                 <div class="item-container space-y-6">
                     <!-- 黑白打印 -->
                     <div class="item-row p-3 border border-gray-100 rounded-lg hover:border-primary/30 transition group" data-category="黑白" data-calc-type="quantity">
@@ -254,18 +277,25 @@
                 <!-- 打印复印小计 -->
                 <div class="mt-6 pt-4 border-t border-gray-200">
                     <div class="flex justify-end items-center">
-                        <span class="text-lg font-semibold text-gray-700 mr-3">打印复印小计：</span>
+                        <span class="text-lg font-semibold text-gray-700 mr-3">黑白/彩色打印 / 图纸小计：</span>
                         <span class="text-xl font-bold text-secondary section-subtotal">¥0.00</span>
                     </div>
+                </div>
                 </div>
             </section>
 
             <!-- 二、户内广告 -->
             <section class="bg-white rounded-xl p-6 card-shadow" data-section="indoor-ad">
-                <h2 class="text-xl font-semibold mb-6 flex items-center border-b pb-3">
-                    <i class="fa fa-bullhorn text-primary mr-2"></i>二、户内广告
+                <h2 class="text-xl font-semibold mb-6 flex items-center justify-between border-b pb-3">
+                    <div class="flex items-center">
+                        <i class="fa fa-bullhorn text-primary mr-2"></i>软膜 / 车贴 / 超透贴 / 磨砂贴 / 展架画面 /涂塑板 / 亚克力UV / PVC.UV / 喷绘
+                    </div>
+                    <button class="toggle-section-btn text-primary hover:text-primary/80 transition-colors">
+                        <i class="fa fa-chevron-down"></i>
+                    </button>
                 </h2>
                 
+                <div class="section-content">
                 <!-- 计算规则设置 -->
                 <div class="subtle-section p-4 mb-6 text-gray-600">
                     <div class="flex justify-between items-center mb-3">
@@ -751,18 +781,25 @@
                 <!-- 户内广告小计 -->
                 <div class="mt-6 pt-4 border-t border-gray-200">
                     <div class="flex justify-end items-center">
-                        <span class="text-lg font-semibold text-gray-700 mr-3">户内广告小计：</span>
+                        <span class="text-lg font-semibold text-gray-700 mr-3">软软膜 / 车贴 / 超透贴 / 磨砂贴 / 展架画面 /涂塑板 / 亚克力UV / PVC.UV / 喷绘小计：</span>
                         <span class="text-xl font-bold text-secondary section-subtotal">¥0.00</span>
                     </div>
+                </div>
                 </div>
             </section>
 
             <!-- 三、户外广告 -->
             <section class="bg-white rounded-xl p-6 card-shadow" data-section="outdoor-ad">
-                <h2 class="text-xl font-semibold mb-6 flex items-center border-b pb-3">
-                    <i class="fa fa-outdent text-primary mr-2"></i>三、户外广告
+                <h2 class="text-xl font-semibold mb-6 flex items-center justify-between border-b pb-3">
+                    <div class="flex items-center">
+                        <i class="fa fa-outdent text-primary mr-2"></i>软膜灯箱 / 灯带 / 焊架子+铝塑板门头 / 展架 / 锦旗 / 公司门牌 / LED显示屏
+                    </div>
+                    <button class="toggle-section-btn text-primary hover:text-primary/80 transition-colors">
+                        <i class="fa fa-chevron-down"></i>
+                    </button>
                 </h2>
                 
+                <div class="section-content">
                 <!-- 计算规则设置 -->
                 <div class="subtle-section p-4 mb-6 text-gray-600">
                     <div class="flex justify-between items-center mb-3">
@@ -1041,6 +1078,7 @@
 										<option value="30x40cm（木托奖牌）" data-price="80">30x40cm（木托奖牌）</option>
 										<option value="35x50cm（木托奖牌）" data-price="85">35x50cm（木托奖牌）</option>
 										<option value="40x60cm（木托奖牌）" data-price="90">40x60cm（木托奖牌）</option>
+										<option value="——————LED显示屏类——————" data-price="666" disabled>——————LED显示屏类——————</option>
 										<option value="40x80cm（跑马灯显示屏）" data-price="260">40x80cm（跑马灯显示屏）</option>
 										<option value="50x100cm（跑马灯显示屏）" data-price="360">50x100cm（跑马灯显示屏）</option>
 										<option value="60x120cm（跑马灯显示屏）" data-price="530">60x120cm（跑马灯显示屏）</option>
@@ -1086,18 +1124,25 @@
                 <!-- 户外广告小计 -->
                 <div class="mt-6 pt-4 border-t border-gray-200">
                     <div class="flex justify-end items-center">
-                        <span class="text-lg font-semibold text-gray-700 mr-3">户外广告小计：</span>
+                        <span class="text-lg font-semibold text-gray-700 mr-3">软膜灯箱 / 灯带 / 焊架子+铝塑板门头 / 展架 / 锦旗 / 公司门牌 / LED显示屏小计：</span>
                         <span class="text-xl font-bold text-secondary section-subtotal">¥0.00</span>
                     </div>
+                </div>
                 </div>
             </section>
 
 <!-- 四、发光字 -->
 <section class="bg-white rounded-xl p-6 card-shadow" data-section="lighted-letters">
-    <h2 class="text-xl font-semibold mb-6 flex items-center border-b pb-3">
-        <i class="fa fa-lightbulb-o text-primary mr-2"></i>四、发光字
+    <h2 class="text-xl font-semibold mb-6 flex items-center justify-between border-b pb-3">
+        <div class="flex items-center">
+            <i class="fa fa-lightbulb-o text-primary mr-2"></i>不锈钢包边发光字 / 无边字 / 水晶字 / PVC字
+        </div>
+        <button class="toggle-section-btn text-primary hover:text-primary/80 transition-colors">
+            <i class="fa fa-chevron-down"></i>
+        </button>
     </h2>
     
+    <div class="section-content">
     <!-- 计算规则设置 -->
     <div class="subtle-section p-4 mb-6 text-gray-600">
         <div class="flex justify-between items-center mb-3">
@@ -1343,6 +1388,7 @@
             <span class="text-xl font-bold text-secondary section-subtotal">¥0.00</span>
         </div>
     </div>
+    </div>
 </section>
 
             <!-- 总计区域 -->
@@ -1364,6 +1410,30 @@
         </div>
     </main>
 
+    <!-- JavaScript 代码 -->
+    <script>
+        // 页面加载完成后执行
+        document.addEventListener('DOMContentLoaded', function() {
+            // 获取所有的切换按钮
+            const toggleButtons = document.querySelectorAll('.toggle-section-btn');
+            
+            // 为每个按钮添加点击事件监听
+            toggleButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // 获取当前按钮所在的 section
+                    const section = this.closest('section');
+                    // 获取当前 section 下的内容区域
+                    const content = section.querySelector('.section-content');
+                    
+                    // 切换内容区域的展开/关闭状态
+                    content.classList.toggle('expanded');
+                    // 切换按钮的状态
+                    this.classList.toggle('expanded');
+                });
+            });
+        });
+    </script>
+    
     <!-- 客户管理模态框 -->
     <div id="customer-modal-backdrop" class="modal-backdrop"></div>
     <div id="customer-modal" class="modal-content">
@@ -1449,15 +1519,6 @@
             </div>
         </div>
     </div>
-
-    <!-- 页脚 -->
-    <footer class="bg-white border-t mt-12 py-6">
-        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center text-gray-500 text-sm">
-                <p>报价、计价、计算系统 &copy; YaHee, Studio.</p>
-            </div>
-        </div>
-    </footer>
 
     <!-- 核心功能JS -->
     <script>
