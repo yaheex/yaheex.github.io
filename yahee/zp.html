@@ -1,0 +1,1045 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>万物皆可裁 - YaHee, Studio. </title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        i {
+            color: #8b5cf6;
+        }
+        
+        #applyPreset i,
+        #applyCustomRatio i {
+            color: #fff;
+        }
+        
+        body {
+            font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: #333;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1800px;
+            margin: 0 auto;
+            background-color: #fff;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            padding: 30px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eaeaea;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            font-size: 32px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            background: linear-gradient(90deg, #3498db, #9b59b6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .subtitle {
+            color: #7f8c8d;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+        
+        /* 上传区域 - 紧凑设计 */
+        .upload-section {
+            text-align: center;
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 2px dashed #dce4ec;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background-color: #f8fafc;
+            width: 100%;
+        }
+        
+        .upload-section:hover {
+            border-color: #3498db;
+            background-color: #ebf5fb;
+            transform: translateY(-2px);
+        }
+        
+        .upload-section input[type="file"] {
+            display: none;
+        }
+        
+        .upload-section label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 15px;
+            color: #5d6d7e;
+            cursor: pointer;
+            padding: 5px;
+        }
+        
+        .upload-icon {
+            font-size: 36px;
+            color: #3498db;
+            margin-bottom: 10px;
+            background: #e3f2fd;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        
+        .upload-section:hover .upload-icon {
+            background: #3498db;
+            color: white;
+            transform: scale(1.05);
+        }
+        
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        @media (max-width: 992px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .section-card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+            border: 1px solid #eef2f7;
+            transition: transform 0.3s ease;
+        }
+        
+        .section-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .section-title {
+            font-size: 18px;
+            color: #3B82F6;
+            margin-bottom: 20px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+        }
+        
+        .section-title i {
+            margin-right: 10px;
+            color: #3B82F6;
+        }
+        
+        .crop-container {
+            position: relative;
+            width: 100%;
+            height: 400px;
+            border-radius: 8px;
+            overflow: hidden;
+            background-color: #f8fafc;
+            border: 1px solid #eef2f7;
+            margin-bottom: 20px;
+        }
+        
+        .crop-container img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+        
+        .result-image-container {
+            width: 100%;
+            height: 400px;
+            border-radius: 8px;
+            overflow: hidden;
+            background-color: #f8fafc;
+            border: 1px solid #eef2f7;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .result-image {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+        
+        .controls {
+            margin-top: 25px;
+        }
+        
+        .control-group {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .control-group:last-child {
+            border-bottom: none;
+        }
+        
+        .control-group h3 {
+            margin-bottom: 15px;
+            font-size: 16px;
+            color: #3B82F6;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+        }
+        
+        .control-group h3 i {
+            margin-right: 8px;
+            color: #3B82F6;
+        }
+        
+        .aspect-ratios {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .aspect-ratios button {
+            padding: 0 15px;
+            border: 1px solid #e0e6ed;
+            background-color: #fff;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 14px;
+            font-weight: 500;
+            color: #5d6d7e;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .aspect-ratios button:hover {
+            border-color: #3498db;
+            color: #3498db;
+            transform: translateY(-2px);
+        }
+        
+        .aspect-ratios button.active {
+            background: linear-gradient(135deg, #3B82F6, #3B82F6);
+            color: #fff;
+            border-color: #3B82F6;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+        
+        .custom-ratio {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .custom-ratio input {
+            flex: 1;
+            padding: 10px 12px;
+            border: 1px solid #e0e6ed;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.3s;
+            height: 40px;
+            box-sizing: border-box;
+        }
+        
+        .custom-ratio input:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+        }
+        
+        .custom-ratio button {
+            padding: 0 20px;
+            background: linear-gradient(135deg, #8B5CF6, #8B5CF6);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .custom-ratio button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(155, 89, 182, 0.3);
+        }
+        
+        .control-row {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+        
+        .control-row select,
+        .control-row input {
+            flex: 1;
+            padding: 10px 12px;
+            border: 1px solid #e0e6ed;
+            border-radius: 8px;
+            font-size: 14px;
+            background-color: #fff;
+            transition: all 0.3s;
+        }
+        
+        .control-row select:focus,
+        .control-row input:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+        }
+        
+        .preset-controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .preset-controls select {
+            flex: 1;
+            padding: 10px 12px;
+            border: 1px solid #e0e6ed;
+            border-radius: 8px;
+            font-size: 14px;
+            background-color: #fff;
+        }
+        
+        .preset-controls button {
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #2ecc71, #27ae60);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .preset-controls button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(46, 204, 113, 0.3);
+        }
+        
+        .save-section {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 25px;
+            border-top: 1px solid #eaeaea;
+        }
+        
+        .save-btn {
+            padding: 12px 30px;
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 20px rgba(231, 76, 60, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .save-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(231, 76, 60, 0.3);
+        }
+        
+        .save-btn:disabled {
+            background: #bdc3c7;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .result-info {
+            font-size: 14px;
+            color: #7f8c8d;
+            margin-top: 15px;
+            padding: 12px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #3498db;
+        }
+        
+        .download-btn {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 12px 30px;
+            background: #3B82F6;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.2);
+        }
+        
+        .download-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(59, 130, 246, 0.3);
+            color: #fff;
+        }
+        
+        /* 预设应用提示 */
+        .preset-notification {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            background: linear-gradient(135deg, #2ecc71, #27ae60);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(46, 204, 113, 0.3);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            transform: translateX(150%);
+            transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+        
+        .preset-notification.show {
+            transform: translateX(0);
+        }
+        
+        .preset-notification i {
+            margin-right: 10px;
+            font-size: 20px;
+        }
+        
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            color: #bdc3c7;
+        }
+        
+        .empty-state i {
+            font-size: 60px;
+            margin-bottom: 15px;
+            opacity: 0.6;
+        }
+        
+        .empty-state p {
+            font-size: 16px;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 24px;
+            }
+            
+            .main-content {
+                gap: 20px;
+            }
+            
+            .section-card {
+                padding: 20px;
+            }
+            
+            .aspect-ratios {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            
+            .custom-ratio {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .control-row, .preset-controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+        }
+    </style>
+    <!-- 引入Cropper.js库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+    <!-- 引入Font Awesome图标 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- 预设应用提示 -->
+        <div class="preset-notification" id="presetNotification">
+            <i class="fas fa-check-circle"></i>
+            <span id="notificationText">预设已应用</span>
+        </div>
+        
+        <!-- 预览和裁剪工具 -->
+        <div class="main-content">
+            <!-- 裁剪工具 -->
+            <div class="section-card">
+                <div class="section-title">
+                    <i class="fas fa-cut"></i>
+                    <span>裁剪工具</span>
+                </div>
+                
+                <div class="crop-container" id="cropContainer">
+                    <div class="empty-state" id="emptyCropState">
+                        <i class="fas fa-image"></i>
+                        <p>上传图片开始裁剪 - YaHee, Studio.</p>
+                    </div>
+                    <img id="image" src="" alt="预览图片" style="display: none;">
+                </div>
+                
+                <!-- 控制选项 -->
+                <div class="controls">
+                    <!-- 裁剪比例控制 -->
+                    <div class="control-group">
+                        <h3><i class="fas fa-expand-alt"></i> 照片像素</h3>
+                        <div style="display: flex; align-items: center; gap: 15px; flex-wrap: wrap;">
+                            <div class="aspect-ratios" style="display: flex; gap: 10px;">
+                                <button data-pixels="600x800" class="ratio-btn active">
+                                    600*800
+                                </button>
+                                <button data-pixels="480x640" class="ratio-btn">
+                                    480*640
+                                </button>
+                                <button data-pixels="300x400" class="ratio-btn">
+                                    300*400
+                                </button>
+                                <button data-ratio="free" class="ratio-btn">
+                                    <i class="fas fa-expand"></i> 自由
+                                </button>
+                            </div>
+                            <div class="custom-ratio" style="display: flex; align-items: center; gap: 10px;">
+                                <input type="number" id="customWidth" placeholder="宽度" min="1" style="max-width: 100px;">
+                                <span>×</span>
+                                <input type="number" id="customHeight" placeholder="高度" min="1" style="max-width: 100px;">
+                                <button id="applyCustomRatio">
+                                    <i class="fas fa-check-circle" style="margin-right: 8px;"></i> 应用
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 预设、分辨率和文件大小控制 - 并列显示 -->
+                    <div class="control-group" style="display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start;">
+                        <!-- 快速预设 -->
+                        <div style="flex: 1; min-width: 300px;">
+                            <h3><i class="fas fa-cog"></i> 预设</h3>
+                            <div class="preset-controls">
+                                <select id="presetSelect">
+                                    <option value="">选择预设</option>
+                                    <option value="600x800">600*800 dpi (  5~200kb  )</option>
+                                    <option value="480x640">480*640 dpi (  20~40kb  )</option>
+                                    <option value="300x400">300*400 dpi (  20~50kb  )</option>
+                                </select>
+                                <button id="applyPreset">
+                                    <i class="fas fa-check-circle" style="margin-right: 8px;"></i> 应用
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- 分辨率控制 -->
+                        <div style="flex: 1; min-width: 200px;">
+                            <h3><i class="fas fa-tachometer-alt"></i> 分辨率</h3>
+                            <div class="control-row">
+                                <select id="resolution">
+                                    <option value="300" selected>300 DPI</option>
+                                    <option value="600">600 DPI</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <!-- 文件大小控制 -->
+                        <div style="flex: 1; min-width: 200px;">
+                            <h3><i class="fas fa-weight-hanging"></i> 大小</h3>
+                            <div class="control-row">
+                                <input type="number" id="targetSize" placeholder="目标大小 (KB)" min="1" value="50">
+                                <span>KB</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 保存按钮 -->
+                <div class="save-section" style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #f0f0f0;">
+                    <button id="saveBtn" class="save-btn" disabled>
+                        <i class="fas fa-save" style="color: #fff;"></i> 保存裁剪框
+                    </button>
+                </div>
+            </div>
+            
+            <!-- 结果显示区域 -->
+            <div class="section-card">
+                <div class="section-title">
+                    <i class="fas fa-image"></i>
+                    <span>成像</span>
+                </div>
+                
+                <!-- 上传区域 -->
+                <div class="upload-section" style="margin-bottom: 20px;">
+                    <input type="file" id="fileInput" accept="image/*">
+                    <label for="fileInput">
+                        <div class="upload-icon">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                        </div>
+                        <p>点击或拖拽图片上传</p>
+                        <p style="font-size: 13px; color: #95a5a6; margin-top: 5px;">支持 JPG、PNG、WebP 格式</p>
+                    </label>
+                </div>
+                
+                <div class="result-image-container" id="resultContainer">
+                    <div class="empty-state" id="emptyResultState">
+                        <i class="fas fa-crop-alt"></i>
+                        <p>成像结果将显示在这里</p>
+                    </div>
+                    <img id="resultImage" class="result-image" src="" alt="成像结果" style="display: none;">
+                </div>
+                
+                <div class="result-info" id="resultInfo" style="display: none;">
+                    <i class="fas fa-info-circle"></i> 
+                    <span id="resultDetails">等待裁剪图片...</span>
+                </div>
+                
+                <div id="downloadSection" style="display: none; text-align: center;">
+                    <a href="#" id="downloadLink" class="download-btn">
+                        <i class="fas fa-download" style="color: #fff;"></i> 下载图片
+                    </a>
+                </div>
+            </div>
+ 
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 获取DOM元素
+            const fileInput = document.getElementById('fileInput');
+            const image = document.getElementById('image');
+            const ratioBtns = document.querySelectorAll('.ratio-btn');
+            const customWidth = document.getElementById('customWidth');
+            const customHeight = document.getElementById('customHeight');
+            const applyCustomRatio = document.getElementById('applyCustomRatio');
+            const resolution = document.getElementById('resolution');
+            const targetSize = document.getElementById('targetSize');
+            const saveBtn = document.getElementById('saveBtn');
+            const resultImage = document.getElementById('resultImage');
+            const resultInfo = document.getElementById('resultInfo');
+            const resultDetails = document.getElementById('resultDetails');
+            const presetSelect = document.getElementById('presetSelect');
+            const applyPreset = document.getElementById('applyPreset');
+            const presetNotification = document.getElementById('presetNotification');
+            const notificationText = document.getElementById('notificationText');
+            const emptyCropState = document.getElementById('emptyCropState');
+            const emptyResultState = document.getElementById('emptyResultState');
+            const cropContainer = document.getElementById('cropContainer');
+            const resultContainer = document.getElementById('resultContainer');
+            const downloadSection = document.getElementById('downloadSection');
+            const downloadLink = document.getElementById('downloadLink');
+            
+            let cropper = null;
+            let originalImage = null;
+            let currentRatio = { width: 600, height: 800 }; // 默认比例
+            
+            // 预设数据
+            const presets = {
+                '600x800': {
+                    name: '600*800',
+                    width: 600,
+                    height: 800,
+                    resolution: 300,
+                    size: 166
+                },
+                '480x640': {
+                    name: '480*640',
+                    width: 480,
+                    height: 640,
+                    resolution: 300,
+                    size: 35
+                },
+                '300x400': {
+                    name: '300*400',
+                    width: 300,
+                    height: 400,
+                    resolution: 300,
+                    size: 45
+                }
+            };
+            
+            // 显示通知
+            function showNotification(message) {
+                notificationText.textContent = message;
+                presetNotification.classList.add('show');
+                
+                // 3秒后隐藏通知
+                setTimeout(() => {
+                    presetNotification.classList.remove('show');
+                }, 1000);
+            }
+            
+            // 文件上传处理
+            fileInput.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (!file) return;
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    image.src = e.target.result;
+                    originalImage = e.target.result;
+                    
+                    // 显示图片，隐藏空状态
+                    image.style.display = 'block';
+                    emptyCropState.style.display = 'none';
+                    
+                    // 启用保存按钮
+                    saveBtn.disabled = false;
+                    
+                    // 初始化Cropper
+                    if (cropper) {
+                        cropper.destroy();
+                    }
+                    
+                    cropper = new Cropper(image, {
+                        aspectRatio: currentRatio.width / currentRatio.height,
+                        viewMode: 1,
+                        dragMode: 'move',
+                        autoCropArea: 0.8,
+                        responsive: true,
+                        restore: false,
+                        guides: true,
+                        center: true,
+                        highlight: true,
+                        cropBoxMovable: true,
+                        cropBoxResizable: true,
+                        toggleDragModeOnDblclick: true,
+                        ready: function() {
+                            // 裁剪框准备好后，显示一些结果信息
+                            resultInfo.style.display = 'block';
+                            resultDetails.textContent = '已上传图片，请调整裁剪框';
+                        }
+                    });
+                };
+                reader.readAsDataURL(file);
+            });
+            
+            // 处理裁剪比例选择
+            ratioBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    // 移除所有按钮的active类
+                    ratioBtns.forEach(b => b.classList.remove('active'));
+                    // 添加当前按钮的active类
+                    this.classList.add('active');
+                    
+                    // 检查是否是像素尺寸按钮
+                    const pixels = this.getAttribute('data-pixels');
+                    if (pixels) {
+                        // 处理具体像素尺寸
+                        const [width, height] = pixels.split('x');
+                        const w = parseInt(width);
+                        const h = parseInt(height);
+                        if (cropper) {
+                            cropper.setAspectRatio(w / h);
+                        }
+                        currentRatio = { width: w, height: h };
+                    } else {
+                        // 处理比例按钮
+                        const ratio = this.getAttribute('data-ratio');
+                        if (ratio === 'free') {
+                            if (cropper) {
+                                cropper.setAspectRatio(NaN);
+                            }
+                            currentRatio = { width: null, height: null };
+                        } else {
+                            const [width, height] = ratio.split('/');
+                            const w = parseFloat(width);
+                            const h = parseFloat(height);
+                            if (cropper) {
+                                cropper.setAspectRatio(w / h);
+                            }
+                            currentRatio = { width: w, height: h };
+                        }
+                    }
+                });
+            });
+            
+            // 应用自定义比例
+            applyCustomRatio.addEventListener('click', function() {
+                const width = parseInt(customWidth.value);
+                const height = parseInt(customHeight.value);
+                
+                if (width && height && width > 0 && height > 0) {
+                    if (cropper) {
+                        cropper.setAspectRatio(width / height);
+                    }
+                    currentRatio = { width: width, height: height };
+                    // 移除所有按钮的active类
+                    ratioBtns.forEach(b => b.classList.remove('active'));
+                    showNotification(`已应用自定义比例 ${width}:${height}`);
+                } else {
+                    showNotification('请输入有效的宽度和高度');
+                }
+            });
+            
+            // 应用预设
+            applyPreset.addEventListener('click', function() {
+                const presetValue = presetSelect.value;
+                if (!presetValue) {
+                    showNotification('请选择预设类型');
+                    return;
+                }
+                
+                const preset = presets[presetValue];
+                if (!preset) return;
+                
+                // 更新裁剪比例
+                currentRatio = { width: preset.width, height: preset.height };
+                if (cropper) {
+                    cropper.setAspectRatio(preset.width / preset.height);
+                }
+                
+                // 更新分辨率
+                resolution.value = preset.resolution;
+                
+                // 更新文件大小
+                targetSize.value = preset.size;
+                
+                // 更新比例按钮状态
+                ratioBtns.forEach(b => b.classList.remove('active'));
+                
+                // 自动选择对应的照片像素选项
+                const targetPixels = `${preset.width}x${preset.height}`;
+                ratioBtns.forEach(btn => {
+                    if (btn.getAttribute('data-pixels') === targetPixels) {
+                        btn.classList.add('active');
+                    }
+                });
+                
+                // 显示通知
+                showNotification(`已应用预设: ${preset.name}`);
+            });
+            
+            // 保存图片
+            saveBtn.addEventListener('click', function() {
+                if (!cropper) return;
+                
+                const dpi = parseInt(resolution.value);
+                const targetSizeKB = parseInt(targetSize.value);
+                
+                // 确定最终裁剪尺寸
+                let outputWidth, outputHeight;
+                if (currentRatio.width && currentRatio.height) {
+                    // 检查是否是具体像素尺寸（600x800, 480x640, 300x400）
+                    const isSpecificSize = [
+                        {w: 600, h: 800},
+                        {w: 480, h: 640},
+                        {w: 300, h: 400},
+                    ].some(size => size.w === currentRatio.width && size.h === currentRatio.height);
+                    
+                    if (isSpecificSize) {
+                        // 使用具体像素尺寸
+                        outputWidth = currentRatio.width;
+                        outputHeight = currentRatio.height;
+                    } else {
+                        // 对于其他比例，使用裁剪框的实际尺寸，但保持比例
+                        const cropBoxData = cropper.getCropBoxData();
+                        const aspectRatio = currentRatio.width / currentRatio.height;
+                        
+                        // 确保最小尺寸
+                        const minSize = 100;
+                        const maxSize = 2000;
+                        
+                        if (cropBoxData.width > cropBoxData.height * aspectRatio) {
+                            outputHeight = Math.min(Math.max(cropBoxData.height, minSize), maxSize);
+                            outputWidth = Math.round(outputHeight * aspectRatio);
+                        } else {
+                            outputWidth = Math.min(Math.max(cropBoxData.width, minSize), maxSize);
+                            outputHeight = Math.round(outputWidth / aspectRatio);
+                        }
+                    }
+                } else {
+                    // 自由比例时，使用裁剪框的实际尺寸
+                    const cropBoxData = cropper.getCropBoxData();
+                    outputWidth = Math.round(cropBoxData.width);
+                    outputHeight = Math.round(cropBoxData.height);
+                }
+                
+                // 获取裁剪后的画布
+                const canvas = cropper.getCroppedCanvas({
+                    width: outputWidth,
+                    height: outputHeight,
+                    imageSmoothingEnabled: true,
+                    imageSmoothingQuality: 'high'
+                });
+                
+                // 调整文件大小 - 精确控制，误差不超过5KB
+                let bestDataUrl = '';
+                let bestSizeKB = 0;
+                let minDifference = Infinity;
+                
+                // 第一次二分查找 - 快速定位大致范围
+                let low = 0.1;
+                let high = 1.0;
+                const maxIterations = 20; // 增加迭代次数以提高精度
+                
+                for (let i = 0; i < maxIterations; i++) {
+                    const mid = (low + high) / 2;
+                    const dataUrl = canvas.toDataURL('image/jpeg', mid);
+                    const fileSizeKB = Math.round((dataUrl.length - 22) * 3 / 4 / 1024); // 移除data URL前缀并转换为KB
+                    const difference = Math.abs(fileSizeKB - targetSizeKB);
+                    
+                    // 如果找到更接近目标大小的文件
+                    if (difference < minDifference) {
+                        minDifference = difference;
+                        bestDataUrl = dataUrl;
+                        bestSizeKB = fileSizeKB;
+                    }
+                    
+                    // 如果已经达到目标误差范围，提前结束
+                    if (difference <= 5) {
+                        break;
+                    }
+                    
+                    // 根据当前文件大小调整搜索范围
+                    if (fileSizeKB > targetSizeKB) {
+                        // 文件太大，降低质量
+                        high = mid;
+                    } else {
+                        // 文件太小，提高质量
+                        low = mid;
+                    }
+                }
+                
+                // 多质量点采样 - 提高精度
+                const qualitySteps = 100;
+                let bestQuality = 0.5;
+                
+                for (let q = 0; q <= qualitySteps; q++) {
+                    const quality = q / qualitySteps;
+                    const dataUrl = canvas.toDataURL('image/jpeg', quality);
+                    const fileSizeKB = Math.round((dataUrl.length - 22) * 3 / 4 / 1024);
+                    const difference = Math.abs(fileSizeKB - targetSizeKB);
+                    
+                    if (difference < minDifference) {
+                        minDifference = difference;
+                        bestDataUrl = dataUrl;
+                        bestSizeKB = fileSizeKB;
+                        bestQuality = quality;
+                    }
+                    
+                    if (difference <= 5) {
+                        break;
+                    }
+                }
+                
+                // 精细微调 - 在最佳质量附近进行小范围搜索
+                const fineTuneSteps = 20;
+                const fineTuneRange = 0.05; // 5%的质量范围
+                
+                for (let step = -fineTuneSteps; step <= fineTuneSteps; step++) {
+                    const quality = Math.max(0, Math.min(1, bestQuality + step * (fineTuneRange / fineTuneSteps)));
+                    const dataUrl = canvas.toDataURL('image/jpeg', quality);
+                    const fileSizeKB = Math.round((dataUrl.length - 22) * 3 / 4 / 1024);
+                    const difference = Math.abs(fileSizeKB - targetSizeKB);
+                    
+                    if (difference < minDifference) {
+                        minDifference = difference;
+                        bestDataUrl = dataUrl;
+                        bestSizeKB = fileSizeKB;
+                    }
+                    
+                    if (difference <= 5) {
+                        break;
+                    }
+                }
+                
+                // 显示结果
+                resultImage.src = bestDataUrl;
+                resultImage.style.display = 'block';
+                emptyResultState.style.display = 'none';
+                
+                // 计算实际文件大小
+                const actualSizeKB = Math.round((bestDataUrl.length - 22) * 3 / 4 / 1024);
+                resultDetails.textContent = `分辨率: ${dpi} DPI | 文件大小: ${actualSizeKB} KB | 尺寸: ${outputWidth} × ${outputHeight} 像素`;
+                resultInfo.style.display = 'block';
+                
+                // 创建下载链接
+                downloadLink.href = bestDataUrl;
+                downloadLink.download = `YaHee_${Math.floor(Date.now() / 1000)}.jpg`;
+                downloadSection.style.display = 'block';
+                
+                // 显示成功消息
+                showNotification('图片裁剪完成，可以点击下载图片了');
+            });
+            
+            // 拖拽上传功能
+            const uploadSection = document.querySelector('.upload-section');
+            uploadSection.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                this.style.borderColor = '#3498db';
+                this.style.transform = 'translateY(-5px)';
+            });
+            
+            uploadSection.addEventListener('dragleave', function(e) {
+                e.preventDefault();
+                this.style.borderColor = '#dce4ec';
+                this.style.transform = 'translateY(0)';
+            });
+            
+            uploadSection.addEventListener('drop', function(e) {
+                e.preventDefault();
+                this.style.borderColor = '#dce4ec';
+                this.style.transform = 'translateY(0)';
+                
+                const files = e.dataTransfer.files;
+                if (files.length > 0) {
+                    const file = files[0];
+                    if (file.type.startsWith('image/')) {
+                        // 模拟文件输入
+                        const dataTransfer = new DataTransfer();
+                        dataTransfer.items.add(file);
+                        fileInput.files = dataTransfer.files;
+                        
+                        // 触发change事件
+                        fileInput.dispatchEvent(new Event('change'));
+                    } else {
+                        showNotification('请选择图片文件');
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

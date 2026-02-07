@@ -1,0 +1,2458 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>报价计算系统 - YaHee, Studio. </title>
+    <!-- 外部资源引入 -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <style>
+        .section-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+        .section-content.expanded {
+            max-height: 5000px;
+        }
+        .toggle-section-btn {
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        .toggle-section-btn.expanded {
+            transform: rotate(180deg);
+        }
+    </style>
+    
+    <!-- Tailwind 自定义配置 -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#165DFF',    // 主色调（蓝色）
+                        secondary: '#FF7D00',  // 强调色（橙色）
+                        category: '#7B61FF',   // 品类名称色（紫色）
+                        danger: '#F53F3F',     // 危险/删除色（红色）
+                        dark: '#1D2129',       // 文字深色
+                    },
+                    fontFamily: {
+                        inter: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    
+    <!-- 自定义工具类 -->
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto { content-visibility: auto; }
+            .card-shadow { box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08); }
+            .input-focus:focus { box-shadow: 0 0 0 2px rgba(245, 63, 63, 0.5); border-color: #F53F3F; }
+            .animate-number { transition: all 0.5s ease-out; }
+            .subtle-section { background-color: #f9fafb; border-radius: 0.5rem; font-size: 0.875rem; }
+            .category-name { font-weight: 700; color: #8B5CF6; }
+            .add-row-btn { color: #F53F3F; transition: color 0.2s ease-in-out; font-size: 0.875rem; display: flex; align-items: center; margin-top: 0.5rem; margin-left: auto; cursor: pointer; }
+            .add-row-btn:hover { color: rgba(245, 63, 63, 0.8); }
+            .delete-row-btn { color: #ef4444; transition: color 0.2s ease-in-out; font-size: 0.875rem; display: flex; align-items: center; margin-top: 0.5rem; cursor: pointer; opacity: 0; transition: opacity 0.2s ease-in-out; }
+            .delete-row-btn:hover { color: rgba(239, 68, 68, 0.8); }
+            .group:hover .delete-row-btn { opacity: 1; }
+            .fade-in { animation: fadeIn 0.3s ease-in-out; }
+            .scale-in { animation: scaleIn 0.2s ease-out; }
+            .calculation-wrapper { display: flex; align-items: center; gap: 0.5rem; }
+            .toggle-calc-btn { color: #9ca3af; transition: color 0.2s ease-in-out; cursor: pointer; padding: 0.25rem; }
+            .toggle-calc-btn:hover { color: #F53F3F; }
+            .calculation-hidden { display: none !important; }
+            .modal-backdrop { position: fixed; inset: 0; background-color: rgba(0, 0, 0, 0.5); z-index: 40; display: none; }
+            .modal-content { position: fixed; top: 50%; left: 50%; transform: translateX(-50%) translateY(-50%); background-color: white; border-radius: 0.5rem; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); max-width: 48rem; width: 100%; max-height: 90vh; overflow-y: auto; z-index: 50; display: none; }
+            .modal-active { display: block; }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes scaleIn {
+            from { transform: scale(0.95); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+    </style>
+</head>
+<body class="font-inter bg-gray-50 text-dark min-h-screen">
+    <!-- 页面头部 -->
+    <header class="bg-white shadow-sm sticky top-0 z-10 transition-all duration-300">
+        <div class="container mx-auto px-4 py-1.5 sm:px-6 lg:px-8">
+            <div class="flex flex-wrap justify-between items-center">
+                <h1 class="text-[clamp(1.2rem,2vw,1.5rem)] font-bold text-primary flex items-center">
+                    <i class="fa fa-calculator mr-2"></i>报价计算系统.
+                </h1>
+                <div class="flex items-center space-x-4 mt-3 sm:mt-0">
+                    <!-- 客户管理区域 -->
+                    <div class="relative w-full sm:w-auto">
+                        <select id="customer-select" class="w-full sm:w-64 px-3 py-1.5 border border-gray-300 rounded-md input-focus appearance-none bg-white">
+                            <option value="">选择客户</option>
+                        </select>
+                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                            <i class="fa fa-chevron-down text-xs"></i>
+                        </div>
+                    </div>
+                    <button id="manage-customers-btn" class="bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-md transition-colors flex items-center">
+                        <i class="fa fa-users mr-2"></i>客户管理
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- 主要内容区 -->
+    <main class="container mx-auto px-4 py-8 sm:px-6 lg:px-8">
+        <div class="space-y-8">
+            <!-- 黑白/彩色打印 / 图纸 -->
+            <section class="bg-white rounded-xl p-6 card-shadow" data-section="printing">
+                <h2 class="text-xl font-semibold mb-6 flex items-center justify-between border-b pb-3">
+                    <div class="flex items-center">
+                        <i class="fa fa-print text-primary mr-2"></i>黑白/彩色打印 / 图纸
+                    </div>
+                    <button class="toggle-section-btn text-primary hover:text-primary/80 transition-colors">
+                        <i class="fa fa-chevron-down"></i>
+                    </button>
+                </h2>
+                
+                <div class="section-content">
+                <div class="item-container space-y-6">
+                    <!-- 黑白打印 -->
+                    <div class="item-row p-3 border border-gray-100 rounded-lg hover:border-primary/30 transition group" data-category="黑白" data-calc-type="quantity">
+                        <div class="flex flex-wrap justify-between items-start">
+                            <div class="w-full md:w-1/4 mb-4 md:mb-0">
+                                <h3 class="text-lg category-name">黑白</h3>
+                                <p class="text-sm text-gray-500 mt-1">各类黑白文档打印/复印</p>
+                            </div>
+                            <div class="w-full md:w-3/4 grid grid-cols-1 sm:grid-cols-3 gap-3">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-0.5">尺寸</label>
+                                    <select class="size w-full px-3 py-1.5 border border-gray-300 rounded-md input-focus">
+                                        <option value="A4" data-price="0.5">A4</option>
+                                        <option value="A3" data-price="1">A3</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-0.5">数量</label>
+                                    <input type="number" min="1" class="quantity w-full px-3 py-1.5 border border-gray-300 rounded-md input-focus" placeholder="输入数量">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-0.5">单价 (元/张)</label>
+                                    <input type="number" step="0.01" min="0" value="0.5" class="price w-full px-3 py-1.5 border border-gray-300 rounded-md input-focus" placeholder="输入单价">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-3 pt-3 border-t border-gray-100 flex flex-wrap justify-between">
+                            <div class="w-full md:w-2/3 mb-4 md:mb-0">
+                                <div class="calculation-wrapper">
+                                    <button class="toggle-calc-btn" title="显示计算过程">
+                                        <i class="fa fa-eye-slash"></i>
+                                    </button>
+                                    <div class="text-sm text-gray-500 calculation calculation-hidden">计算过程：请输入数量</div>
+                                </div>
+                            </div>
+                            <div class="w-full md:w-1/3 flex justify-between items-center">
+                                <div class="text-right">
+                                    <span class="text-sm text-gray-500">总价：</span>
+                                    <span class="text-xl font-semibold text-primary total-price animate-number">¥0.00</span>
+                                </div>
+                                <div class="flex">
+                                    <button class="delete-row-btn mr-2">
+                                        <i class="fa fa-trash mr-1"></i> 删除
+                                    </button>
+                                    <button class="add-row-btn">
+                                        <i class="fa fa-plus-circle mr-1"></i> 增加一行
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 彩色打印 -->
+                    <div class="item-row p-3 border border-gray-100 rounded-lg hover:border-primary/30 transition group" data-category="彩色" data-calc-type="quantity">
+                        <div class="flex flex-wrap justify-between items-start">
+                            <div class="w-full md:w-1/4 mb-4 md:mb-0">
+                                <h3 class="text-lg category-name">彩色</h3>
+                                <p class="text-sm text-gray-500 mt-1">各类彩色文档打印/复印</p>
+                            </div>
+                            <div class="w-full md:w-3/4 grid grid-cols-1 sm:grid-cols-3 gap-3">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-0.5">尺寸</label>
+                                    <select class="size w-full px-3 py-1.5 border border-gray-300 rounded-md input-focus">
+                                        <option value="A4" data-price="1" selected>A4</option>
+                                        <option value="A3" data-price="2">A3</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-0.5">数量</label>
+                                    <input type="number" min="1" class="quantity w-full px-3 py-1.5 border border-gray-300 rounded-md input-focus" placeholder="输入数量">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-0.5">单价 (元/张)</label>
+                                    <input type="number" step="0.01" min="0" value="1" class="price w-full px-3 py-1.5 border border-gray-300 rounded-md input-focus" placeholder="输入单价">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-3 pt-3 border-t border-gray-100 flex flex-wrap justify-between">
+                            <div class="w-full md:w-2/3 mb-4 md:mb-0">
+                                <div class="calculation-wrapper">
+                                    <button class="toggle-calc-btn" title="显示计算过程">
+                                        <i class="fa fa-eye-slash"></i>
+                                    </button>
+                                    <div class="text-sm text-gray-500 calculation calculation-hidden">计算过程：请输入数量</div>
+                                </div>
+                            </div>
+                            <div class="w-full md:w-1/3 flex justify-between items-center">
+                                <div class="text-right">
+                                    <span class="text-sm text-gray-500">总价：</span>
+                                    <span class="text-xl font-semibold text-primary total-price animate-number">¥0.00</span>
+                                </div>
+                                <div class="flex">
+                                    <button class="delete-row-btn mr-2">
+                                        <i class="fa fa-trash mr-1"></i> 删除
+                                    </button>
+                                    <button class="add-row-btn">
+                                        <i class="fa fa-plus-circle mr-1"></i> 增加一行
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 图纸打印 -->
+                    <div class="item-row p-3 border border-gray-100 rounded-lg hover:border-primary/30 transition group" data-category="图纸" data-calc-type="quantity">
+                        <div class="flex flex-wrap justify-between items-start">
+                            <div class="w-full md:w-1/4 mb-4 md:mb-0">
+                                <h3 class="text-lg category-name">图纸</h3>
+                                <p class="text-sm text-gray-500 mt-1">工程图纸打印/复印</p>
+                            </div>
+                            <div class="w-full md:w-3/4 grid grid-cols-1 sm:grid-cols-3 gap-3">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-0.5">尺寸</label>
+                                    <select class="size w-full px-3 py-1.5 border border-gray-300 rounded-md input-focus">
+                                        <option value="A2" data-price="6">A2</option>
+                                        <option value="A1" data-price="8">A1</option>
+                                        <option value="A0" data-price="10">A0</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-0.5">数量</label>
+                                    <input type="number" min="1" class="quantity w-full px-3 py-1.5 border border-gray-300 rounded-md input-focus" placeholder="输入数量">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-0.5">单价 (元/张)</label>
+                                    <input type="number" step="0.01" min="0" value="6" class="price w-full px-3 py-1.5 border border-gray-300 rounded-md input-focus" placeholder="输入单价">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-3 pt-3 border-t border-gray-100 flex flex-wrap justify-between">
+                            <div class="w-full md:w-2/3 mb-4 md:mb-0">
+                                <div class="calculation-wrapper">
+                                    <button class="toggle-calc-btn" title="显示计算过程">
+                                        <i class="fa fa-eye-slash"></i>
+                                    </button>
+                                    <div class="text-sm text-gray-500 calculation calculation-hidden">计算过程：请输入数量</div>
+                                </div>
+                            </div>
+                            <div class="w-full md:w-1/3 flex justify-between items-center">
+                                <div class="text-right">
+                                    <span class="text-sm text-gray-500">总价：</span>
+                                    <span class="text-xl font-semibold text-primary total-price animate-number">¥0.00</span>
+                                </div>
+                                <div class="flex">
+                                    <button class="delete-row-btn mr-2">
+                                        <i class="fa fa-trash mr-1"></i> 删除
+                                    </button>
+                                    <button class="add-row-btn">
+                                        <i class="fa fa-plus-circle mr-1"></i> 增加一行
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 打印复印小计 -->
+                <div class="mt-6 pt-4 border-t border-gray-200">
+                    <div class="flex justify-end items-center">
+                        <span class="text-lg font-semibold text-gray-700 mr-3">黑白/彩色打印 / 图纸小计：</span>
+                        <span class="text-xl font-bold text-secondary section-subtotal">¥0.00</span>
+                    </div>
+                </div>
+                </div>
+            </section>
+
+            <!-- 二、户内广告 -->
+            <section class="bg-white rounded-xl p-6 card-shadow" data-section="indoor-ad">
+                <h2 class="text-xl font-semibold mb-6 flex items-center justify-between border-b pb-3">
+                    <div class="flex items-center">
+                        <i class="fa fa-bullhorn text-primary mr-2"></i>软膜 / 车贴 / 超透贴 / 磨砂贴 / 展架画面 /涂塑板 / 亚克力UV / PVC.UV / 喷绘
+                    </div>
+                    <button class="toggle-section-btn text-primary hover:text-primary/80 transition-colors">
+                        <i class="fa fa-chevron-down"></i>
+                    </button>
+                </h2>
+                
+                <div class="section-content">
+                <!-- 计算规则设置 -->
+                <div class="subtle-section p-4 mb-6 text-gray-600">
+                    <div class="flex justify-between items-center mb-3">
+                        <h3 class="text-sm font-medium flex items-center">
+                            <i class="fa fa-sliders text-primary/70 mr-1.5"></i>计算规则设置
+                        </h3>
+                        <button class="toggle-rules-btn text-primary/70 hover:text-primary text-xs flex items-center transition">
+                            <i class="fa fa-chevron-down mr-1"></i>
+                            <span>显示</span>
+                        </button>
+                    </div>
+                    <div class="rules-content hidden space-y-3">
+                        <p class="text-xs text-gray-500">面积规则与价格规则不能同时生效</p>
+                        <div>
+                            <label class="block text-xs font-medium text-gray-600 mb-1.5">面积规则</label>
+                            <div class="flex flex-wrap items-center gap-2">
+                                <label class="relative inline-flex items-center cursor-pointer mr-3">
+                                    <input type="checkbox" class="min-area-switch sr-only peer" checked>
+                                    <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-1 peer-focus:ring-primary/50 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[1px] after:left-[1px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary"></div>
+                                    <span class="ml-1.5 text-xs">面积小于设定值按设定值计算</span>
+                                </label>
+                                <div class="flex items-center gap-1.5">
+                                    <input type="number" step="0.1" min="0" value="0.6" class="min-area-value w-full px-2 py-1 border border-gray-300 rounded-md input-focus text-xs">
+                                    <span class="text-xs">平方米</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-gray-600 mb-1.5">价格规则</label>
+                            <div class="flex flex-wrap items-center gap-2">
+                                <label class="relative inline-flex items-center cursor-pointer mr-3">
+                                    <input type="checkbox" class="min-price-switch sr-only peer">
+                                    <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-1 peer-focus:ring-primary/50 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[1px] after:left-[1px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary"></div>
+                                    <span class="ml-1.5 text-xs">价格小于设定值按设定值计算</span>
+                                </label>
+                                <div class="flex items-center gap-1.5">
+                                    <span class="text-xs">¥</span>
+                                    <input type="number" step="5" min="0" value="30" class="min-price-value w-full px-2 py-1 border border-gray-300 rounded-md input-focus text-xs">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="item-container space-y-6">
+                    <!-- 超透彩白彩 -->
+                    <div class="item-row p-3 border border-gray-100 rounded-lg hover:border-primary/30 transition group" data-category="超透彩白彩" data-calc-type="area">
+                        <div class="flex flex-wrap justify-between items-start">
+                            <div class="w-full md:w-1/4 mb-4 md:mb-0">
+                                <h3 class="text-lg category-name">超透彩白彩</h3>
+                                <p class="text-sm text-gray-500 mt-1">三层材质（彩色+白色+彩色）</p>
+                            </div>
+                            <div class="w-full md:w-3/4 grid grid-cols-1 sm:grid-cols-3 gap-3">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-0.5">长度 (cm)</label>
+                                    <input type="number" step="0.01" min="0" class="length w-full px-3 py-1.5 border border-gray-300 rounded-md input-focus" placeholder="输入长度">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-0.5">宽度 (cm)</label>
+                                    <input type="number" step="0.01" min="0" class="width w-full px-3 py-1.5 border border-gray-300 rounded-md input-focus" placeholder="输入宽度">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-0.5">单价 (元/平方米)</label>
+                                    <input type="number" step="0.01" min="0" value="70" class="price w-full px-3 py-1.5 border border-gray-300 rounded-md input-focus" placeholder="输入单价">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-3 pt-3 border-t border-gray-100 flex flex-wrap justify-between">
+                            <div class="w-full md:w-2/3 mb-4 md:mb-0">
+                                <div class="calculation-wrapper">
+                                    <button class="toggle-calc-btn" title="显示计算过程">
+                                        <i class="fa fa-eye-slash"></i>
+                                    </button>
+                                    <div class="text-sm text-gray-500 calculation calculation-hidden">计算过程：请输入尺寸和单价</div>
+                                </div>
+                            </div>
+                            <div class="w-full md:w-1/3 flex justify-between items-center">
+                                <div class="text-right">
+                                    <span class="text-sm text-gray-500">总价：</span>
+                                    <span class="text-xl font-semibold text-primary total-price animate-number">¥0.00</span>
+                                </div>
+                                <div class="flex">
+                                    <button class="delete-row-btn mr-2">
+                                        <i class="fa fa-trash mr-1"></i> 删除
+                                    </button>
+                                    <button class="add-row-btn">
+                                        <i class="fa fa-plus-circle mr-1"></i> 增加一行
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- UV软膜 -->
+                    <div class="item-row p-3 border border-gray-100 rounded-lg hover:border-primary/30 transition group" data-category="UV软膜" data-calc-type="area">
+                        <div class="flex flex-wrap justify-between items-start">
+                            <div class="w-full md:w-1/4 mb-4 md:mb-0">
+                                <h3 class="text-lg category-name">UV软膜</h3>
+                                <p class="text-sm text-gray-500 mt-1">UV打印工艺软膜</p>
+                            </div>
+                            <div class="w-full md:w-3/4 grid grid-cols-1 sm:grid-cols-3 gap-3">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-0.5">长度 (cm)</label>
+                                    <input type="number" step="0.01" min="0" class="length w-full px-3 py-1.5 border border-gray-300 rounded-md input-focus" placeholder="输入长度">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-0.5">宽度 (cm)</label>
+                                    <input type="number" step="0.01" min="0" class="width w-full px-3 py-1.5 border border-gray-300 rounded-md input-focus" placeholder="输入宽度">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-0.5">单价 (元/平方米)</label>
+                                    <input type="number" step="0.01" min="0" value="50" class="price w-full px-3 py-1.5 border border-gray-300 rounded-md input-focus" placeholder="输入单价">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-3 pt-3 border-t border-gray-100 flex flex-wrap justify-between">
+                            <div class="w-full md:w-2/3 mb-4 md:mb-0">
+                                <div class="calculation-wrapper">
+                                    <button class="toggle-calc-btn" title="显示计算过程">
+                                        <i class="fa fa-eye-slash"></i>
+                                    </button>
+                                    <div class="text-sm text-gray-500 calculation calculation-hidden">计算过程：请输入尺寸和单价</div>
+                                </div>
+                            </div>
+                            <div class="w-full md:w-1/3 flex justify-between items-center">
+                                <div class="text-right">
+                                    <span class="text-sm text-gray-500">总价：</span>
+                                    <span class="text-xl font-semibold text-primary total-price animate-number">¥0.00</span>
+                                </div>
+                                <div class="flex">
+                                    <button class="delete-row-btn mr-2">
+                                        <i class="fa fa-trash mr-1"></i> 删除
+                                    </button>
+                                    <button class="add-row-btn">
+                                        <i class="fa fa-plus-circle mr-1"></i> 增加一行
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 黑胶车贴 / 展架画面PP纸 -->
+                    <div class="item-row p-3 border border-gray-100 rounded-lg hover:border-primary/30 transition group" data-category="黑胶车贴 / 展架画面PP纸" data-calc-type="area">
+                        <div class="flex flex-wrap justify-between items-start">
+                            <div class="w-full md:w-1/4 mb-4 md:mb-0">
+                                <h3 class="text-lg category-name">黑胶车贴 / 展架画面PP纸</h3>
+                                <p class="text-sm text-gray-500 mt-1">展架专用pp纸材质/车贴材质</p>
+                            </div>
+                            <div class="w-full md:w-3/4 grid grid-cols-1 sm:grid-cols-3 gap-3">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-0.5">长度 (cm)</label>
+                                    <input type="number" step="0.01" min="0" class="length w-full px-3 py-1.5 border border-gray-300 rounded-md input-focus" placeholder="输入长度">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-0.5">宽度 (cm)</label>
+                                    <input type="number" step="0.01" min="0" class="width w-full px-3 py-1.5 border border-gray-300 rounded-md input-focus" placeholder="输入宽度">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-0.5">单价 (元/平方米)</label>
+                                    <input type="number" step="0.01" min="0" value="45" class="price w-full px-3 py-1.5 border border-gray-300 rounded-md input-focus" placeholder="输入单价">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-3 pt-3 border-t border-gray-100 flex flex-wrap justify-between">
+                            <div class="w-full md:w-2/3 mb-4 md:mb-0">
+                                <div class="calculation-wrapper">
+                                    <button class="toggle-calc-btn" title="显示计算过程">
+                                        <i class="fa fa-eye-slash"></i>
+                                    </button>
+                                    <div class="text-sm text-gray-500 calculation calculation-hidden">计算过程：请输入尺寸和单价</div>
+                                </div>
+                            </div>
+                            <div class="w-full md:w-1/3 flex justify-between items-center">
+                                <div class="text-right">
+                                    <span class="text-sm text-gray-500">总价：</span>
+                                    <span class="text-xl font-semibold text-primary total-price animate-number">¥0.00</span>
+                                </div>
+                                <div class="flex">
+                                    <button class="delete-row-btn mr-2">
+                                        <i class="fa fa-trash mr-1"></i> 删除
+                                    </button>
+                                    <button class="add-row-btn">
+                                        <i class="fa fa-plus-circle mr-1"></i> 增加一行
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- 户外涂塑板 -->
+                    <div class="item-row p-3 border border-gray-100 rounded-lg hover:border-primary/30 transition group" data-category="户外涂塑板" data-calc-type="area">
+                        <div class="flex flex-wrap justify-between items-start">
+                            <div class="w-full md:w-1/4 mb-4 md:mb-0">
+                                <h3 class="text-lg category-name">户外涂塑板</h3>
+                                <p class="text-sm text-gray-500 mt-1">户外涂塑板 涂塑板边条一根2.4米：<br>小边条9元/根，中边条12元/根，大边条15元/根</p>
+                            </div>
+                            <div class="w-full md:w-3/4 grid grid-cols-1 sm:grid-cols-3 gap-3">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-0.5">长度 (cm)</label>
+                                    <input type="number" step="0.01" min="0" class="length w-full px-3 py-1.5 border border-gray-300 rounded-md input-focus" placeholder="输入长度">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-0.5">宽度 (cm)</label>
+                                    <input type="number" step="0.01" min="0" class="width w-full px-3 py-1.5 border border-gray-300 rounded-md input-focus" placeholder="输入宽度">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-0.5">单价 (元/平方米)</label>
+                                    <input type="number" step="0.01" min="0" value="60" class="price w-full px-3 py-1.5 border border-gray-300 rounded-md input-focus" placeholder="输入单价">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-3 pt-3 border-t border-gray-100 flex flex-wrap justify-between">
+                            <div class="w-full md:w-2/3 mb-4 md:mb-0">
+                                <div class="calculation-wrapper">
+                                    <button class="toggle-calc-btn" title="显示计算过程">
+                                        <i class="fa fa-eye-slash"></i>
+                                    </button>
+                                    <div class="text-sm text-gray-500 calculation calculation-hidden">计算过程：请输入尺寸和单价</div>
+                                </div>
+                            </div>
+                            <div class="w-full md:w-1/3 flex justify-between items-center">
+                                <div class="text-right">
+                                    <span class="text-sm text-gray-500">总价：</span>
+                                    <span class="text-xl font-semibold text-primary total-price animate-number">¥0.00</span>
+                                </div>
+                                <div class="flex">
+                                    <button class="delete-row-btn mr-2">
+                                        <i class="fa fa-trash mr-1"></i> 删除
+                                    </button>
+                                    <button class="add-row-btn">
+                                        <i class="fa fa-plus-circle mr-1"></i> 增加一行
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 亚克力UV -->
+                    <div class="item-row p-3 border border-gray-100 rounded-lg hover:border-primary/30 transition group" data-category="亚克力UV" data-calc-type="area">
+                        <div class="flex flex-wrap justify-between items-start">
+                            <div class="w-full md:w-1/4 mb-4 md:mb-0">
+                                <h3 class="text-lg category-name">亚克力UV</h3>
+                                <p class="text-sm text-gray-500 mt-1">亚克力UV-厚度3mm</p>
+                            </div>
+                            <div class="w-full md:w-3/4 grid grid-cols-1 sm:grid-cols-3 gap-3">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-0.5">长度 (cm)</label>
+                                    <input type="number" step="0.01" min="0" class="length w-full px-3 py-1.5 border border-gray-300 rounded-md input-focus" placeholder="输入长度">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-0.5">宽度 (cm)</label>
+                                    <input type="number" step="0.01" min="0" class="width w-full px-3 py-1.5 border border-gray-300 rounded-md input-focus" placeholder="输入宽度">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-0.5">单价 (元/平方米)</label>
+                                    <input type="number" step="0.01" min="0" value="230" class="price w-full px-3 py-1.5 border border-gray-300 rounded-md input-focus" placeholder="输入单价">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-3 pt-3 border-t border-gray-100 flex flex-wrap justify-between">
+                            <div class="w-full md:w-2/3 mb-4 md:mb-0">
+                                <div class="calculation-wrapper">
+                                    <button class="toggle-calc-btn" title="显示计算过程">
+                                        <i class="fa fa-eye-slash"></i>
+                                    </button>
+                                    <div class="text-sm text-gray-500 calculation calculation-hidden">计算过程：请输入尺寸和单价</div>
+                                </div>
+                            </div>
+                            <div class="w-full md:w-1/3 flex justify-between items-center">
+                                <div class="text-right">
+                                    <span class="text-sm text-gray-500">总价：</span>
+                                    <span class="text-xl font-semibold text-primary total-price animate-number">¥0.00</span>
+                                </div>
+                                <div class="flex">
+                                    <button class="delete-row-btn mr-2">
+                                        <i class="fa fa-trash mr-1"></i> 删除
+                                    </button>
+                                    <button class="add-row-btn">
+                                        <i class="fa fa-plus-circle mr-1"></i> 增加一行
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                   <!-- PVC平面UV -->
+                    <div class="item-row p-3 border border-gray-100 rounded-lg hover:border-primary/30 transition group" data-category="PVC平面UV" data-calc-type="area">
+                        <div class="flex flex-wrap justify-between items-start">
+                            <div class="w-full md:w-1/4 mb-4 md:mb-0">
+                                <h3 class="text-lg category-name">PVC平面UV</h3>
+                                <p class="text-sm text-gray-500 mt-1">PVC平面UV-厚度5mm</p>
+                            </div>
+                            <div class="w-full md:w-3/4 grid grid-cols-1 sm:grid-cols-3 gap-3">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-0.5">长度 (cm)</label>
+                                    <input type="number" step="0.01" min="0" class="length w-full px-3 py-1.5 border border-gray-300 rounded-md input-focus" placeholder="输入长度">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-0.5">宽度 (cm)</label>
+                                    <input type="number" step="0.01" min="0" class="width w-full px-3 py-1.5 border border-gray-300 rounded-md input-focus" placeholder="输入宽度">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-0.5">单价 (元/平方米)</label>
+                                    <input type="number" step="0.01" min="0" value="80" class="price w-full px-3 py-1.5 border border-gray-300 rounded-md input-focus" placeholder="输入单价">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-3 pt-3 border-t border-gray-100 flex flex-wrap justify-between">
+                            <div class="w-full md:w-2/3 mb-4 md:mb-0">
+                                <div class="calculation-wrapper">
+                                    <button class="toggle-calc-btn" title="显示计算过程">
+                                        <i class="fa fa-eye-slash"></i>
+                                    </button>
+                                    <div class="text-sm text-gray-500 calculation calculation-hidden">计算过程：请输入尺寸和单价</div>
+                                </div>
+                            </div>
+                            <div class="w-full md:w-1/3 flex justify-between items-center">
+                                <div class="text-right">
+                                    <span class="text-sm text-gray-500">总价：</span>
+                                    <span class="text-xl font-semibold text-primary total-price animate-number">¥0.00</span>
+                                </div>
+                                <div class="flex">
+                                    <button class="delete-row-btn mr-2">
+                                        <i class="fa fa-trash mr-1"></i> 删除
+                                    </button>
+                                    <button class="add-row-btn">
+                                        <i class="fa fa-plus-circle mr-1"></i> 增加一行
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- 磨砂贴UV -->
+                    <div class="item-row p-3 border border-gray-100 rounded-lg hover:border-primary/30 transition group" data-category="磨砂贴UV" data-calc-type="area">
+                        <div class="flex flex-wrap justify-between items-start">
+                            <div class="w-full md:w-1/4 mb-4 md:mb-0">
+                                <h3 class="text-lg category-name">磨砂贴UV（含安装）</h3>
+                                <p class="text-sm text-gray-500 mt-1">磨砂贴UV（含安装），不安装减20元/平</p>
+                            </div>
+                            <div class="w-full md:w-3/4 grid grid-cols-1 sm:grid-cols-3 gap-3">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-0.5">长度 (cm)</label>
+                                    <input type="number" step="0.01" min="0" class="length w-full px-3 py-1.5 border border-gray-300 rounded-md input-focus" placeholder="输入长度">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-0.5">宽度 (cm)</label>
+                                    <input type="number" step="0.01" min="0" class="width w-full px-3 py-1.5 border border-gray-300 rounded-md input-focus" placeholder="输入宽度">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-0.5">单价 (元/平方米)</label>
+                                    <input type="number" step="0.01" min="0" value="60" class="price w-full px-3 py-1.5 border border-gray-300 rounded-md input-focus" placeholder="输入单价">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-3 pt-3 border-t border-gray-100 flex flex-wrap justify-between">
+                            <div class="w-full md:w-2/3 mb-4 md:mb-0">
+                                <div class="calculation-wrapper">
+                                    <button class="toggle-calc-btn" title="显示计算过程">
+                                        <i class="fa fa-eye-slash"></i>
+                                    </button>
+                                    <div class="text-sm text-gray-500 calculation calculation-hidden">计算过程：请输入尺寸和单价</div>
+                                </div>
+                            </div>
+                            <div class="w-full md:w-1/3 flex justify-between items-center">
+                                <div class="text-right">
+                                    <span class="text-sm text-gray-500">总价：</span>
+                                    <span class="text-xl font-semibold text-primary total-price animate-number">¥0.00</span>
+                                </div>
+                                <div class="flex">
+                                    <button class="delete-row-btn mr-2">
+                                        <i class="fa fa-trash mr-1"></i> 删除
+                                    </button>
+                                    <button class="add-row-btn">
+                                        <i class="fa fa-plus-circle mr-1"></i> 增加一行
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- PVC板UV -->
+                    <div class="item-row p-3 border border-gray-100 rounded-lg hover:border-primary/30 transition group" data-category="PVC板UV" data-calc-type="area">
+                        <div class="flex flex-wrap justify-between items-start">
+                            <div class="w-full md:w-1/4 mb-4 md:mb-0">
+                                <h3 class="text-lg category-name">PVC板UV（含安装）</h3>
+                                <p class="text-sm text-gray-500 mt-1">PVC板1cm厚度 UV（含安装）</p>
+                            </div>
+                            <div class="w-full md:w-3/4 grid grid-cols-1 sm:grid-cols-3 gap-3">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-0.5">长度 (cm)</label>
+                                    <input type="number" step="0.01" min="0" class="length w-full px-3 py-1.5 border border-gray-300 rounded-md input-focus" placeholder="输入长度">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-0.5">宽度 (cm)</label>
+                                    <input type="number" step="0.01" min="0" class="width w-full px-3 py-1.5 border border-gray-300 rounded-md input-focus" placeholder="输入宽度">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-0.5">单价 (元/平方米)</label>
+                                    <input type="number" step="0.01" min="0" value="130" class="price w-full px-3 py-1.5 border border-gray-300 rounded-md input-focus" placeholder="输入单价">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-3 pt-3 border-t border-gray-100 flex flex-wrap justify-between">
+                            <div class="w-full md:w-2/3 mb-4 md:mb-0">
+                                <div class="calculation-wrapper">
+                                    <button class="toggle-calc-btn" title="显示计算过程">
+                                        <i class="fa fa-eye-slash"></i>
+                                    </button>
+                                    <div class="text-sm text-gray-500 calculation calculation-hidden">计算过程：请输入尺寸和单价</div>
+                                </div>
+                            </div>
+                            <div class="w-full md:w-1/3 flex justify-between items-center">
+                                <div class="text-right">
+                                    <span class="text-sm text-gray-500">总价：</span>
+                                    <span class="text-xl font-semibold text-primary total-price animate-number">¥0.00</span>
+                                </div>
+                                <div class="flex">
+                                    <button class="delete-row-btn mr-2">
+                                        <i class="fa fa-trash mr-1"></i> 删除
+                                    </button>
+                                    <button class="add-row-btn">
+                                        <i class="fa fa-plus-circle mr-1"></i> 增加一行
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+					
+
+                    <!-- 喷绘布 -->
+                    <div class="item-row p-3 border border-gray-100 rounded-lg hover:border-primary/30 transition group" data-category="喷绘布" data-calc-type="area">
+                        <div class="flex flex-wrap justify-between items-start">
+                            <div class="w-full md:w-1/4 mb-4 md:mb-0">
+                                <h3 class="text-lg category-name">喷绘布</h3>
+                                <p class="text-sm text-gray-500 mt-1">室内高精度喷绘布材质</p>
+                            </div>
+                            <div class="w-full md:w-3/4 grid grid-cols-1 sm:grid-cols-3 gap-3">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-0.5">长度 (cm)</label>
+                                    <input type="number" step="0.01" min="0" class="length w-full px-3 py-1.5 border border-gray-300 rounded-md input-focus" placeholder="输入长度">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-0.5">宽度 (cm)</label>
+                                    <input type="number" step="0.01" min="0" class="width w-full px-3 py-1.5 border border-gray-300 rounded-md input-focus" placeholder="输入宽度">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-0.5">单价 (元/平方米)</label>
+                                    <input type="number" step="0.01" min="0" value="30" class="price w-full px-3 py-1.5 border border-gray-300 rounded-md input-focus" placeholder="输入单价">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-3 pt-3 border-t border-gray-100 flex flex-wrap justify-between">
+                            <div class="w-full md:w-2/3 mb-4 md:mb-0">
+                                <div class="calculation-wrapper">
+                                    <button class="toggle-calc-btn" title="显示计算过程">
+                                        <i class="fa fa-eye-slash"></i>
+                                    </button>
+                                    <div class="text-sm text-gray-500 calculation calculation-hidden">计算过程：请输入尺寸和单价</div>
+                                </div>
+                            </div>
+                            <div class="w-full md:w-1/3 flex justify-between items-center">
+                                <div class="text-right">
+                                    <span class="text-sm text-gray-500">总价：</span>
+                                    <span class="text-xl font-semibold text-primary total-price animate-number">¥0.00</span>
+                                </div>
+                                <div class="flex">
+                                    <button class="delete-row-btn mr-2">
+                                        <i class="fa fa-trash mr-1"></i> 删除
+                                    </button>
+                                    <button class="add-row-btn">
+                                        <i class="fa fa-plus-circle mr-1"></i> 增加一行
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 户内广告小计 -->
+                <div class="mt-6 pt-4 border-t border-gray-200">
+                    <div class="flex justify-end items-center">
+                        <span class="text-lg font-semibold text-gray-700 mr-3">软软膜 / 车贴 / 超透贴 / 磨砂贴 / 展架画面 /涂塑板 / 亚克力UV / PVC.UV / 喷绘小计：</span>
+                        <span class="text-xl font-bold text-secondary section-subtotal">¥0.00</span>
+                    </div>
+                </div>
+                </div>
+            </section>
+
+            <!-- 三、户外广告 -->
+            <section class="bg-white rounded-xl p-6 card-shadow" data-section="outdoor-ad">
+                <h2 class="text-xl font-semibold mb-6 flex items-center justify-between border-b pb-3">
+                    <div class="flex items-center">
+                        <i class="fa fa-outdent text-primary mr-2"></i>软膜灯箱 / 灯带 / 焊架子+铝塑板门头 / 展架 / 锦旗 / 公司门牌 / LED显示屏
+                    </div>
+                    <button class="toggle-section-btn text-primary hover:text-primary/80 transition-colors">
+                        <i class="fa fa-chevron-down"></i>
+                    </button>
+                </h2>
+                
+                <div class="section-content">
+                <!-- 计算规则设置 -->
+                <div class="subtle-section p-4 mb-6 text-gray-600">
+                    <div class="flex justify-between items-center mb-3">
+                        <h3 class="text-sm font-medium flex items-center">
+                            <i class="fa fa-sliders text-primary/70 mr-1.5"></i>计算规则设置
+                        </h3>
+                        <button class="toggle-rules-btn text-primary/70 hover:text-primary text-xs flex items-center transition">
+                            <i class="fa fa-chevron-down mr-1"></i>
+                            <span>显示</span>
+                        </button>
+                    </div>
+                    <div class="rules-content hidden space-y-3">
+                        <p class="text-xs text-gray-500">面积规则与价格规则不能同时生效</p>
+                        <div>
+                            <label class="block text-xs font-medium text-gray-600 mb-1.5">面积规则</label>
+                            <div class="flex flex-wrap items-center gap-2">
+                                <label class="relative inline-flex items-center cursor-pointer mr-3">
+                                    <input type="checkbox" class="min-area-switch sr-only peer" checked>
+                                    <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-1 peer-focus:ring-primary/50 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[1px] after:left-[1px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary"></div>
+                                    <span class="ml-1.5 text-xs">面积小于设定值按设定值计算</span>
+                                </label>
+                                <div class="flex items-center gap-1.5">
+                                    <input type="number" step="0.1" min="0" value="0.8" class="min-area-value w-full px-2 py-1 border border-gray-300 rounded-md input-focus text-xs">
+                                    <span class="text-xs">平方米</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-gray-600 mb-1.5">价格规则</label>
+                            <div class="flex flex-wrap items-center gap-2">
+                                <label class="relative inline-flex items-center cursor-pointer mr-3">
+                                    <input type="checkbox" class="min-price-switch sr-only peer">
+                                    <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-1 peer-focus:ring-primary/50 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[1px] after:left-[1px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary"></div>
+                                    <span class="ml-1.5 text-xs">价格小于设定值按设定值计算</span>
+                                </label>
+                                <div class="flex items-center gap-1.5">
+                                    <span class="text-xs">¥</span>
+                                    <input type="number" step="5" min="0" value="50" class="min-price-value w-full px-2 py-1 border border-gray-300 rounded-md input-focus text-xs">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="item-container space-y-6">
+                    <!-- 户外软膜灯箱 -->
+                    <div class="item-row p-3 border border-gray-100 rounded-lg hover:border-primary/30 transition group" data-category="户外软膜灯箱" data-calc-type="area">
+                        <div class="flex flex-wrap justify-between items-start">
+                            <div class="w-full md:w-1/4 mb-4 md:mb-0">
+                                <h3 class="text-lg category-name">户外软膜灯箱</h3>
+                                <p class="text-sm text-gray-500 mt-1">户外专用软膜灯箱</p>
+                            </div>
+                            <div class="w-full md:w-3/4 grid grid-cols-1 sm:grid-cols-3 gap-3">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-0.5">长度 (cm)</label>
+                                    <input type="number" step="0.01" min="0" class="length w-full px-3 py-1.5 border border-gray-300 rounded-md input-focus" placeholder="输入长度">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-0.5">宽度 (cm)</label>
+                                    <input type="number" step="0.01" min="0" class="width w-full px-3 py-1.5 border border-gray-300 rounded-md input-focus" placeholder="输入宽度">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-0.5">单价 (元/平方米)</label>
+                                    <input type="number" step="0.01" min="0" value="220" class="price w-full px-3 py-1.5 border border-gray-300 rounded-md input-focus" placeholder="输入单价">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-3 pt-3 border-t border-gray-100 flex flex-wrap justify-between">
+                            <div class="w-full md:w-2/3 mb-4 md:mb-0">
+                                <div class="calculation-wrapper">
+                                    <button class="toggle-calc-btn" title="显示计算过程">
+                                        <i class="fa fa-eye-slash"></i>
+                                    </button>
+                                    <div class="text-sm text-gray-500 calculation calculation-hidden">计算过程：请输入尺寸和单价</div>
+                                </div>
+                            </div>
+                            <div class="w-full md:w-1/3 flex justify-between items-center">
+                                <div class="text-right">
+                                    <span class="text-sm text-gray-500">总价：</span>
+                                    <span class="text-xl font-semibold text-primary total-price animate-number">¥0.00</span>
+                                </div>
+                                <div class="flex">
+                                    <button class="delete-row-btn mr-2">
+                                        <i class="fa fa-trash mr-1"></i> 删除
+                                    </button>
+                                    <button class="add-row-btn">
+                                        <i class="fa fa-plus-circle mr-1"></i> 增加一行
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 推车灯箱 -->
+                    <div class="item-row p-3 border border-gray-100 rounded-lg hover:border-primary/30 transition group" data-category="推车灯箱" data-calc-type="area">
+                        <div class="flex flex-wrap justify-between items-start">
+                            <div class="w-full md:w-1/4 mb-4 md:mb-0">
+                                <h3 class="text-lg category-name">推车灯箱</h3>
+                                <p class="text-sm text-gray-500 mt-1">便携式可移动灯箱</p>
+                            </div>
+                            <div class="w-full md:w-3/4 grid grid-cols-1 sm:grid-cols-3 gap-3">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-0.5">长度 (cm)</label>
+                                    <input type="number" step="0.01" min="0" class="length w-full px-3 py-1.5 border border-gray-300 rounded-md input-focus" placeholder="输入长度">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-0.5">宽度 (cm)</label>
+                                    <input type="number" step="0.01" min="0" class="width w-full px-3 py-1.5 border border-gray-300 rounded-md input-focus" placeholder="输入宽度">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-0.5">单价 (元/平方米)</label>
+                                    <input type="number" step="0.01" min="0" value="180" class="price w-full px-3 py-1.5 border border-gray-300 rounded-md input-focus" placeholder="输入单价">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-3 pt-3 border-t border-gray-100 flex flex-wrap justify-between">
+                            <div class="w-full md:w-2/3 mb-4 md:mb-0">
+                                <div class="calculation-wrapper">
+                                    <button class="toggle-calc-btn" title="显示计算过程">
+                                        <i class="fa fa-eye-slash"></i>
+                                    </button>
+                                    <div class="text-sm text-gray-500 calculation calculation-hidden">计算过程：请输入尺寸和单价</div>
+                                </div>
+                            </div>
+                            <div class="w-full md:w-1/3 flex justify-between items-center">
+                                <div class="text-right">
+                                    <span class="text-sm text-gray-500">总价：</span>
+                                    <span class="text-xl font-semibold text-primary total-price animate-number">¥0.00</span>
+                                </div>
+                                <div class="flex">
+                                    <button class="delete-row-btn mr-2">
+                                        <i class="fa fa-trash mr-1"></i> 删除
+                                    </button>
+                                    <button class="add-row-btn">
+                                        <i class="fa fa-plus-circle mr-1"></i> 增加一行
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 双面户外灯箱 -->
+                    <div class="item-row p-3 border border-gray-100 rounded-lg hover:border-primary/30 transition group" data-category="双面户外灯箱" data-calc-type="area">
+                        <div class="flex flex-wrap justify-between items-start">
+                            <div class="w-full md:w-1/4 mb-4 md:mb-0">
+                                <h3 class="text-lg category-name">双面户外灯箱</h3>
+                                <p class="text-sm text-gray-500 mt-1">高抗风防水，适合恶劣环境</p>
+                            </div>
+                            <div class="w-full md:w-3/4 grid grid-cols-1 sm:grid-cols-3 gap-3">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-0.5">长度 (cm)</label>
+                                    <input type="number" step="0.01" min="0" class="length w-full px-3 py-1.5 border border-gray-300 rounded-md input-focus" placeholder="输入长度">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-0.5">宽度 (cm)</label>
+                                    <input type="number" step="0.01" min="0" class="width w-full px-3 py-1.5 border border-gray-300 rounded-md input-focus" placeholder="输入宽度">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-0.5">单价 (元/平方米)</label>
+                                    <input type="number" step="0.01" min="0" value="450" class="price w-full px-3 py-1.5 border border-gray-300 rounded-md input-focus" placeholder="输入单价">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-3 pt-3 border-t border-gray-100 flex flex-wrap justify-between">
+                            <div class="w-full md:w-2/3 mb-4 md:mb-0">
+                                <div class="calculation-wrapper">
+                                    <button class="toggle-calc-btn" title="显示计算过程">
+                                        <i class="fa fa-eye-slash"></i>
+                                    </button>
+                                    <div class="text-sm text-gray-500 calculation calculation-hidden">计算过程：请输入尺寸和单价</div>
+                                </div>
+                            </div>
+                            <div class="w-full md:w-1/3 flex justify-between items-center">
+                                <div class="text-right">
+                                    <span class="text-sm text-gray-500">总价：</span>
+                                    <span class="text-xl font-semibold text-primary total-price animate-number">¥0.00</span>
+                                </div>
+                                <div class="flex">
+                                    <button class="delete-row-btn mr-2">
+                                        <i class="fa fa-trash mr-1"></i> 删除
+                                    </button>
+                                    <button class="add-row-btn">
+                                        <i class="fa fa-plus-circle mr-1"></i> 增加一行
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                   <!-- 铁架铝塑板门头 -->
+                    <div class="item-row p-3 border border-gray-100 rounded-lg hover:border-primary/30 transition group" data-category="铁架铝塑板门头" data-calc-type="area">
+                        <div class="flex flex-wrap justify-between items-start">
+                            <div class="w-full md:w-1/4 mb-4 md:mb-0">
+                                <h3 class="text-lg category-name">铁架铝塑板门头</h3>
+                                <p class="text-sm text-gray-500 mt-1">焊接铁架+铝塑板门头安装</p>
+                            </div>
+                            <div class="w-full md:w-3/4 grid grid-cols-1 sm:grid-cols-3 gap-3">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-0.5">长度 (cm)</label>
+                                    <input type="number" step="0.01" min="0" class="length w-full px-3 py-1.5 border border-gray-300 rounded-md input-focus" placeholder="输入长度">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-0.5">宽度 (cm)</label>
+                                    <input type="number" step="0.01" min="0" class="width w-full px-3 py-1.5 border border-gray-300 rounded-md input-focus" placeholder="输入宽度">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-0.5">单价 (元/平方米)</label>
+                                    <input type="number" step="0.01" min="0" value="240" class="price w-full px-3 py-1.5 border border-gray-300 rounded-md input-focus" placeholder="输入单价">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-3 pt-3 border-t border-gray-100 flex flex-wrap justify-between">
+                            <div class="w-full md:w-2/3 mb-4 md:mb-0">
+                                <div class="calculation-wrapper">
+                                    <button class="toggle-calc-btn" title="显示计算过程">
+                                        <i class="fa fa-eye-slash"></i>
+                                    </button>
+                                    <div class="text-sm text-gray-500 calculation calculation-hidden">计算过程：请输入尺寸和单价</div>
+                                </div>
+                            </div>
+                            <div class="w-full md:w-1/3 flex justify-between items-center">
+                                <div class="text-right">
+                                    <span class="text-sm text-gray-500">总价：</span>
+                                    <span class="text-xl font-semibold text-primary total-price animate-number">¥0.00</span>
+                                </div>
+                                <div class="flex">
+                                    <button class="delete-row-btn mr-2">
+                                        <i class="fa fa-trash mr-1"></i> 删除
+                                    </button>
+                                    <button class="add-row-btn">
+                                        <i class="fa fa-plus-circle mr-1"></i> 增加一行
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 户外高压灯带 -->
+                    <div class="item-row p-3 border border-gray-100 rounded-lg hover:border-primary/30 transition group" data-category="户外高压灯带" data-calc-type="quantity">
+                        <div class="flex flex-wrap justify-between items-start">
+                            <div class="w-full md:w-1/4 mb-4 md:mb-0">
+                                <h3 class="text-lg category-name">户外高压灯带 + 展具展架 + <br>不锈钢门牌/铜牌 + LED跑马灯显示屏</h3>
+                                <p class="text-sm text-gray-500 mt-1">户外高压灯带 + 展具展架 + 不锈钢门牌/铜牌 + <br>跑马灯显示屏</p>
+                            </div>
+                            <div class="w-full md:w-3/4 grid grid-cols-1 sm:grid-cols-3 gap-3">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-0.5">尺寸</label>
+                                    <select class="size w-full px-3 py-1.5 border border-gray-300 rounded-md input-focus">
+										<option value="——————灯箱灯带类——————" data-price="666" disabled>——————灯箱灯带类——————</option>
+                                        <option value="108cm（14灯）" data-price="15">108cm（14灯）</option>
+                                        <option value="92cm（12灯）" data-price="12">92cm（12灯）</option>
+                                        <option value="68cm（9灯）" data-price="11">68cm（9灯）</option>
+                                        <option value="45cm（6灯）" data-price="4" selected>45cm（6灯）</option>
+										<option value="——————展具展架类——————" data-price="666" disabled>——————展具展架类——————</option>
+										<option value="60x160cm（韩式X展架）" data-price="60">60x160（韩式X展架）</option>
+										<option value="80x180cm（韩式X展架）" data-price="80">80x180（韩式X展架）</option>
+										<option value="60x160cm（铁制门型展架）" data-price="100">60x160cm（铁制门型展架）</option>
+										<option value="80x180cm（铁制门型展架）" data-price="120">80x180cm（铁制门型展架）</option>
+										<option value="60x160cm（注水门型展架）" data-price="130">60x160cm（注水门型展架）</option>
+										<option value="80x180cm（注水门型展架）" data-price="160">80x180cm（注水门型展架）</option>
+										<option value="80x180cm（塑钢易拉宝）" data-price="150">80x180cm（塑钢易拉宝）</option>
+										<option value="120x200cm（铝合金易拉宝）" data-price="180">120x200cm（铝合金易拉宝）</option>
+										<option value="——————锦旗厂旗类——————" data-price="666" disabled>——————锦旗厂旗类——————</option>
+                                        <option value="金粉锦旗（60*90）" data-price="90">金粉锦旗（60*90）</option>
+                                        <option value="金粉锦旗（70*110）" data-price="100">金粉锦旗（70*110）</option>
+                                        <option value="金粉锦旗（80*120）" data-price="130">金粉锦旗（80*120）</option>
+                                        <option value="4号厂旗（144*96）" data-price="50">4号厂旗（144*96）</option>
+                                        <option value="3号厂旗（195*125）" data-price="75">3号厂旗（195*125）</option>
+                                        <option value="2号厂旗（240*160）" data-price="100">2号厂旗（240*160）</option>
+										<option value="——————公司门牌类——————" data-price="666" disabled>——————公司门牌类——————</option>
+										<option value="40x60cm（不锈钢公司牌）" data-price="120">40x60cm（不锈钢公司牌）</option>
+										<option value="60x80cm（不锈钢公司牌）" data-price="200">60x80cm（不锈钢公司牌）</option>
+										<option value="30x240cm（不锈钢公司牌）" data-price="200">30x240cm（不锈钢公司牌）</option>
+										<option value="40x240cm（不锈钢公司牌）" data-price="230">40x240cm（不锈钢公司牌）</option>
+										<option value="24x34cm（木托奖牌）" data-price="75">24x34cm（木托奖牌）</option>
+										<option value="30x40cm（木托奖牌）" data-price="80">30x40cm（木托奖牌）</option>
+										<option value="35x50cm（木托奖牌）" data-price="85">35x50cm（木托奖牌）</option>
+										<option value="40x60cm（木托奖牌）" data-price="90">40x60cm（木托奖牌）</option>
+										<option value="——————LED显示屏类——————" data-price="666" disabled>——————LED显示屏类——————</option>
+										<option value="40x80cm（跑马灯显示屏）" data-price="260">40x80cm（跑马灯显示屏）</option>
+										<option value="50x100cm（跑马灯显示屏）" data-price="360">50x100cm（跑马灯显示屏）</option>
+										<option value="60x120cm（跑马灯显示屏）" data-price="530">60x120cm（跑马灯显示屏）</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-0.5">数量</label>
+                                    <input type="number" min="1" class="quantity w-full px-3 py-1.5 border border-gray-300 rounded-md input-focus" placeholder="输入数量">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-0.5">单价 (元/条/套)</label>
+                                    <input type="number" step="0.01" min="0" value="4" class="price w-full px-3 py-1.5 border border-gray-300 rounded-md input-focus" placeholder="输入单价">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-3 pt-3 border-t border-gray-100 flex flex-wrap justify-between">
+                            <div class="w-full md:w-2/3 mb-4 md:mb-0">
+                                <div class="calculation-wrapper">
+                                    <button class="toggle-calc-btn" title="显示计算过程">
+                                        <i class="fa fa-eye-slash"></i>
+                                    </button>
+                                    <div class="text-sm text-gray-500 calculation calculation-hidden">计算过程：请输入数量</div>
+                                </div>
+                            </div>
+                            <div class="w-full md:w-1/3 flex justify-between items-center">
+                                <div class="text-right">
+                                    <span class="text-sm text-gray-500">总价：</span>
+                                    <span class="text-xl font-semibold text-primary total-price animate-number">¥0.00</span>
+                                </div>
+                                <div class="flex">
+                                    <button class="delete-row-btn mr-2">
+                                        <i class="fa fa-trash mr-1"></i> 删除
+                                    </button>
+                                    <button class="add-row-btn">
+                                        <i class="fa fa-plus-circle mr-1"></i> 增加一行
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 户外广告小计 -->
+                <div class="mt-6 pt-4 border-t border-gray-200">
+                    <div class="flex justify-end items-center">
+                        <span class="text-lg font-semibold text-gray-700 mr-3">软膜灯箱 / 灯带 / 焊架子+铝塑板门头 / 展架 / 锦旗 / 公司门牌 / LED显示屏小计：</span>
+                        <span class="text-xl font-bold text-secondary section-subtotal">¥0.00</span>
+                    </div>
+                </div>
+                </div>
+            </section>
+
+<!-- 四、发光字 -->
+<section class="bg-white rounded-xl p-6 card-shadow" data-section="lighted-letters">
+    <h2 class="text-xl font-semibold mb-6 flex items-center justify-between border-b pb-3">
+        <div class="flex items-center">
+            <i class="fa fa-lightbulb-o text-primary mr-2"></i>不锈钢包边发光字 / 无边字 / 迷你字 / 水晶字 / PVC字
+        </div>
+        <button class="toggle-section-btn text-primary hover:text-primary/80 transition-colors">
+            <i class="fa fa-chevron-down"></i>
+        </button>
+    </h2>
+    
+    <div class="section-content">
+    <!-- 计算规则设置 -->
+    <div class="subtle-section p-4 mb-6 text-gray-600">
+        <div class="flex justify-between items-center mb-3">
+            <h3 class="text-sm font-medium flex items-center">
+                <i class="fa fa-sliders text-primary/70 mr-1.5"></i>计算规则设置
+            </h3>
+            <button class="toggle-rules-btn text-primary/70 hover:text-primary text-xs flex items-center transition">
+                <i class="fa fa-chevron-down mr-1"></i>
+                <span>显示</span>
+            </button>
+        </div>
+        <div class="rules-content hidden space-y-3">
+            <p class="text-xs text-gray-500">字的大小规则与价格规则不能同时生效</p>
+            <div>
+                <label class="block text-xs font-medium text-gray-600 mb-1.5">字的大小规则</label>
+                <div class="flex flex-wrap items-center gap-2">
+                    <label class="relative inline-flex items-center cursor-pointer mr-3">
+                        <input type="checkbox" class="min-area-switch sr-only peer">
+                        <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-1 peer-focus:ring-primary/50 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[1px] after:left-[1px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary"></div>
+                        <span class="ml-1.5 text-xs">字的大小小于设定值按设定值计算</span>
+                    </label>
+                    <div class="flex items-center gap-1.5">
+                        <input type="number" step="0.1" min="0" value="10" class="min-area-value w-full px-2 py-1 border border-gray-300 rounded-md input-focus text-xs">
+                        <span class="text-xs">cm</span>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <label class="block text-xs font-medium text-gray-600 mb-1.5">价格规则</label>
+                <div class="flex flex-wrap items-center gap-2">
+                    <label class="relative inline-flex items-center cursor-pointer mr-3">
+                        <input type="checkbox" class="min-price-switch sr-only peer">
+                        <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-1 peer-focus:ring-primary/50 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[1px] after:left-[1px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary"></div>
+                        <span class="ml-1.5 text-xs">价格小于设定值按设定值计算</span>
+                    </label>
+                    <div class="flex items-center gap-1.5">
+                        <span class="text-xs">¥</span>
+                        <input type="number" step="5" min="0" value="50" class="min-price-value w-full px-2 py-1 border border-gray-300 rounded-md input-focus text-xs">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="item-container space-y-6">
+        <!-- 不锈钢包边发光字 -->
+        <div class="item-row p-3 border border-gray-100 rounded-lg hover:border-primary/30 transition group" data-category="不锈钢包边发光字" data-calc-type="size">
+            <div class="flex flex-wrap justify-between items-start">
+                <div class="w-full md:w-1/4 mb-4 md:mb-0">
+                    <h3 class="text-lg category-name">不锈钢包边发光字</h3>
+                    <p class="text-sm text-gray-500 mt-1">不锈钢材质包边</p>
+                </div>
+                <div class="w-full md:w-3/4 grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-0.5">字的大小 (cm)</label>
+                        <input type="number" step="0.1" min="0" class="size w-full px-3 py-1.5 border border-gray-300 rounded-md input-focus" placeholder="输入字的大小">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-0.5">数量</label>
+                        <input type="number" min="1" class="quantity w-full px-3 py-1.5 border border-gray-300 rounded-md input-focus" placeholder="输入数量">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-0.5">单价 (元/cm)</label>
+                        <input type="number" step="0.01" min="0" value="4" class="price w-full px-3 py-1.5 border border-gray-300 rounded-md input-focus" placeholder="输入单价">
+                    </div>
+                </div>
+            </div>
+            <div class="mt-3 pt-3 border-t border-gray-100 flex flex-wrap justify-between">
+                <div class="w-full md:w-2/3 mb-4 md:mb-0">
+                    <div class="calculation-wrapper">
+                        <button class="toggle-calc-btn" title="显示计算过程">
+                            <i class="fa fa-eye-slash"></i>
+                        </button>
+                        <div class="text-sm text-gray-500 calculation calculation-hidden">计算过程：请输入字的大小、数量和单价</div>
+                    </div>
+                </div>
+                <div class="w-full md:w-1/3 flex justify-between items-center">
+                    <div class="text-right">
+                        <span class="text-sm text-gray-500">总价：</span>
+                        <span class="text-xl font-semibold text-primary total-price animate-number">¥0.00</span>
+                    </div>
+                    <div class="flex">
+                        <button class="delete-row-btn mr-2">
+                            <i class="fa fa-trash mr-1"></i> 删除
+                        </button>
+                        <button class="add-row-btn">
+                            <i class="fa fa-plus-circle mr-1"></i> 增加一行
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 迷你字 -->
+        <div class="item-row p-3 border border-gray-100 rounded-lg hover:border-primary/30 transition group" data-category="迷你字" data-calc-type="size">
+            <div class="flex flex-wrap justify-between items-start">
+                <div class="w-full md:w-1/4 mb-4 md:mb-0">
+                    <h3 class="text-lg category-name">迷你字</h3>
+                    <p class="text-sm text-gray-500 mt-1">正背面发光</p>
+                </div>
+                <div class="w-full md:w-3/4 grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-0.5">字的大小 (cm)</label>
+                        <input type="number" step="0.1" min="0" class="size w-full px-3 py-1.5 border border-gray-300 rounded-md input-focus" placeholder="输入字的大小">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-0.5">数量</label>
+                        <input type="number" min="1" class="quantity w-full px-3 py-1.5 border border-gray-300 rounded-md input-focus" placeholder="输入数量">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-0.5">单价 (元/cm)</label>
+                        <input type="number" step="0.01" min="0" value="5.5" class="price w-full px-3 py-1.5 border border-gray-300 rounded-md input-focus" placeholder="输入单价">
+                    </div>
+                </div>
+            </div>
+            <div class="mt-3 pt-3 border-t border-gray-100 flex flex-wrap justify-between">
+                <div class="w-full md:w-2/3 mb-4 md:mb-0">
+                    <div class="calculation-wrapper">
+                        <button class="toggle-calc-btn" title="显示计算过程">
+                            <i class="fa fa-eye-slash"></i>
+                        </button>
+                        <div class="text-sm text-gray-500 calculation calculation-hidden">计算过程：请输入字的大小、数量和单价</div>
+                    </div>
+                </div>
+                <div class="w-full md:w-1/3 flex justify-between items-center">
+                    <div class="text-right">
+                        <span class="text-sm text-gray-500">总价：</span>
+                        <span class="text-xl font-semibold text-primary total-price animate-number">¥0.00</span>
+                    </div>
+                    <div class="flex">
+                        <button class="delete-row-btn mr-2">
+                            <i class="fa fa-trash mr-1"></i> 删除
+                        </button>
+                        <button class="add-row-btn">
+                            <i class="fa fa-plus-circle mr-1"></i> 增加一行
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 亚克力水晶字 -->
+        <div class="item-row p-3 border border-gray-100 rounded-lg hover:border-primary/30 transition group" data-category="亚克力水晶字" data-calc-type="size">
+            <div class="flex flex-wrap justify-between items-start">
+                <div class="w-full md:w-1/4 mb-4 md:mb-0">
+                    <h3 class="text-lg category-name">亚克力水晶字</h3>
+                    <p class="text-sm text-gray-500 mt-1">亚克力面板8mm+透明亚克力3mm</p>
+                </div>
+                <div class="w-full md:w-3/4 grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-0.5">字的大小 (cm)</label>
+                        <input type="number" step="0.1" min="0" class="size w-full px-3 py-1.5 border border-gray-300 rounded-md input-focus" placeholder="输入字的大小">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-0.5">数量</label>
+                        <input type="number" min="1" class="quantity w-full px-3 py-1.5 border border-gray-300 rounded-md input-focus" placeholder="输入数量">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-0.5">单价 (元/cm)</label>
+                        <input type="number" step="0.01" min="0" value="2.5" class="price w-full px-3 py-1.5 border border-gray-300 rounded-md input-focus" placeholder="输入单价">
+                    </div>
+                </div>
+            </div>
+            <div class="mt-3 pt-3 border-t border-gray-100 flex flex-wrap justify-between">
+                <div class="w-full md:w-2/3 mb-4 md:mb-0">
+                    <div class="calculation-wrapper">
+                        <button class="toggle-calc-btn" title="显示计算过程">
+                            <i class="fa fa-eye-slash"></i>
+                        </button>
+                        <div class="text-sm text-gray-500 calculation calculation-hidden">计算过程：请输入字的大小、数量和单价</div>
+                    </div>
+                </div>
+                <div class="w-full md:w-1/3 flex justify-between items-center">
+                    <div class="text-right">
+                        <span class="text-sm text-gray-500">总价：</span>
+                        <span class="text-xl font-semibold text-primary total-price animate-number">¥0.00</span>
+                    </div>
+                    <div class="flex">
+                        <button class="delete-row-btn mr-2">
+                            <i class="fa fa-trash mr-1"></i> 删除
+                        </button>
+                        <button class="add-row-btn">
+                            <i class="fa fa-plus-circle mr-1"></i> 增加一行
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PVC雕刻字 -->
+        <div class="item-row p-3 border border-gray-100 rounded-lg hover:border-primary/30 transition group" data-category="PVC雕刻字" data-calc-type="size">
+            <div class="flex flex-wrap justify-between items-start">
+                <div class="w-full md:w-1/4 mb-4 md:mb-0">
+                    <h3 class="text-lg category-name">PVC雕刻字</h3>
+                    <p class="text-sm text-gray-500 mt-1">PVC雕刻字厚度10mm</p>
+                </div>
+                <div class="w-full md:w-3/4 grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-0.5">字的大小 (cm)</label>
+                        <input type="number" step="0.1" min="0" class="size w-full px-3 py-1.5 border border-gray-300 rounded-md input-focus" placeholder="输入字的大小">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-0.5">数量</label>
+                        <input type="number" min="1" class="quantity w-full px-3 py-1.5 border border-gray-300 rounded-md input-focus" placeholder="输入数量">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-0.5">单价 (元/cm)</label>
+                        <input type="number" step="0.01" min="0" value="1" class="price w-full px-3 py-1.5 border border-gray-300 rounded-md input-focus" placeholder="输入单价">
+                    </div>
+                </div>
+            </div>
+            <div class="mt-3 pt-3 border-t border-gray-100 flex flex-wrap justify-between">
+                <div class="w-full md:w-2/3 mb-4 md:mb-0">
+                    <div class="calculation-wrapper">
+                        <button class="toggle-calc-btn" title="显示计算过程">
+                            <i class="fa fa-eye-slash"></i>
+                        </button>
+                        <div class="text-sm text-gray-500 calculation calculation-hidden">计算过程：请输入字的大小、数量和单价</div>
+                    </div>
+                </div>
+                <div class="w-full md:w-1/3 flex justify-between items-center">
+                    <div class="text-right">
+                        <span class="text-sm text-gray-500">总价：</span>
+                        <span class="text-xl font-semibold text-primary total-price animate-number">¥0.00</span>
+                    </div>
+                    <div class="flex">
+                        <button class="delete-row-btn mr-2">
+                            <i class="fa fa-trash mr-1"></i> 删除
+                        </button>
+                        <button class="add-row-btn">
+                            <i class="fa fa-plus-circle mr-1"></i> 增加一行
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 无边字 -->
+        <div class="item-row p-3 border border-gray-100 rounded-lg hover:border-primary/30 transition group" data-category="无边字" data-calc-type="size">
+            <div class="flex flex-wrap justify-between items-start">
+                <div class="w-full md:w-1/4 mb-4 md:mb-0">
+                    <h3 class="text-lg category-name">无边字</h3>
+                    <p class="text-sm text-gray-500 mt-1">无边框设计</p>
+                </div>
+                <div class="w-full md:w-3/4 grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-0.5">字的大小 (cm)</label>
+                        <input type="number" step="0.1" min="0" class="size w-full px-3 py-1.5 border border-gray-300 rounded-md input-focus" placeholder="输入字的大小">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-0.5">数量</label>
+                        <input type="number" min="1" class="quantity w-full px-3 py-1.5 border border-gray-300 rounded-md input-focus" placeholder="输入数量">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-0.5">单价 (元/cm)</label>
+                        <input type="number" step="0.01" min="0" value="3.8" class="price w-full px-3 py-1.5 border border-gray-300 rounded-md input-focus" placeholder="输入单价">
+                    </div>
+                </div>
+            </div>
+            <div class="mt-3 pt-3 border-t border-gray-100 flex flex-wrap justify-between">
+                <div class="w-full md:w-2/3 mb-4 md:mb-0">
+                    <div class="calculation-wrapper">
+                        <button class="toggle-calc-btn" title="显示计算过程">
+                            <i class="fa fa-eye-slash"></i>
+                        </button>
+                        <div class="text-sm text-gray-500 calculation calculation-hidden">计算过程：请输入字的大小、数量和单价</div>
+                    </div>
+                </div>
+                <div class="w-full md:w-1/3 flex justify-between items-center">
+                    <div class="text-right">
+                        <span class="text-sm text-gray-500">总价：</span>
+                        <span class="text-xl font-semibold text-primary total-price animate-number">¥0.00</span>
+                    </div>
+                    <div class="flex">
+                        <button class="delete-row-btn mr-2">
+                            <i class="fa fa-trash mr-1"></i> 删除
+                        </button>
+                        <button class="add-row-btn">
+                            <i class="fa fa-plus-circle mr-1"></i> 增加一行
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 发光字小计 -->
+    <div class="mt-6 pt-4 border-t border-gray-200">
+        <div class="flex justify-end items-center">
+            <span class="text-lg font-semibold text-gray-700 mr-3">不锈钢包边发光字 / 无边字 / 迷你字 / 水晶字 / PVC字小计：</span>
+            <span class="text-xl font-bold text-secondary section-subtotal">¥0.00</span>
+        </div>
+    </div>
+    </div>
+</section>
+
+            <!-- 总计区域 -->
+            <section class="bg-white rounded-xl p-6 card-shadow border-l-4 border-secondary">
+                <div class="flex flex-col md:flex-row justify-between items-center">
+                    <div>
+                        <h2 class="text-xl font-semibold flex items-center">
+                            <i class="fa fa-calculator text-secondary mr-2"></i>报价总计
+                        </h2>
+                        <p class="text-sm text-gray-500 mt-1">所有项目的最终报价总和</p>
+                    </div>
+                    <div class="mt-4 md:mt-0 w-full md:w-auto">
+                        <div class="flex flex-col items-end">
+                            <span class="text-2xl font-bold text-secondary total-amount">¥0.00</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- JavaScript 代码 -->
+    <script>
+        // 页面加载完成后执行
+        document.addEventListener('DOMContentLoaded', function() {
+            // 获取所有的切换按钮
+            const toggleButtons = document.querySelectorAll('.toggle-section-btn');
+            
+            // 为每个按钮添加点击事件监听
+            toggleButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // 获取当前按钮所在的 section
+                    const section = this.closest('section');
+                    // 获取当前 section 下的内容区域
+                    const content = section.querySelector('.section-content');
+                    
+                    // 切换内容区域的展开/关闭状态
+                    content.classList.toggle('expanded');
+                    // 切换按钮的状态
+                    this.classList.toggle('expanded');
+                });
+            });
+        });
+    </script>
+    
+    <!-- 客户管理模态框 -->
+    <div id="customer-modal-backdrop" class="modal-backdrop"></div>
+    <div id="customer-modal" class="modal-content">
+        <div class="p-6">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-xl font-bold text-primary">客户管理</h2>
+                <button id="close-modal-btn" class="text-gray-500 hover:text-gray-700 transition-colors">
+                    <i class="fa fa-times text-xl"></i>
+                </button>
+            </div>
+            
+            <div class="flex justify-between items-center mb-6">
+                <button id="add-customer-btn" class="bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-md transition-colors flex items-center">
+                    <i class="fa fa-plus mr-2"></i>添加客户
+                </button>
+                <div class="flex space-x-2">
+                    <button id="export-customers-btn" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md transition-colors flex items-center">
+                        <i class="fa fa-download mr-2"></i>导出
+                    </button>
+                    <button id="import-customers-btn" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md transition-colors flex items-center">
+                        <i class="fa fa-upload mr-2"></i>导入
+                    </button>
+                    <input type="file" id="import-file-input" accept=".json" class="hidden">
+                </div>
+            </div>
+            
+            <!-- 客户列表 -->
+            <div class="overflow-x-auto">
+                <table class="min-w-full bg-white">
+                    <thead>
+                        <tr class="bg-gray-100 text-left">
+                            <th class="py-3 px-4 font-semibold">客户名称</th>
+                            <th class="py-3 px-4 font-semibold">联系人</th>
+                            <th class="py-3 px-4 font-semibold">电话</th>
+                            <th class="py-3 px-4 font-semibold">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="customer-list">
+                        <!-- 客户数据将通过JS动态填充 -->
+                        <tr>
+                            <td colspan="4" class="py-4 px-4 text-center text-gray-500">暂无客户数据，请添加客户</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- 客户表单 -->
+            <div id="customer-form-container" class="mt-6 hidden">
+                <h3 id="form-title" class="text-lg font-semibold mb-4">添加客户</h3>
+                <form id="customer-form">
+                    <input type="hidden" id="customer-id">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <label for="customer-name" class="block text-sm font-medium text-gray-700 mb-0.5">客户名称 *</label>
+                            <input type="text" id="customer-name" class="w-full px-3 py-1.5 border border-gray-300 rounded-md input-focus" required>
+                        </div>
+                        <div>
+                            <label for="customer-contact" class="block text-sm font-medium text-gray-700 mb-0.5">联系人</label>
+                            <input type="text" id="customer-contact" class="w-full px-3 py-1.5 border border-gray-300 rounded-md input-focus">
+                        </div>
+                        <div>
+                            <label for="customer-phone" class="block text-sm font-medium text-gray-700 mb-0.5">电话</label>
+                            <input type="tel" id="customer-phone" class="w-full px-3 py-1.5 border border-gray-300 rounded-md input-focus">
+                        </div>
+                        <div>
+                            <label for="customer-email" class="block text-sm font-medium text-gray-700 mb-0.5">邮箱</label>
+                            <input type="email" id="customer-email" class="w-full px-3 py-1.5 border border-gray-300 rounded-md input-focus">
+                        </div>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <h4 class="text-sm font-semibold mb-3">单价设置（不设置则使用默认值）</h4>
+                        <div id="price-settings" class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                            <!-- 单价设置将通过JS动态生成 -->
+                        </div>
+                    </div>
+                    
+                    <div class="flex justify-end space-x-3">
+                        <button type="button" id="cancel-form-btn" class="px-4 py-1.5 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors">取消</button>
+                        <button type="submit" class="bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-md transition-colors">保存</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- 核心功能JS -->
+    <script>
+        // 用于跟踪每个类别的行数
+        const categoryRowCount = {};
+        
+        // 客户数据存储
+        let customers = [];
+        let currentCustomerId = null;
+        
+        // DOM元素初始化
+        const toggleRulesBtns = document.querySelectorAll('.toggle-rules-btn');
+        const totalAmountEl = document.querySelector('.total-amount');
+        const customerSelect = document.getElementById('customer-select');
+        const manageCustomersBtn = document.getElementById('manage-customers-btn');
+        const customerModal = document.getElementById('customer-modal');
+        const customerModalBackdrop = document.getElementById('customer-modal-backdrop');
+        const closeModalBtn = document.getElementById('close-modal-btn');
+        const addCustomerBtn = document.getElementById('add-customer-btn');
+        const customerList = document.getElementById('customer-list');
+        const customerFormContainer = document.getElementById('customer-form-container');
+        const customerForm = document.getElementById('customer-form');
+        const formTitle = document.getElementById('form-title');
+        const customerIdInput = document.getElementById('customer-id');
+        const customerNameInput = document.getElementById('customer-name');
+        const customerContactInput = document.getElementById('customer-contact');
+        const customerPhoneInput = document.getElementById('customer-phone');
+        const customerEmailInput = document.getElementById('customer-email');
+        const cancelFormBtn = document.getElementById('cancel-form-btn');
+        const priceSettingsContainer = document.getElementById('price-settings');
+        const exportCustomersBtn = document.getElementById('export-customers-btn');
+        const importCustomersBtn = document.getElementById('import-customers-btn');
+        const importFileInput = document.getElementById('import-file-input');
+
+        // 1. 客户数据管理
+        function initCustomerData() {
+            // 从localStorage加载客户数据
+            const savedCustomers = localStorage.getItem('quotationSystemCustomers');
+            if (savedCustomers) {
+                customers = JSON.parse(savedCustomers);
+            } else {
+                customers = [];
+            }
+            
+            // 更新客户选择下拉框
+            updateCustomerSelect();
+            
+            // 更新客户列表
+            renderCustomerList();
+            
+            // 生成价格设置表单
+            generatePriceSettingsForm();
+        }
+        
+        // 保存客户数据到localStorage
+        function saveCustomersToLocalStorage() {
+            localStorage.setItem('quotationSystemCustomers', JSON.stringify(customers));
+        }
+        
+        // 更新客户选择下拉框
+        function updateCustomerSelect() {
+            // 保存当前选中值
+            const currentValue = customerSelect.value;
+            
+            // 清空下拉框
+            customerSelect.innerHTML = '<option value="">选择客户</option>';
+            
+            // 添加客户选项
+            customers.forEach(customer => {
+                const option = document.createElement('option');
+                option.value = customer.id;
+                option.textContent = customer.name;
+                customerSelect.appendChild(option);
+            });
+            
+            // 恢复选中值
+            if (currentValue) {
+                customerSelect.value = currentValue;
+            }
+        }
+        
+        // 渲染客户列表
+        function renderCustomerList() {
+            if (customers.length === 0) {
+                customerList.innerHTML = '<tr><td colspan="4" class="py-4 px-4 text-center text-gray-500">暂无客户数据，请添加客户</td></tr>';
+                return;
+            }
+            
+            customerList.innerHTML = '';
+            
+            customers.forEach(customer => {
+                const row = document.createElement('tr');
+                row.className = 'border-b hover:bg-gray-50 transition-colors';
+                
+                row.innerHTML = `
+                    <td class="py-3 px-4">${customer.name}</td>
+                    <td class="py-3 px-4">${customer.contact || '-'}</td>
+                    <td class="py-3 px-4">${customer.phone || '-'}</td>
+                    <td class="py-3 px-4">
+                        <div class="flex space-x-2">
+                            <button class="edit-customer text-primary hover:text-primary/80 transition-colors" data-id="${customer.id}">
+                                <i class="fa fa-pencil"></i> 编辑
+                            </button>
+                            <button class="delete-customer text-danger hover:text-danger/80 transition-colors" data-id="${customer.id}">
+                                <i class="fa fa-trash"></i> 删除
+                            </button>
+                        </div>
+                    </td>
+                `;
+                
+                customerList.appendChild(row);
+            });
+            
+            // 绑定编辑和删除事件
+            document.querySelectorAll('.edit-customer').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const id = btn.getAttribute('data-id');
+                    editCustomer(id);
+                });
+            });
+            
+            document.querySelectorAll('.delete-customer').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const id = btn.getAttribute('data-id');
+                    if (confirm('确定要删除这个客户吗？')) {
+                        deleteCustomer(id);
+                    }
+                });
+            });
+        }
+        
+        // 生成价格设置表单
+        function generatePriceSettingsForm() {
+            priceSettingsContainer.innerHTML = '';
+            
+            // 获取所有独特的品类
+            const categories = new Set();
+            document.querySelectorAll('.item-row').forEach(row => {
+                // 只获取基础品类（不带序号的）
+                const category = row.dataset.category.split(' ')[0];
+                categories.add(category);
+            });
+            
+            // 为每个品类创建价格设置项
+            categories.forEach(category => {
+                // 找到该品类的默认价格
+                let defaultPrice = 0;
+                const row = document.querySelector(`.item-row[data-category^="${category}"]`);
+                if (row) {
+                    defaultPrice = parseFloat(row.querySelector('.price').value) || 0;
+                }
+                
+                const priceSetting = document.createElement('div');
+                priceSetting.className = 'price-setting-item';
+                priceSetting.innerHTML = `
+                    <label for="price-${category}" class="block text-sm font-medium text-gray-700 mb-0.5">${category} 单价</label>
+                    <input type="number" step="0.01" min="0" id="price-${category}" 
+                           class="w-full px-3 py-1.5 border border-gray-300 rounded-md input-focus"
+                           data-category="${category}"
+                           placeholder="默认: ${defaultPrice.toFixed(2)}">
+                `;
+                
+                priceSettingsContainer.appendChild(priceSetting);
+            });
+        }
+        
+        // 添加新客户
+        function addCustomer() {
+            // 重置表单
+            customerForm.reset();
+            customerIdInput.value = '';
+            formTitle.textContent = '添加客户';
+            
+            // 显示表单
+            showCustomerForm();
+        }
+        
+        // 编辑客户
+        function editCustomer(id) {
+            const customer = customers.find(c => c.id === id);
+            if (!customer) return;
+            
+            // 填充表单
+            customerIdInput.value = customer.id;
+            customerNameInput.value = customer.name;
+            customerContactInput.value = customer.contact || '';
+            customerPhoneInput.value = customer.phone || '';
+            customerEmailInput.value = customer.email || '';
+            
+            // 填充价格设置
+            Object.keys(customer.prices || {}).forEach(category => {
+                const input = document.getElementById(`price-${category}`);
+                if (input) {
+                    input.value = customer.prices[category];
+                }
+            });
+            
+            // 显示表单
+            formTitle.textContent = '编辑客户';
+            showCustomerForm();
+        }
+        
+        // 保存客户
+        function saveCustomer(event) {
+            event.preventDefault();
+            
+            const id = customerIdInput.value || generateId();
+            const name = customerNameInput.value.trim();
+            
+            if (!name) {
+                alert('客户名称不能为空');
+                return;
+            }
+            
+            // 收集价格设置
+            const prices = {};
+            document.querySelectorAll('#price-settings input').forEach(input => {
+                const category = input.getAttribute('data-category');
+                const price = parseFloat(input.value);
+                if (!isNaN(price) && price > 0) {
+                    prices[category] = price;
+                }
+            });
+            
+            const customerData = {
+                id,
+                name,
+                contact: customerContactInput.value.trim(),
+                phone: customerPhoneInput.value.trim(),
+                email: customerEmailInput.value.trim(),
+                prices
+            };
+            
+            // 检查是添加还是编辑
+            const existingIndex = customers.findIndex(c => c.id === id);
+            if (existingIndex >= 0) {
+                // 更新现有客户
+                customers[existingIndex] = customerData;
+            } else {
+                // 添加新客户
+                customers.push(customerData);
+            }
+            
+            // 保存到本地存储
+            saveCustomersToLocalStorage();
+            
+            // 更新UI
+            updateCustomerSelect();
+            renderCustomerList();
+            
+            // 隐藏表单
+            hideCustomerForm();
+        }
+        
+        // 删除客户
+        function deleteCustomer(id) {
+            customers = customers.filter(customer => customer.id !== id);
+            
+            // 如果删除的是当前选中的客户，重置选择
+            if (currentCustomerId === id) {
+                customerSelect.value = '';
+                currentCustomerId = null;
+            }
+            
+            // 保存到本地存储
+            saveCustomersToLocalStorage();
+            
+            // 更新UI
+            updateCustomerSelect();
+            renderCustomerList();
+        }
+        
+        // 显示客户表单
+        function showCustomerForm() {
+            customerFormContainer.classList.remove('hidden');
+            customerFormContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+        
+        // 隐藏客户表单
+        function hideCustomerForm() {
+            customerFormContainer.classList.add('hidden');
+        }
+        
+        // 2. 客户选择与单价加载
+        function initCustomerSelection() {
+            customerSelect.addEventListener('change', () => {
+                const customerId = customerSelect.value;
+                currentCustomerId = customerId;
+                
+                if (customerId) {
+                    // 加载客户的单价设置
+                    loadCustomerPrices(customerId);
+                }
+                
+                // 重新计算所有价格
+                recalculateAll();
+            });
+        }
+        
+        // 加载客户的单价设置
+        function loadCustomerPrices(customerId) {
+            const customer = customers.find(c => c.id === customerId);
+            if (!customer || !customer.prices) return;
+            
+            // 应用每个品类的单价
+            Object.keys(customer.prices).forEach(category => {
+                const price = customer.prices[category];
+                // 找到所有该品类的行（包括带序号的）
+                document.querySelectorAll(`.item-row[data-category^="${category}"]`).forEach(row => {
+                    const priceInput = row.querySelector('.price');
+                    if (priceInput) {
+                        priceInput.value = price;
+                        // 触发输入事件以更新计算
+                        priceInput.dispatchEvent(new Event('input'));
+                    }
+                });
+            });
+        }
+        
+        // 3. 客户数据导入导出
+        function initImportExport() {
+            // 导出客户数据
+            exportCustomersBtn.addEventListener('click', () => {
+                if (customers.length === 0) {
+                    alert('没有客户数据可导出');
+                    return;
+                }
+                
+                const dataStr = JSON.stringify(customers, null, 2);
+                const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+                
+                const exportFileDefaultName = `客户数据_${new Date().toLocaleDateString().replace(/\//g, '-')}.json`;
+                
+                const linkElement = document.createElement('a');
+                linkElement.setAttribute('href', dataUri);
+                linkElement.setAttribute('download', exportFileDefaultName);
+                linkElement.click();
+            });
+            
+            // 导入客户数据
+            importCustomersBtn.addEventListener('click', () => {
+                importFileInput.click();
+            });
+            
+            importFileInput.addEventListener('change', (event) => {
+                const file = event.target.files[0];
+                if (!file) return;
+                
+                if (file.type !== 'application/json' && !file.name.endsWith('.json')) {
+                    alert('请选择JSON格式的文件');
+                    return;
+                }
+                
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    try {
+                        const importedData = JSON.parse(e.target.result);
+                        
+                        if (!Array.isArray(importedData)) {
+                            alert('导入的数据格式不正确');
+                            return;
+                        }
+                        
+                        // 检查数据结构
+                        const isValid = importedData.every(item => 
+                            typeof item === 'object' && 
+                            item !== null && 
+                            typeof item.id === 'string' && 
+                            typeof item.name === 'string'
+                        );
+                        
+                        if (!isValid) {
+                            alert('导入的数据结构不正确');
+                            return;
+                        }
+                        
+                        // 合并数据（保留现有数据，添加新数据，ID重复的则覆盖）
+                        importedData.forEach(importedCustomer => {
+                            const existingIndex = customers.findIndex(c => c.id === importedCustomer.id);
+                            if (existingIndex >= 0) {
+                                customers[existingIndex] = importedCustomer;
+                            } else {
+                                customers.push(importedCustomer);
+                            }
+                        });
+                        
+                        // 保存并更新UI
+                        saveCustomersToLocalStorage();
+                        updateCustomerSelect();
+                        renderCustomerList();
+                        
+                        alert(`成功导入 ${importedData.length} 个客户数据`);
+                    } catch (error) {
+                        console.error('导入失败', error);
+                        alert('导入失败，请检查文件格式是否正确');
+                    }
+                };
+                reader.readAsText(file);
+                
+                // 重置input值，允许重复选择同一个文件
+                importFileInput.value = '';
+            });
+        }
+        
+        // 4. 模态框控制
+        function initModal() {
+            // 打开模态框
+            manageCustomersBtn.addEventListener('click', () => {
+                customerModal.classList.add('modal-active');
+                customerModalBackdrop.classList.add('modal-active');
+                document.body.style.overflow = 'hidden'; // 防止背景滚动
+            });
+            
+            // 关闭模态框
+            function closeModal() {
+                customerModal.classList.remove('modal-active');
+                customerModalBackdrop.classList.remove('modal-active');
+                document.body.style.overflow = ''; // 恢复滚动
+                hideCustomerForm();
+            }
+            
+            closeModalBtn.addEventListener('click', closeModal);
+            customerModalBackdrop.addEventListener('click', closeModal);
+            
+            // 添加客户按钮
+            addCustomerBtn.addEventListener('click', addCustomer);
+            
+            // 取消表单按钮
+            cancelFormBtn.addEventListener('click', hideCustomerForm);
+            
+            // 表单提交
+            customerForm.addEventListener('submit', saveCustomer);
+        }
+        
+        // 5. 初始化增加行功能
+        function initAddRowFeature() {
+            // 使用document级别的事件委托，确保动态元素也能触发
+            document.addEventListener('click', (e) => {
+                const addBtn = e.target.closest('.add-row-btn');
+                if (!addBtn) return;
+
+                const originalRow = addBtn.closest('.item-row');
+                if (!originalRow) return;
+
+                // 获取原始行的类别
+                const originalCategory = originalRow.dataset.category;
+                
+                // 初始化或更新该类别的计数
+                if (!categoryRowCount[originalCategory]) {
+                    categoryRowCount[originalCategory] = 0;
+                }
+                categoryRowCount[originalCategory]++;
+                
+                // 格式化计数为3位数（001, 002等）
+                const formattedCount = String(categoryRowCount[originalCategory]).padStart(3, '0');
+                
+                // 复制原始行（深拷贝）
+                const newRow = originalRow.cloneNode(true);
+                
+                // 重置新行输入值
+                resetNewRowValues(newRow);
+                
+                // 修改新行的名称，添加序号
+                const categoryNameEl = newRow.querySelector('.category-name');
+                if (categoryNameEl) {
+                    categoryNameEl.textContent = `${originalCategory} ${formattedCount}`;
+                }
+                
+                // 更新新行的data-category属性，包含序号
+                newRow.dataset.category = `${originalCategory} ${formattedCount}`;
+                
+                // 如果有选中的客户，应用其单价设置
+                if (currentCustomerId) {
+                    const customer = customers.find(c => c.id === currentCustomerId);
+                    if (customer && customer.prices) {
+                        // 只取基础品类（不带序号的）
+                        const baseCategory = originalCategory.split(' ')[0];
+                        const price = customer.prices[baseCategory];
+                        if (price) {
+                            const priceInput = newRow.querySelector('.price');
+                            if (priceInput) {
+                                priceInput.value = price;
+                            }
+                        }
+                    }
+                }
+                
+                // 添加动画类
+                newRow.classList.add('scale-in');
+                
+                // 插入到原始行之后
+                originalRow.after(newRow);
+                
+                // 重新绑定尺寸选择联动事件
+                bindSizeSelectEvent(newRow.querySelector('.size'));
+                
+                // 重新计算价格
+                calculateItemPrice(newRow);
+                calculateSectionSubtotals();
+                calculateTotalAmount();
+            });
+        }
+
+        // 6. 初始化删除行功能
+        function initDeleteRowFeature() {
+            document.addEventListener('click', (e) => {
+                const deleteBtn = e.target.closest('.delete-row-btn');
+                if (!deleteBtn) return;
+
+                const row = deleteBtn.closest('.item-row');
+                if (!row) return;
+
+                // 检查是否是最后一行
+                const container = row.closest('.item-container');
+                const rows = container.querySelectorAll('.item-row');
+                if (rows.length <= 1) {
+                    // 最后一行不删除，只清空
+                    resetNewRowValues(row);
+                    calculateItemPrice(row);
+                } else {
+                    // 获取要删除的行的类别（去除序号）
+                    const fullCategory = row.dataset.category;
+                    const baseCategory = fullCategory.split(' ')[0];
+                    
+                    // 如果这是一个带有序号的行，减少计数
+                    if (categoryRowCount[baseCategory] && fullCategory.includes(' ')) {
+                        categoryRowCount[baseCategory]--;
+                    }
+                    
+                    // 添加淡出动画
+                    row.style.opacity = '0';
+                    row.style.transform = 'translateY(10px)';
+                    row.style.height = row.offsetHeight + 'px';
+                    row.style.margin = '0';
+                    row.style.overflow = 'hidden';
+                    row.style.transition = 'all 0.3s ease-out';
+                    
+                    // 延迟删除，等待动画完成
+                    setTimeout(() => {
+                        row.remove();
+                        calculateSectionSubtotals();
+                        calculateTotalAmount();
+                    }, 300);
+                }
+            });
+        }
+
+        // 重置新行的输入值和计算结果
+function resetNewRowValues(row) {
+    // 获取计算类型（数量计算或面积计算）
+    const calcType = row.dataset.calcType || 'area';
+    
+    // 重置输入框
+    row.querySelectorAll('input[type="number"]').forEach(input => {
+        if (input.classList.contains('quantity')) {
+            // 数量输入框清空
+            input.value = '';
+        } else if (input.classList.contains('length') || input.classList.contains('width')) {
+            // 长度和宽度输入框清空
+            input.value = '';
+        } else if (input.classList.contains('size')) {
+            // 字的大小输入框清空
+            input.value = '';
+        }
+        // 单价保持不变
+    });
+
+    // 重置计算过程和总价
+    let defaultText = '';
+    if (calcType === 'quantity') {
+        defaultText = '计算过程：请输入数量';
+    } else if (calcType === 'area') {
+        defaultText = '计算过程：请输入尺寸和单价';
+    } else if (calcType === 'size') {
+        defaultText = '计算过程：请输入字的大小、数量和单价';
+    }
+    
+    const calculationEl = row.querySelector('.calculation');
+    calculationEl.textContent = defaultText;
+    calculationEl.classList.add('calculation-hidden'); // 确保隐藏
+    
+    row.querySelector('.total-price').textContent = '¥0.00';
+    
+    // 确保眼睛图标状态正确
+    const icon = row.querySelector('.toggle-calc-btn i');
+    icon.classList.remove('fa-eye');
+    icon.classList.add('fa-eye-slash');
+}
+
+        // 7. 尺寸选择联动单价
+        function bindSizeSelectEvent(select) {
+            if (!select) return;
+            select.addEventListener('change', () => {
+                const price = select.options[select.selectedIndex].dataset.price;
+                if (price) {
+                    const priceInput = select.closest('.item-row').querySelector('.price');
+                    priceInput.value = price;
+                    // 触发价格输入事件
+                    priceInput.dispatchEvent(new Event('input'));
+                }
+            });
+        }
+
+        // 8. 计算过程显示/隐藏功能 - 修复版
+        function initToggleCalculationFeature() {
+            // 使用事件委托处理所有toggle-calc-btn点击
+            document.addEventListener('click', (e) => {
+                if (e.target.closest('.toggle-calc-btn')) {
+                    const button = e.target.closest('.toggle-calc-btn');
+                    const calculationEl = button.nextElementSibling;
+                    const icon = button.querySelector('i');
+                    
+                    // 切换计算过程的显示/隐藏
+                    if (calculationEl.classList.contains('calculation-hidden')) {
+                        calculationEl.classList.remove('calculation-hidden');
+                        icon.classList.remove('fa-eye-slash');
+                        icon.classList.add('fa-eye');
+                        button.title = "隐藏计算过程";
+                    } else {
+                        calculationEl.classList.add('calculation-hidden');
+                        icon.classList.remove('fa-eye');
+                        icon.classList.add('fa-eye-slash');
+                        button.title = "显示计算过程";
+                    }
+                }
+            });
+        }
+
+        // 9. 单个项目价格计算
+        function calculateItemPrice(row) {
+            // 使用data属性明确指定计算类型
+            const calcType = row.dataset.calcType || 'area';
+            const category = row.dataset.category;
+
+            let totalPrice = 0;
+            let calcText = '';
+
+            // 数量计算类型（打印复印/户外高压灯带）
+            if (calcType === 'quantity') {
+                const quantity = parseInt(row.querySelector('.quantity').value) || 0;
+                const price = parseFloat(row.querySelector('.price').value) || 0;
+                const size = row.querySelector('.size').value;
+
+                if (quantity > 0 && price > 0) {
+                    totalPrice = quantity * price;
+                    const unit = category.includes('户外高压灯带') ? '条' : '张';
+                    calcText = `计算过程：${quantity}${unit}（${size}） × ${price}元/${unit} = ${totalPrice.toFixed(2)}元`;
+                } else {
+                    calcText = '计算过程：请输入有效的数量和单价';
+                }
+            } 
+            // 面积计算类型
+            else if (calcType === 'area') {
+                const length = parseFloat(row.querySelector('.length').value) || 0;
+                const width = parseFloat(row.querySelector('.width').value) || 0;
+                const price = parseFloat(row.querySelector('.price').value) || 0;
+
+                if (length > 0 && width > 0 && price > 0) {
+                    let area = (length * width) / 10000; // cm转平方米
+                    const section = row.closest('section');
+                    const { minArea, minPrice, areaRuleEnabled, priceRuleEnabled } = getCalculationRules(section);
+
+                    // 应用面积规则
+                    if (areaRuleEnabled && area < minArea) {
+                        calcText = `计算过程：${length}cm × ${width}cm = ${area.toFixed(4)}㎡（小于${minArea}㎡，按${minArea}㎡计算） × ${price}元/㎡ = ${(minArea * price).toFixed(2)}元`;
+                        area = minArea;
+                    } else {
+                        calcText = `计算过程：${length}cm × ${width}cm = ${area.toFixed(4)}㎡ × ${price}元/㎡ = ${(area * price).toFixed(2)}元`;
+                    }
+
+                    totalPrice = area * price;
+
+                    // 应用价格规则
+                    if (priceRuleEnabled && totalPrice < minPrice) {
+                        calcText += `（小于${minPrice}元，按${minPrice}元计算）`;
+                        totalPrice = minPrice;
+                    }
+                } else {
+                    calcText = '计算过程：请输入完整的尺寸和单价';
+                }
+            }
+            // 字的大小计算类型（发光字）- 修改为包含数量
+else if (calcType === 'size') {
+    const size = parseFloat(row.querySelector('.size').value) || 0;
+    const quantity = parseInt(row.querySelector('.quantity').value) || 0;
+    const price = parseFloat(row.querySelector('.price').value) || 0;
+
+    if (size > 0 && quantity > 0 && price > 0) {
+        let finalSize = size;
+        const section = row.closest('section');
+        const { minArea, minPrice, areaRuleEnabled, priceRuleEnabled } = getCalculationRules(section);
+
+        // 应用字的大小规则
+        if (areaRuleEnabled && finalSize < minArea) {
+            calcText = `计算过程：${size}cm（小于${minArea}cm，按${minArea}cm计算） × ${quantity}个 × ${price}元/cm = ${(minArea * quantity * price).toFixed(2)}元`;
+            finalSize = minArea;
+        } else {
+            calcText = `计算过程：${size}cm × ${quantity}个 × ${price}元/cm = ${(size * quantity * price).toFixed(2)}元`;
+        }
+
+        totalPrice = finalSize * quantity * price;
+
+        // 应用价格规则
+        if (priceRuleEnabled && totalPrice < minPrice) {
+            calcText += `（小于${minPrice}元，按${minPrice}元计算）`;
+            totalPrice = minPrice;
+        }
+    } else {
+        calcText = '计算过程：请输入字的大小、数量和单价';
+    }
+}
+
+            // 更新显示
+            row.querySelector('.calculation').textContent = calcText;
+            row.querySelector('.total-price').textContent = `¥${totalPrice.toFixed(2)}`;
+            return totalPrice;
+        }
+
+        // 获取计算规则（面积/价格规则）
+        function getCalculationRules(section) {
+            return {
+                minArea: parseFloat(section.querySelector('.min-area-value')?.value) || 0,
+                minPrice: parseFloat(section.querySelector('.min-price-value')?.value) || 0,
+                areaRuleEnabled: section.querySelector('.min-area-switch')?.checked || false,
+                priceRuleEnabled: section.querySelector('.min-price-switch')?.checked || false
+            };
+        }
+
+        // 10. 计算分类小计
+        function calculateSectionSubtotals() {
+            document.querySelectorAll('section').forEach(section => {
+                const subtotalEl = section.querySelector('.section-subtotal');
+                if (!subtotalEl) return;
+
+                let subtotal = 0;
+                section.querySelectorAll('.item-row').forEach(row => {
+                    subtotal += parseFloat(row.querySelector('.total-price').textContent.replace('¥', '')) || 0;
+                });
+
+                subtotalEl.textContent = `¥${subtotal.toFixed(2)}`;
+            });
+        }
+
+        // 11. 计算总价
+        function calculateTotalAmount() {
+            let total = 0;
+            document.querySelectorAll('.section-subtotal').forEach(subtotalEl => {
+                total += parseFloat(subtotalEl.textContent.replace('¥', '')) || 0;
+            });
+
+            // 更新显示
+            totalAmountEl.textContent = `¥${total.toFixed(2)}`;
+            
+            return total;
+        }
+
+        // 12. 规则显示/隐藏切换
+        function initRuleToggle() {
+            toggleRulesBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const content = btn.closest('.subtle-section').querySelector('.rules-content');
+                    const icon = btn.querySelector('i');
+                    const text = btn.querySelector('span');
+
+                    if (content.classList.contains('hidden')) {
+                        content.classList.remove('hidden');
+                        content.classList.add('fade-in');
+                        icon.classList.replace('fa-chevron-down', 'fa-chevron-up');
+                        text.textContent = '隐藏';
+                    } else {
+                        content.classList.add('hidden');
+                        icon.classList.replace('fa-chevron-up', 'fa-chevron-down');
+                        text.textContent = '显示';
+                    }
+                });
+            });
+        }
+
+        // 13. 面积/价格规则互斥
+        function initRuleMutualExclusion() {
+            document.querySelectorAll('.min-area-switch').forEach(switchEl => {
+                switchEl.addEventListener('change', () => {
+                    if (switchEl.checked) {
+                        switchEl.closest('section').querySelector('.min-price-switch').checked = false;
+                    }
+                    recalculateAll();
+                });
+            });
+
+            document.querySelectorAll('.min-price-switch').forEach(switchEl => {
+                switchEl.addEventListener('change', () => {
+                    if (switchEl.checked) {
+                        switchEl.closest('section').querySelector('.min-area-switch').checked = false;
+                    }
+                    recalculateAll();
+                });
+            });
+        }
+
+        // 14. 输入值变化时重新计算
+        function initInputListener() {
+            document.addEventListener('input', (e) => {
+                const target = e.target;
+                if (['price', 'quantity', 'length', 'width', 'size', 'min-area-value', 'min-price-value'].some(cls => target.classList.contains(cls))) {
+                    const row = target.closest('.item-row') || target.closest('section');
+                    if (row.classList.contains('item-row')) {
+                        calculateItemPrice(row);
+                    } else {
+                        recalculateAll();
+                    }
+                    calculateSectionSubtotals();
+                    calculateTotalAmount();
+                }
+            });
+        }
+
+        // 15. 重新计算所有项目
+        function recalculateAll() {
+            document.querySelectorAll('.item-row').forEach(row => calculateItemPrice(row));
+            calculateSectionSubtotals();
+            calculateTotalAmount();
+        }
+
+        // 16. 页面滚动时导航栏效果
+        function initScrollEffect() {
+            const header = document.querySelector('header');
+            let lastScrollTop = 0;
+            
+            window.addEventListener('scroll', () => {
+                const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                
+                if (scrollTop > 100) {
+                    header.classList.add('py-3', 'shadow');
+                    header.classList.remove('py-2.5');
+                } else {
+                    header.classList.add('py-2.5');
+                    header.classList.remove('py-3', 'shadow');
+                }
+                
+                lastScrollTop = scrollTop;
+            });
+        }
+
+        // 工具函数：生成唯一ID
+        function generateId() {
+            return Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
+        }
+
+        // 初始化所有功能
+        function initAllFeatures() {
+            // 客户管理相关初始化
+            initCustomerData();
+            initCustomerSelection();
+            initModal();
+            initImportExport();
+            
+            // 原有功能初始化
+            initAddRowFeature();
+            initDeleteRowFeature();
+            initToggleCalculationFeature(); // 修复的计算过程显示/隐藏功能
+            initRuleToggle();
+            initRuleMutualExclusion();
+            initInputListener();
+            initScrollEffect();
+            
+            // 绑定初始尺寸选择事件
+            document.querySelectorAll('.size').forEach(select => bindSizeSelectEvent(select));
+            
+            // 初始化类别计数
+            document.querySelectorAll('.item-row').forEach(row => {
+                const category = row.dataset.category;
+                if (!categoryRowCount[category]) {
+                    categoryRowCount[category] = 0;
+                }
+            });
+            
+            // 初始计算
+            recalculateAll();
+        }
+
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', initAllFeatures);
+    </script>
+</body>
+</html>
