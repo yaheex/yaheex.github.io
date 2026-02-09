@@ -1205,12 +1205,12 @@
                         <input type="number" step="0.1" min="0" class="size w-full px-3 py-1.5 border border-gray-300 rounded-md input-focus" placeholder="输入字的大小">
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-0.5">数量</label>
-                        <input type="number" min="1" class="quantity w-full px-3 py-1.5 border border-gray-300 rounded-md input-focus" placeholder="输入数量">
-                    </div>
-                    <div>
                         <label class="block text-sm font-medium text-gray-700 mb-0.5">单价 (元/cm)</label>
                         <input type="number" step="0.01" min="0" value="4" class="price w-full px-3 py-1.5 border border-gray-300 rounded-md input-focus" placeholder="输入单价">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-0.5">数量</label>
+                        <input type="number" min="1" value="1" class="quantity w-full px-3 py-1.5 border border-gray-300 rounded-md input-focus" placeholder="输入数量">
                     </div>
                 </div>
             </div>
@@ -1253,12 +1253,12 @@
                         <input type="number" step="0.1" min="0" class="size w-full px-3 py-1.5 border border-gray-300 rounded-md input-focus" placeholder="输入字的大小">
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-0.5">数量</label>
-                        <input type="number" min="1" class="quantity w-full px-3 py-1.5 border border-gray-300 rounded-md input-focus" placeholder="输入数量">
-                    </div>
-                    <div>
                         <label class="block text-sm font-medium text-gray-700 mb-0.5">单价 (元/cm)</label>
                         <input type="number" step="0.01" min="0" value="5.5" class="price w-full px-3 py-1.5 border border-gray-300 rounded-md input-focus" placeholder="输入单价">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-0.5">数量</label>
+                        <input type="number" min="1" value="1" class="quantity w-full px-3 py-1.5 border border-gray-300 rounded-md input-focus" placeholder="输入数量">
                     </div>
                 </div>
             </div>
@@ -1301,12 +1301,12 @@
                         <input type="number" step="0.1" min="0" class="size w-full px-3 py-1.5 border border-gray-300 rounded-md input-focus" placeholder="输入字的大小">
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-0.5">数量</label>
-                        <input type="number" min="1" class="quantity w-full px-3 py-1.5 border border-gray-300 rounded-md input-focus" placeholder="输入数量">
-                    </div>
-                    <div>
                         <label class="block text-sm font-medium text-gray-700 mb-0.5">单价 (元/cm)</label>
                         <input type="number" step="0.01" min="0" value="2.5" class="price w-full px-3 py-1.5 border border-gray-300 rounded-md input-focus" placeholder="输入单价">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-0.5">数量</label>
+                        <input type="number" min="1" value="1" class="quantity w-full px-3 py-1.5 border border-gray-300 rounded-md input-focus" placeholder="输入数量">
                     </div>
                 </div>
             </div>
@@ -1349,12 +1349,12 @@
                         <input type="number" step="0.1" min="0" class="size w-full px-3 py-1.5 border border-gray-300 rounded-md input-focus" placeholder="输入字的大小">
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-0.5">数量</label>
-                        <input type="number" min="1" class="quantity w-full px-3 py-1.5 border border-gray-300 rounded-md input-focus" placeholder="输入数量">
-                    </div>
-                    <div>
                         <label class="block text-sm font-medium text-gray-700 mb-0.5">单价 (元/cm)</label>
                         <input type="number" step="0.01" min="0" value="1" class="price w-full px-3 py-1.5 border border-gray-300 rounded-md input-focus" placeholder="输入单价">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-0.5">数量</label>
+                        <input type="number" min="1" value="1" class="quantity w-full px-3 py-1.5 border border-gray-300 rounded-md input-focus" placeholder="输入数量">
                     </div>
                 </div>
             </div>
@@ -1397,12 +1397,12 @@
                         <input type="number" step="0.1" min="0" class="size w-full px-3 py-1.5 border border-gray-300 rounded-md input-focus" placeholder="输入字的大小">
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-0.5">数量</label>
-                        <input type="number" min="1" class="quantity w-full px-3 py-1.5 border border-gray-300 rounded-md input-focus" placeholder="输入数量">
-                    </div>
-                    <div>
                         <label class="block text-sm font-medium text-gray-700 mb-0.5">单价 (元/cm)</label>
                         <input type="number" step="0.01" min="0" value="3.8" class="price w-full px-3 py-1.5 border border-gray-300 rounded-md input-focus" placeholder="输入单价">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-0.5">数量</label>
+                        <input type="number" min="1" value="1" class="quantity w-full px-3 py-1.5 border border-gray-300 rounded-md input-focus" placeholder="输入数量">
                     </div>
                 </div>
             </div>
@@ -2015,17 +2015,73 @@
                 const originalRow = addBtn.closest('.item-row');
                 if (!originalRow) return;
 
-                // 获取原始行的类别
-                const originalCategory = originalRow.dataset.category;
+                // 获取原始行的类别（去除序号，只保留基础类别）
+                const originalCategoryFull = originalRow.dataset.category;
+                const parts = originalCategoryFull.split(' ');
+                const baseCategory = parts[0];
+                const originalIndex = parts[1] || '';
                 
-                // 初始化或更新该类别的计数
-                if (!categoryRowCount[originalCategory]) {
-                    categoryRowCount[originalCategory] = 0;
+                // 计算新行的序号
+                let newIndex;
+                
+                // 检查原始行是否已有序号
+                if (originalIndex) {
+                    if (originalIndex.includes('-')) {
+                        // 如果原始行是子项（已有-格式），则在其基础上递增子序号
+                        const parts = originalIndex.split('-');
+                        const lastPart = parts[parts.length - 1];
+                        const currentSubIndex = parseInt(lastPart) || 0;
+                        const nextSubIndex = currentSubIndex + 1;
+                        
+                        // 复制前面的部分，替换最后一个序号
+                        const newParts = [...parts];
+                        newParts[newParts.length - 1] = nextSubIndex;
+                        newIndex = newParts.join('-');
+                    } else {
+                        // 如果原始行是主项（没有-格式），则创建该主项的下一个子项
+                        // 查找当前主项的所有子项，计算最大子项序号
+                        const container = originalRow.closest('.item-container');
+                        const childRows = container.querySelectorAll(`.item-row[data-category^="${baseCategory} ${originalIndex}-"]`);
+                        
+                        // 找出所有子项的序号
+                        const childIndices = Array.from(childRows).map(row => {
+                            const category = row.dataset.category;
+                            const parts = category.split(' ');
+                            const index = parts[1] || '';
+                            if (index && index.includes('-')) {
+                                const subIndex = index.split('-')[1];
+                                return parseInt(subIndex) || 0;
+                            }
+                            return 0;
+                        });
+                        
+                        // 计算下一个子项序号
+                        const maxChildIndex = childIndices.length > 0 ? Math.max(...childIndices) : 0;
+                        const nextChildIndex = maxChildIndex + 1;
+                        newIndex = `${originalIndex}-${nextChildIndex}`;
+                    }
+                } else {
+                    // 如果原始行是基础行（没有序号），则创建第一个主项
+                    // 查找当前类别的最大主项序号
+                    const container = originalRow.closest('.item-container');
+                    const sameCategoryRows = container.querySelectorAll(`.item-row[data-category^="${baseCategory}"]`);
+                    
+                    // 找出所有主项（不带-的）的序号
+                    const mainIndices = Array.from(sameCategoryRows).map(row => {
+                        const category = row.dataset.category;
+                        const parts = category.split(' ');
+                        const index = parts[1] || '';
+                        if (index && !index.includes('-')) {
+                            return parseInt(index) || 0;
+                        }
+                        return 0;
+                    });
+                    
+                    // 计算下一个主项序号
+                    const maxMainIndex = mainIndices.length > 0 ? Math.max(...mainIndices) : 0;
+                    const nextMainIndex = String(maxMainIndex + 1).padStart(3, '0');
+                    newIndex = nextMainIndex;
                 }
-                categoryRowCount[originalCategory]++;
-                
-                // 格式化计数为3位数（001, 002等）
-                const formattedCount = String(categoryRowCount[originalCategory]).padStart(3, '0');
                 
                 // 复制原始行（深拷贝）
                 const newRow = originalRow.cloneNode(true);
@@ -2036,18 +2092,17 @@
                 // 修改新行的名称，添加序号
                 const categoryNameEl = newRow.querySelector('.category-name');
                 if (categoryNameEl) {
-                    categoryNameEl.textContent = `${originalCategory} ${formattedCount}`;
+                    categoryNameEl.textContent = `${baseCategory} ${newIndex}`;
                 }
                 
                 // 更新新行的data-category属性，包含序号
-                newRow.dataset.category = `${originalCategory} ${formattedCount}`;
+                newRow.dataset.category = `${baseCategory} ${newIndex}`;
                 
                 // 如果有选中的客户，应用其单价设置
                 if (currentCustomerId) {
                     const customer = customers.find(c => c.id === currentCustomerId);
                     if (customer && customer.prices) {
                         // 只取基础品类（不带序号的）
-                        const baseCategory = originalCategory.split(' ')[0];
                         const price = customer.prices[baseCategory];
                         if (price) {
                             const priceInput = newRow.querySelector('.price');
@@ -2091,15 +2146,6 @@
                     resetNewRowValues(row);
                     calculateItemPrice(row);
                 } else {
-                    // 获取要删除的行的类别（去除序号）
-                    const fullCategory = row.dataset.category;
-                    const baseCategory = fullCategory.split(' ')[0];
-                    
-                    // 如果这是一个带有序号的行，减少计数
-                    if (categoryRowCount[baseCategory] && fullCategory.includes(' ')) {
-                        categoryRowCount[baseCategory]--;
-                    }
-                    
                     // 添加淡出动画
                     row.style.opacity = '0';
                     row.style.transform = 'translateY(10px)';
