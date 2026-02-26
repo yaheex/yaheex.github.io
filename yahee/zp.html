@@ -861,34 +861,16 @@
                 // 确定最终裁剪尺寸
                 let outputWidth, outputHeight;
                 if (currentRatio.width && currentRatio.height) {
-                    // 检查是否是具体像素尺寸（600x800, 480x640, 300x400）
+                    // 检查是否是具体像素尺寸（600x800, 480x640, 300x400）或用户自定义尺寸
                     const isSpecificSize = [
                         {w: 600, h: 800},
                         {w: 480, h: 640},
                         {w: 300, h: 400},
                     ].some(size => size.w === currentRatio.width && size.h === currentRatio.height);
                     
-                    if (isSpecificSize) {
-                        // 使用具体像素尺寸
-                        outputWidth = currentRatio.width;
-                        outputHeight = currentRatio.height;
-                    } else {
-                        // 对于其他比例，使用裁剪框的实际尺寸，但保持比例
-                        const cropBoxData = cropper.getCropBoxData();
-                        const aspectRatio = currentRatio.width / currentRatio.height;
-                        
-                        // 确保最小尺寸
-                        const minSize = 100;
-                        const maxSize = 2000;
-                        
-                        if (cropBoxData.width > cropBoxData.height * aspectRatio) {
-                            outputHeight = Math.min(Math.max(cropBoxData.height, minSize), maxSize);
-                            outputWidth = Math.round(outputHeight * aspectRatio);
-                        } else {
-                            outputWidth = Math.min(Math.max(cropBoxData.width, minSize), maxSize);
-                            outputHeight = Math.round(outputWidth / aspectRatio);
-                        }
-                    }
+                    // 对于具体像素尺寸和用户自定义尺寸，直接使用固定值
+                    outputWidth = currentRatio.width;
+                    outputHeight = currentRatio.height;
                 } else {
                     // 自由比例时，使用裁剪框的实际尺寸
                     const cropBoxData = cropper.getCropBoxData();
@@ -909,6 +891,9 @@
                 let bestSizeKB = 0;
                 let minDifference = Infinity;
                 
+                // 尝试使用JPEG格式
+                let format = 'image/jpeg';
+                
                 // 第一次二分查找 - 快速定位大致范围
                 let low = 0.1;
                 let high = 1.0;
@@ -916,7 +901,7 @@
                 
                 for (let i = 0; i < maxIterations; i++) {
                     const mid = (low + high) / 2;
-                    const dataUrl = canvas.toDataURL('image/jpeg', mid);
+                    const dataUrl = canvas.toDataURL(format, mid);
                     const fileSizeKB = Math.round((dataUrl.length - 22) * 3 / 4 / 1024); // 移除data URL前缀并转换为KB
                     const difference = Math.abs(fileSizeKB - targetSizeKB);
                     
@@ -942,13 +927,33 @@
                     }
                 }
                 
+                // 如果JPEG格式无法达到目标大小，尝试PNG格式
+                if (bestSizeKB < targetSizeKB - 10) {
+                    format = 'image/png';
+                    for (let quality = 1; quality >= 0.1; quality -= 0.1) {
+                        const dataUrl = canvas.toDataURL(format, quality);
+                        const fileSizeKB = Math.round((dataUrl.length - 22) * 3 / 4 / 1024);
+                        const difference = Math.abs(fileSizeKB - targetSizeKB);
+                        
+                        if (difference < minDifference) {
+                            minDifference = difference;
+                            bestDataUrl = dataUrl;
+                            bestSizeKB = fileSizeKB;
+                        }
+                        
+                        if (difference <= 5) {
+                            break;
+                        }
+                    }
+                }
+                
                 // 多质量点采样 - 提高精度
                 const qualitySteps = 100;
                 let bestQuality = 0.5;
                 
                 for (let q = 0; q <= qualitySteps; q++) {
                     const quality = q / qualitySteps;
-                    const dataUrl = canvas.toDataURL('image/jpeg', quality);
+                    const dataUrl = canvas.toDataURL(format, quality);
                     const fileSizeKB = Math.round((dataUrl.length - 22) * 3 / 4 / 1024);
                     const difference = Math.abs(fileSizeKB - targetSizeKB);
                     
@@ -970,7 +975,7 @@
                 
                 for (let step = -fineTuneSteps; step <= fineTuneSteps; step++) {
                     const quality = Math.max(0, Math.min(1, bestQuality + step * (fineTuneRange / fineTuneSteps)));
-                    const dataUrl = canvas.toDataURL('image/jpeg', quality);
+                    const dataUrl = canvas.toDataURL(format, quality);
                     const fileSizeKB = Math.round((dataUrl.length - 22) * 3 / 4 / 1024);
                     const difference = Math.abs(fileSizeKB - targetSizeKB);
                     
@@ -982,6 +987,16 @@
                     
                     if (difference <= 5) {
                         break;
+                    }
+                }
+                
+                // 如果仍然无法达到目标大小，至少使用最高质量
+                if (bestSizeKB < targetSizeKB - 20) {
+                    const highQualityDataUrl = canvas.toDataURL(format, 1.0);
+                    const highQualitySizeKB = Math.round((highQualityDataUrl.length - 22) * 3 / 4 / 1024);
+                    if (highQualitySizeKB > bestSizeKB) {
+                        bestDataUrl = highQualityDataUrl;
+                        bestSizeKB = highQualitySizeKB;
                     }
                 }
                 
