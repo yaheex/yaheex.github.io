@@ -117,9 +117,9 @@
                                     <div class="flex justify-between items-start">
                                         <div>
                                             <h4 class="font-medium">
-                                                GPT
+                                                GPT Image
                                             </h4>
-                                            <p class="text-xs text-gray-500 mt-1">1分钟出图</p>
+                                            <p class="text-xs text-gray-500 mt-1">OpenAI绘画模型 / Image 1.5</p>
                                         </div>
                                         <i class="fa fa-check-circle text-primary hidden"></i>
                                     </div>
@@ -128,9 +128,9 @@
                                     <div class="flex justify-between items-start">
                                         <div>
                                             <h4 class="font-medium">
-                                                Banana
+                                                Nano Banana
                                             </h4>
-                                            <p class="text-xs text-gray-500 mt-1">30秒出图</p>
+                                            <p class="text-xs text-gray-500 mt-1">NanoBanana第二代绘图模型</p>
                                         </div>
                                         <i class="fa fa-check-circle text-primary"></i>
                                     </div>
@@ -142,7 +142,8 @@
                             <div class="mb-3">
                                 <label for="gptVariants" class="block text-sm font-medium text-gray-600 mb-2">选择模型：</label>
                                 <select id="gptVariants" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary">
-                                    <option value="1">GPT ~~~ 400积分/次 - ￥0.04/次</option>
+                                    <option value="gpt-image-1.5">gpt-image-1.5 - 400积分/次</option>
+                                    <option value="sora-image">sora-image - 400积分/次</option>
                                 </select>
                             </div>
                         </div>
@@ -151,8 +152,8 @@
                             <div>
                                 <label for="bananaSubModel" class="block text-sm font-medium text-gray-600 mb-2">选择模型：</label>
                                 <select id="bananaSubModel" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary">
-                                    <option value="nano-banana">banana ~~~ 1400积分/次 - ￥0.14/次</option>
-                                    <option value="nano-banana-pro">banana-pro ~~~ 1800积分/次 - ￥0.18/次</option>
+                                    <option value="nano-banana-2">nano-banana-2 - 1300积分/次</option>
+                                    <option value="nano-banana-pro">nano-banana-pro - 1800积分/次</option>
                                 </select>
                             </div>
                             <!-- 图像大小选择，仅对pro模型显示 -->
@@ -241,10 +242,8 @@
                             <span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="提取主体，删除背景，增强画质，提高清晰度。">提取主体</span>
 							<span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="去除所有黑色文字，保持图章文字的完整性，白色背景，图片变清晰">提取图章</span>
                             <span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="移除所有的内容提取出菜品，只保留菜品">提取菜品</span>
-							<span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="移除所有中文，英文，数字等，只保留背景图。">提取背景</span>
-							<span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="移除所有中文，英文，数字,不要改变参考图比例。">去掉文字</span>
-							<span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="增强画质">增强画质</span>
-                            <span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="透视矫正，矫正为正视图">透视矫正</span>
+							<span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="移除所有的内容提取出背景，只保留背景图。">提取背景</span>
+							<span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="删除图中所有中文，英文，数字等文字。请仔细检查，确保图像中不保留任何文字。">去掉文字</span>
                             <span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="白底黑内容">白底黑内容</span>
                             <span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="移除背景，改为白色背景">白色背景</span>
                             <span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="对照片中的物品进行高品质修复，去除划痕、灰尘、锈迹与凹痕，提升画面清晰度与材质纹理表现，同时保持原始光影、拍摄角度与图像构图不变。">物品材质修复</span>
@@ -255,8 +254,7 @@
                             <span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="根据图中内容，绘制为黑白线稿的草图，并适合矢量追踪">转为线稿图</span>
                             <span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="转为矢量图风格，去掉所有阴影效果，去掉所有灯光效果。轮廓平滑干净。要尽量减少颜色过渡，临近颜色取中间值填充纯色。">转为二维图</span>
                             <span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="给文字内容搭配一个背景，去掉所有文字，只要背景">生成背景图</span>
-                            <span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="去除图中对象身上的布料纹理、褶皱、折痕，保持设计内容不变，转为高清的平面设计稿">去布纹理</span>
-                            <span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="消除布纹，优化布纹处细节，移除噪点，色块平滑。,不要改变参考图比例。">去布纹理2</span>
+                            <span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="消除布纹、褶皱、折痕，优化布纹处细节，移除噪点，色块平滑。保持内容不变">去布纹理</span>
                             <span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="改为夜间亮化效果图，发光字，发光灯带">夜间亮化效果图</span>
                             <span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="将图像中的所有设计元素完全分离，转换为独立的平面设计素材。每个元素必须：1) 完全独立无连接；2) 元素间保持至少20像素的最小间距；3) 采用严格的网格化布局排列；4) 所有元素正面朝向，无角度倾斜；5) 按元素类型和大小智能分组排列；6) 浅灰色(#f5f5f5)极简背景，无任何装饰元素；7) 元素排列遵循从左到右、从上到下的阅读顺序；8) 如元素过多则自动创建多行多列布局，确保所有元素完整可见；9) 生成前进行重叠检测，如有重叠风险则自动调整元素位置和大小。">拆分(大件)</span>
 							<span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="把每个元素提取出来，先从左往右依次排列，放不下了再从上到下依次把每个元素平铺排列在9:21的灰色画布上。要求每个元素完整展示，元素之间不要重叠，元素与元素之间留一定间距。去掉装饰的气球。保证展开图我能直接使用！">拆分(细小)</span>
@@ -265,6 +263,7 @@
 							<span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="把图片变清晰，增强画质，不要模糊效果，还原细节。保持参考图尺寸不变。">变清晰</span>
 							<span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="这是一张拍摄的海报画面，截取海报部分，清除海报透视，垂直对齐正面视角，移除所有破损划痕和噪点，按照要求的比例把他变成电子版海报。">转电子版</span>
 							<span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="消除图中内容的透视角度，改为正面图，复原为可以印刷的平面设计稿件，修补所有划痕破损瑕疵">复原设计稿</span>
+							<span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="消除图中内容的透视角度，改为正面图，复原为可以印刷的平面设计稿件，严格按照手绘稿的设计复原，按3x3的正方形生成多种风格。">复原手绘稿</span>
 							<span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="按照要求的比例根据我提供的菜品名称菜品价格及备注要求，不要更改内容和添加内容，所有内容合理排版，设计一个点菜单海报，风格根据菜品类型智能选择。参考图是手写的菜品目录，识别文字和价格，确定文字正确性，所有内容合理排版，不要更改内容和添加内容海报，配图要真实的摄影照片。">手写菜单</span>
 							<span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="参考图一是平面设计图，参考图二是现场照片，根据平面设计图的布局和结构，在现场照片的基础上做一个逼真的白天发光字效果的门头招牌效果图。">门头(白天)效果图</span>
 							<span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="参考图一是平面设计图，参考图二是现场照片，根据平面设计图的布局和结构，在现场照片的基础上做一个逼真的夜间发光字效果的门头招牌效果图。">门头(夜晚)效果图</span>
@@ -272,6 +271,8 @@
 							<span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="消除图中手绘稿的透视偏斜，改为正面图，并转换为CAD黑白图纸">手绘稿转CAD平面图</span>
 							<span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="生成海报，按照要求的比例生成电子版海报，海报内容：">生成海报</span>
 							<span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="去除所有包含数字的圆形标记，不改动标记外的所有内容；标记1更改为XX；标记2更改为XX；标记3更改为XX；标记4更改为XX；标记5更改为XX；">修改指定区域</span>
+							<span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="将这个图片重新排版，尺寸修改为：800x1800cm">修改尺寸-重新排版</span>
+
                         </div>
                     </div>
                     <div class="mb-4">
@@ -929,7 +930,7 @@
     // 控制图像大小选择的显示/隐藏
     function updateImageSizeVisibility(subModel) {
         const imageSizeContainer = document.getElementById('bananaImageSizeContainer');
-        if (subModel === 'nano-banana-pro') {
+        if (subModel === 'nano-banana-pro' || subModel === 'nano-banana-2') {
             imageSizeContainer.classList.remove('hidden');
         } else {
             imageSizeContainer.classList.add('hidden');
@@ -1367,7 +1368,7 @@
         const creditStatus = document.getElementById('creditStatus');
         
         // 计算不同模型所需的最小积分
-        const minBanana = 1400;
+        const minBanana = 1300;
         const minBananaPro = 1800;
         const minGpt = 400;
         
@@ -1505,8 +1506,8 @@
             variants = 1; // Banana模型固定生成1张
             aspectRatio = document.getElementById('imageSize').value;
         } else {
-            subModel = 'sora-image'; // GPT模型使用sora-image（根据API文档）
-            variants = parseInt(document.getElementById('gptVariants').value);
+            subModel = document.getElementById('gptVariants').value; // GPT模型使用用户选择的子模型
+            variants = 1; // GPT模型固定生成1张
             aspectRatio = document.getElementById('imageSize').value;
             imageSize = null; // GPT模型不使用imageSize参数
         }
@@ -1534,14 +1535,14 @@
         // 计算所需积分
         let requiredCredit;
         if (mainModel === 'banana') {
-            if (subModel === 'nano-banana') {
-                requiredCredit = 1400;
+            if (subModel === 'nano-banana-2') {
+                requiredCredit = 1300;
             } else if (subModel === 'nano-banana-pro') {
                 requiredCredit = 1800;
             }
         } else {
-            // GPT模型：基础400积分 + 额外图片积分（每增加一张图额外消耗50积分）
-            requiredCredit = 400 + (variants - 1) * 50;
+            // GPT模型：固定400积分
+            requiredCredit = 400;
         }
         
         // 检查当前API Key积分，如果不足则自动切换
@@ -1583,8 +1584,8 @@
                 shutProgress: false
             };
             
-            // 仅当使用pro模型时添加imageSize参数
-            if (subModel === 'nano-banana-pro') {
+            // 当使用支持imageSize的模型时添加参数
+            if (subModel === 'nano-banana-pro' || subModel === 'nano-banana-2') {
                 requestData.imageSize = imageSize;
             }
             
@@ -1654,7 +1655,7 @@
                 appState.currentTaskId = result.data.id;
                 
                 // 开始轮询结果，使用 finalApiKey
-                pollResult(finalApiKey);
+                pollResult(finalApiKey, requiredCredit);
             } else {
                 throw new Error(result.msg || '生成失败');
             }
@@ -1666,7 +1667,7 @@
     }
 
     // 轮询生成结果
-    async function pollResult(apiKey) {
+    async function pollResult(apiKey, requiredCredit) {
         if (!appState.currentTaskId) return;
         
         try {
@@ -1734,6 +1735,8 @@
                     
                     showToast('图片生成成功，已自动保存到历史记录', 'success');
                     
+                    // 扣除积分
+                    appState.credits[apiKey] -= requiredCredit;
                     // 刷新积分显示
                     updateCreditDisplay();
                     
@@ -1748,7 +1751,7 @@
                     throw new Error(errorMessage);
                 } else {
                     // 继续轮询
-                    setTimeout(() => pollResult(apiKey), 2000);
+                    setTimeout(() => pollResult(apiKey, requiredCredit), 2000);
                 }
             } else if (result.code === -22) {
                 // 任务不存在
@@ -1783,29 +1786,6 @@
         }
         
         return bestApiKey;
-    }
-
-    // 寻找积分足够的API Key
-    function findAvailableApiKey(requiredCredit) {
-        for (const [apiKey, credits] of Object.entries(appState.credits)) {
-            if (credits >= requiredCredit) {
-                return apiKey;
-            }
-        }
-        return null;
-    }
-
-    // 获取所有API Key中的最高积分
-    function getMaxCredit() {
-        let maxCredits = 0;
-        
-        for (const credits of Object.values(appState.credits)) {
-            if (credits > maxCredits) {
-                maxCredits = credits;
-            }
-        }
-        
-        return maxCredits;
     }
 
     // 下载图片 - 修复版本，添加文件名前缀
