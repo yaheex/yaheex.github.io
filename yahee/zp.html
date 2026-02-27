@@ -52,6 +52,7 @@
             margin-bottom: 8px;
             background: linear-gradient(90deg, #3498db, #9b59b6);
             -webkit-background-clip: text;
+            background-clip: text;
             -webkit-text-fill-color: transparent;
         }
         
@@ -542,8 +543,8 @@
                                 <button data-pixels="300x400" class="ratio-btn">
                                     300*400
                                 </button>
-                                <button data-ratio="free" class="ratio-btn">
-                                    <i class="fas fa-expand"></i> 自由
+                                <button data-pixels="120x160" class="ratio-btn">
+                                    120*160
                                 </button>
                             </div>
                             <div class="custom-ratio" style="display: flex; align-items: center; gap: 10px;">
@@ -565,9 +566,10 @@
                             <div class="preset-controls">
                                 <select id="presetSelect">
                                     <option value="">选择预设</option>
-                                    <option value="600x800">600*800 dpi (  5~200kb  )</option>
-                                    <option value="480x640">480*640 dpi (  20~40kb  )</option>
-                                    <option value="300x400">300*400 dpi (  20~50kb  )</option>
+                                    <option value="600x800">600*800 - (  5~200kb  )</option>
+                                    <option value="480x640">480*640 - (  20~40kb  )</option>
+                                    <option value="300x400">300*400 - (  20~50kb  )</option>
+                                    <option value="120x160">120*160 - (  0~60kb  )</option>
                                 </select>
                                 <button id="applyPreset">
                                     <i class="fas fa-check-circle" style="margin-right: 8px;"></i> 应用
@@ -696,6 +698,13 @@
                     height: 400,
                     resolution: 300,
                     size: 45
+                },
+                '120x160': {
+                    name: '120*160',
+                    width: 120,
+                    height: 160,
+                    resolution: 300,
+                    size: 55
                 }
             };
             
@@ -763,35 +772,15 @@
                     // 添加当前按钮的active类
                     this.classList.add('active');
                     
-                    // 检查是否是像素尺寸按钮
+                    // 处理具体像素尺寸
                     const pixels = this.getAttribute('data-pixels');
-                    if (pixels) {
-                        // 处理具体像素尺寸
-                        const [width, height] = pixels.split('x');
-                        const w = parseInt(width);
-                        const h = parseInt(height);
-                        if (cropper) {
-                            cropper.setAspectRatio(w / h);
-                        }
-                        currentRatio = { width: w, height: h };
-                    } else {
-                        // 处理比例按钮
-                        const ratio = this.getAttribute('data-ratio');
-                        if (ratio === 'free') {
-                            if (cropper) {
-                                cropper.setAspectRatio(NaN);
-                            }
-                            currentRatio = { width: null, height: null };
-                        } else {
-                            const [width, height] = ratio.split('/');
-                            const w = parseFloat(width);
-                            const h = parseFloat(height);
-                            if (cropper) {
-                                cropper.setAspectRatio(w / h);
-                            }
-                            currentRatio = { width: w, height: h };
-                        }
+                    const [width, height] = pixels.split('x');
+                    const w = parseInt(width);
+                    const h = parseInt(height);
+                    if (cropper) {
+                        cropper.setAspectRatio(w / h);
                     }
+                    currentRatio = { width: w, height: h };
                 });
             });
             
@@ -860,23 +849,9 @@
                 
                 // 确定最终裁剪尺寸
                 let outputWidth, outputHeight;
-                if (currentRatio.width && currentRatio.height) {
-                    // 检查是否是具体像素尺寸（600x800, 480x640, 300x400）或用户自定义尺寸
-                    const isSpecificSize = [
-                        {w: 600, h: 800},
-                        {w: 480, h: 640},
-                        {w: 300, h: 400},
-                    ].some(size => size.w === currentRatio.width && size.h === currentRatio.height);
-                    
-                    // 对于具体像素尺寸和用户自定义尺寸，直接使用固定值
-                    outputWidth = currentRatio.width;
-                    outputHeight = currentRatio.height;
-                } else {
-                    // 自由比例时，使用裁剪框的实际尺寸
-                    const cropBoxData = cropper.getCropBoxData();
-                    outputWidth = Math.round(cropBoxData.width);
-                    outputHeight = Math.round(cropBoxData.height);
-                }
+                // 直接使用当前设置的固定尺寸
+                outputWidth = currentRatio.width;
+                outputHeight = currentRatio.height;
                 
                 // 获取裁剪后的画布
                 const canvas = cropper.getCroppedCanvas({
