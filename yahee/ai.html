@@ -66,6 +66,12 @@
             .upload-progress-bar {
                 background-color: #8B5CF6; height: 0.375rem; border-radius: 9999px; transition: all 0.3s ease;
             }
+            .task-tab {
+                cursor: pointer; transition: all 0.2s ease;
+            }
+            .task-tab:hover {
+                background-color: rgba(139, 92, 246, 0.05);
+            }
         }
     </style>
 </head>
@@ -260,7 +266,7 @@
 							<span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="把每个元素提取出来，先从左往右依次排列，放不下了再从上到下依次把每个元素平铺排列在9:21的灰色画布上。要求每个元素完整展示，元素之间不要重叠，元素与元素之间留一定间距。去掉装饰的气球。保证展开图我能直接使用！">拆分(细小)</span>
 							<span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="将这个海报不和谐的元素融合，优化细节，提高整体清晰度，并精准识别图片中所有文字，确保文字100%无错乱、无遗漏；">重排海报</span>
 							<span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="按照要求的比例，重新布局图中元素，保持元素不变。">改变布局</span>
-							<span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="把图片变清晰，增强画质，不要模糊效果，还原细节。保持参考图尺寸不变。">变清晰</span>
+							<span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="把图片变清晰，增强画质，不要模糊效果，还原细节，并精准识别图片中所有文字，确保文字100%无错乱、无遗漏。">变清晰</span>
 							<span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="这是一张拍摄的海报画面，截取海报部分，清除海报透视，垂直对齐正面视角，移除所有破损划痕和噪点，按照要求的比例把他变成电子版海报。">转电子版</span>
 							<span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="消除图中内容的透视角度，改为正面图，复原为可以印刷的平面设计稿件，修补所有划痕破损瑕疵">复原设计稿</span>
 							<span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="消除图中内容的透视角度，改为正面图，复原为可以印刷的平面设计稿件，严格按照手绘稿的设计复原，按3x3的正方形生成多种风格。">复原手绘稿</span>
@@ -286,42 +292,149 @@
                 </div>
 
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    <!-- 生成预览 -->
+                    <!-- 左边：任务管理和预览 -->
                     <div class="lg:col-span-2">
                         <div class="bg-white rounded-xl p-5 shadow-sm card-shadow">
                             <div class="flex justify-between items-center mb-4">
                                 <h2 class="text-lg font-semibold flex items-center gap-2">
-                                    <i class="fa fa-eye text-primary"></i>
-                                    生成预览
+                                    <i class="fa fa-tasks text-primary"></i>
+                                    任务管理
                                 </h2>
-                                <div id="generationStatus" class="text-sm text-secondary hidden">
-                                    <i class="fa fa-spinner fa-spin mr-1"></i>
-                                    <span>生成中...</span>
+                                <span id="taskCount" class="text-sm text-secondary">
+                                    运行中: <span id="runningTaskCount">0</span>/6
+                                </span>
+                            </div>
+                            <!-- 预览区域 -->
+                            <div class="p-4">
+                                <div class="grid grid-cols-6 gap-3">
+                                    <!-- 任务1 -->
+                                    <div class="text-center">
+                                        <div class="flex flex-col items-center mb-2">
+                                            <div class="relative w-8 h-8 mb-2">
+                                                <svg class="w-full h-full" viewBox="0 0 36 36">
+                                                    <circle class="text-gray-200" stroke-width="2" stroke="currentColor" fill="transparent" r="16" cx="18" cy="18"/>
+                                                    <circle id="progress1" class="text-primary" stroke-width="2" stroke="currentColor" fill="transparent" r="16" cx="18" cy="18" stroke-dasharray="100" stroke-dashoffset="100" stroke-linecap="round"/>
+                                                </svg>
+                                                <div id="progressText1" class="absolute inset-0 flex items-center justify-center text-xs font-medium">0%</div>
+                                            </div>
+                                        </div>
+                                        <div id="preview1" class="rounded-lg p-2 min-h-[100px] flex flex-col items-center justify-center bg-gray-50">
+                                            <i class="fa fa-image text-2xl text-gray-300 mb-1"></i>
+                                        </div>
+                                        <button class="mt-2 text-xs bg-primary/10 text-primary px-2 py-1 rounded download-btn" data-task="1">
+                                            <i class="fa fa-download mr-1"></i>下载
+                                        </button>
+                                    </div>
+                                    <!-- 任务2 -->
+                                    <div class="text-center">
+                                        <div class="flex flex-col items-center mb-2">
+                                            <div class="relative w-8 h-8 mb-2">
+                                                <svg class="w-full h-full" viewBox="0 0 36 36">
+                                                    <circle class="text-gray-200" stroke-width="2" stroke="currentColor" fill="transparent" r="16" cx="18" cy="18"/>
+                                                    <circle id="progress2" class="text-primary" stroke-width="2" stroke="currentColor" fill="transparent" r="16" cx="18" cy="18" stroke-dasharray="100" stroke-dashoffset="100" stroke-linecap="round"/>
+                                                </svg>
+                                                <div id="progressText2" class="absolute inset-0 flex items-center justify-center text-xs font-medium">0%</div>
+                                            </div>
+                                        </div>
+                                        <div id="preview2" class="rounded-lg p-2 min-h-[100px] flex flex-col items-center justify-center bg-gray-50">
+                                            <i class="fa fa-image text-2xl text-gray-300 mb-1"></i>
+                                        </div>
+                                        <button class="mt-2 text-xs bg-primary/10 text-primary px-2 py-1 rounded download-btn" data-task="2">
+                                            <i class="fa fa-download mr-1"></i>下载
+                                        </button>
+                                    </div>
+                                    <!-- 任务3 -->
+                                    <div class="text-center">
+                                        <div class="flex flex-col items-center mb-2">
+                                            <div class="relative w-8 h-8 mb-2">
+                                                <svg class="w-full h-full" viewBox="0 0 36 36">
+                                                    <circle class="text-gray-200" stroke-width="2" stroke="currentColor" fill="transparent" r="16" cx="18" cy="18"/>
+                                                    <circle id="progress3" class="text-primary" stroke-width="2" stroke="currentColor" fill="transparent" r="16" cx="18" cy="18" stroke-dasharray="100" stroke-dashoffset="100" stroke-linecap="round"/>
+                                                </svg>
+                                                <div id="progressText3" class="absolute inset-0 flex items-center justify-center text-xs font-medium">0%</div>
+                                            </div>
+                                        </div>
+                                        <div id="preview3" class="rounded-lg p-2 min-h-[100px] flex flex-col items-center justify-center bg-gray-50">
+                                            <i class="fa fa-image text-2xl text-gray-300 mb-1"></i>
+                                        </div>
+                                        <button class="mt-2 text-xs bg-primary/10 text-primary px-2 py-1 rounded download-btn" data-task="3">
+                                            <i class="fa fa-download mr-1"></i>下载
+                                        </button>
+                                    </div>
+                                    <!-- 任务4 -->
+                                    <div class="text-center">
+                                        <div class="flex flex-col items-center mb-2">
+                                            <div class="relative w-8 h-8 mb-2">
+                                                <svg class="w-full h-full" viewBox="0 0 36 36">
+                                                    <circle class="text-gray-200" stroke-width="2" stroke="currentColor" fill="transparent" r="16" cx="18" cy="18"/>
+                                                    <circle id="progress4" class="text-primary" stroke-width="2" stroke="currentColor" fill="transparent" r="16" cx="18" cy="18" stroke-dasharray="100" stroke-dashoffset="100" stroke-linecap="round"/>
+                                                </svg>
+                                                <div id="progressText4" class="absolute inset-0 flex items-center justify-center text-xs font-medium">0%</div>
+                                            </div>
+                                        </div>
+                                        <div id="preview4" class="rounded-lg p-2 min-h-[100px] flex flex-col items-center justify-center bg-gray-50">
+                                            <i class="fa fa-image text-2xl text-gray-300 mb-1"></i>
+                                        </div>
+                                        <button class="mt-2 text-xs bg-primary/10 text-primary px-2 py-1 rounded download-btn" data-task="4">
+                                            <i class="fa fa-download mr-1"></i>下载
+                                        </button>
+                                    </div>
+                                    <!-- 任务5 -->
+                                    <div class="text-center">
+                                        <div class="flex flex-col items-center mb-2">
+                                            <div class="relative w-8 h-8 mb-2">
+                                                <svg class="w-full h-full" viewBox="0 0 36 36">
+                                                    <circle class="text-gray-200" stroke-width="2" stroke="currentColor" fill="transparent" r="16" cx="18" cy="18"/>
+                                                    <circle id="progress5" class="text-primary" stroke-width="2" stroke="currentColor" fill="transparent" r="16" cx="18" cy="18" stroke-dasharray="100" stroke-dashoffset="100" stroke-linecap="round"/>
+                                                </svg>
+                                                <div id="progressText5" class="absolute inset-0 flex items-center justify-center text-xs font-medium">0%</div>
+                                            </div>
+                                        </div>
+                                        <div id="preview5" class="rounded-lg p-2 min-h-[100px] flex flex-col items-center justify-center bg-gray-50">
+                                            <i class="fa fa-image text-2xl text-gray-300 mb-1"></i>
+                                        </div>
+                                        <button class="mt-2 text-xs bg-primary/10 text-primary px-2 py-1 rounded download-btn" data-task="5">
+                                            <i class="fa fa-download mr-1"></i>下载
+                                        </button>
+                                    </div>
+                                    <!-- 任务6 -->
+                                    <div class="text-center">
+                                        <div class="flex flex-col items-center mb-2">
+                                            <div class="relative w-8 h-8 mb-2">
+                                                <svg class="w-full h-full" viewBox="0 0 36 36">
+                                                    <circle class="text-gray-200" stroke-width="2" stroke="currentColor" fill="transparent" r="16" cx="18" cy="18"/>
+                                                    <circle id="progress6" class="text-primary" stroke-width="2" stroke="currentColor" fill="transparent" r="16" cx="18" cy="18" stroke-dasharray="100" stroke-dashoffset="100" stroke-linecap="round"/>
+                                                </svg>
+                                                <div id="progressText6" class="absolute inset-0 flex items-center justify-center text-xs font-medium">0%</div>
+                                            </div>
+                                        </div>
+                                        <div id="preview6" class="rounded-lg p-2 min-h-[100px] flex flex-col items-center justify-center bg-gray-50">
+                                            <i class="fa fa-image text-2xl text-gray-300 mb-1"></i>
+                                        </div>
+                                        <button class="mt-2 text-xs bg-primary/10 text-primary px-2 py-1 rounded download-btn" data-task="6">
+                                            <i class="fa fa-download mr-1"></i>下载
+                                        </button>
+                                    </div>
                                 </div>
-                            </div>
-                            <div id="previewResult" class="border border-gray-200 rounded-lg p-6 text-center bg-gray-50 min-h-[300px] flex flex-col items-center justify-center">
-                                <i class="fa fa-image text-4xl text-gray-300 mb-3"></i>
-                                <p class="text-secondary mb-1">生成的图片将显示在这里</p>
-                                <p class="text-xs text-gray-500">生成的图片链接有效期为2小时</p>
-                            </div>
-                            <div id="resultActions" class="mt-4 flex justify-center gap-3 hidden">
-                                <button id="downloadBtn" class="bg-success text-white px-4 py-2 rounded-lg btn-hover flex items-center gap-1">
-                                    <i class="fa fa-download"></i>
-                                    <span>下载图片</span>
-                                </button>
-                                <button id="saveHistoryBtn" class="bg-primary text-white px-4 py-2 rounded-lg btn-hover flex items-center gap-1">
-                                    <i class="fa fa-save"></i>
-                                    <span>保存到历史</span>
-                                </button>
-                                <button id="regenerateBtn" class="bg-secondary text-white px-4 py-2 rounded-lg btn-hover flex items-center gap-1">
-                                    <i class="fa fa-refresh"></i>
-                                    <span>重新生成</span>
-                                </button>
+                                <div id="resultActions" class="mt-4 flex justify-center gap-3 hidden">
+                                    <button id="downloadBtn" class="bg-success text-white px-4 py-2 rounded-lg btn-hover flex items-center gap-1">
+                                        <i class="fa fa-download"></i>
+                                        <span>下载图片</span>
+                                    </button>
+                                    <button id="saveHistoryBtn" class="bg-primary text-white px-4 py-2 rounded-lg btn-hover flex items-center gap-1">
+                                        <i class="fa fa-save"></i>
+                                        <span>保存到历史</span>
+                                    </button>
+                                    <button id="regenerateBtn" class="bg-secondary text-white px-4 py-2 rounded-lg btn-hover flex items-center gap-1">
+                                        <i class="fa fa-refresh"></i>
+                                        <span>重新生成</span>
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- 历史生成记录 -->
+                    <!-- 右边：历史生成记录 -->
                     <div class="lg:col-span-1">
                         <div class="bg-white rounded-xl p-5 shadow-sm card-shadow h-full">
                             <div class="flex justify-between items-center mb-4">
@@ -331,7 +444,7 @@
                                 </h2>
                                 <button id="clearHistoryBtn" class="text-sm text-danger hover:underline">清空</button>
                             </div>
-                            <div id="historyContainer" class="grid grid-cols-2 gap-2 max-h-[300px] overflow-y-auto">
+                            <div id="historyContainer" class="grid grid-cols-3 gap-3 max-h-[650px] overflow-y-auto">
                                 <div class="col-span-full text-center py-8 text-secondary">
                                     <i class="fa fa-folder-open-o text-3xl mb-3"></i>
                                     <p class="text-sm">暂无历史记录</p>
@@ -438,8 +551,8 @@
         credits: {}, // 存储每个API Key的积分
         currentApiKey: null, // 当前使用的API Key
         currentServer: 'china', // 默认使用国内服务器
-        currentTaskId: null, // 当前生成任务ID
-        isGenerating: false, // 是否正在生成中
+        tasks: [], // 任务队列
+        maxConcurrentTasks: 6, // 最大并发任务数
         uploadedImageUrls: [], // 存储上传到图床的图片URL
         currentImageUrl: null // 当前生成的图片URL
     };
@@ -517,6 +630,22 @@
         elements.presetTags.addEventListener('click', (e) => {
             if (e.target.tagName === 'SPAN' && e.target.dataset.tag) {
                 toggleTag(e.target.dataset.tag);
+            }
+        });
+        
+        // 下载按钮点击事件
+        document.addEventListener('click', (e) => {
+            if (e.target.closest('.download-btn')) {
+                const btn = e.target.closest('.download-btn');
+                const taskIndex = parseInt(btn.dataset.task) - 1;
+                const task = appState.tasks[taskIndex];
+                
+                if (task && task.status === 'succeeded' && task.imageUrl) {
+                    // 调用下载函数
+                    downloadImage(task.imageUrl);
+                } else {
+                    showToast('该任务没有可下载的图片', 'warning');
+                }
             }
         });
 
@@ -1482,15 +1611,17 @@
 
     // 生成图片 - 根据API文档更新GPT模型部分
     async function generateImage() {
-        if (appState.isGenerating) {
-            showToast('正在生成中，请稍候...', 'warning');
-            return;
-        }
-
         // 检查是否有可用的API Key
         if (appState.apiKeys.length === 0) {
             showToast('请先添加API Key', 'warning');
             showApiModal();
+            return;
+        }
+
+        // 检查当前运行的任务数量
+        const runningTasks = appState.tasks.filter(task => task.status === 'running').length;
+        if (runningTasks >= appState.maxConcurrentTasks) {
+            showToast(`当前已有${runningTasks}个任务在运行，最多同时运行${appState.maxConcurrentTasks}个任务`, 'warning');
             return;
         }
 
@@ -1521,7 +1652,7 @@
         }
         
         if (!prompt) {
-            showToast('请输入描述词', 'warning');
+            showToast('描述词都不写，想起飞呢~', 'warning');
             return;
         }
         
@@ -1617,21 +1748,27 @@
             url = `${apiServers[appState.currentServer]}/v1/draw/completions`;
         }
         
-        // 设置生成状态
-        appState.isGenerating = true;
-        elements.generateBtn.disabled = true;
-        elements.generationStatus.classList.remove('hidden');
-        elements.previewResult.innerHTML = `
-            <div class="flex flex-col items-center">
-                <i class="fa fa-spinner fa-spin text-4xl text-primary mb-3"></i>
-                <p class="text-secondary mb-1">正在生成图片，请稍候...</p>
-                <p class="text-xs text-gray-500">这可能需要30秒到2分钟</p>
-                ${referenceUrls.length > 0 ? `<p class="text-xs text-primary mt-2">使用 ${referenceUrls.length} 张参考图片</p>` : ''}
-                <p class="text-xs text-gray-500 mt-2">当前API Key积分: ${currentCredit}</p>
-                <p class="text-xs text-warning mt-1">预计消耗: ${requiredCredit} 积分</p>
-            </div>
-        `;
-        elements.resultActions.classList.add('hidden');
+        // 创建新任务
+        const taskId = Date.now();
+        const task = {
+            id: taskId,
+            status: 'running',
+            apiKey: finalApiKey,
+            requiredCredit: requiredCredit,
+            mainModel: mainModel,
+            subModel: subModel,
+            prompt: prompt,
+            aspectRatio: aspectRatio,
+            referenceUrls: referenceUrls,
+            startTime: new Date(),
+            progress: 0
+        };
+        
+        // 添加任务到任务队列
+        appState.tasks.push(task);
+        
+        // 更新任务管理UI
+        updateTaskManagerUI();
         
         try {
             // 发送请求，使用 finalApiKey
@@ -1651,24 +1788,27 @@
             const result = await response.json();
             
             if (result.code === 0) {
-                // 保存任务ID
-                appState.currentTaskId = result.data.id;
+                // 更新任务ID
+                task.taskId = result.data.id;
                 
                 // 开始轮询结果，使用 finalApiKey
-                pollResult(finalApiKey, requiredCredit);
+                pollResult(task);
             } else {
                 throw new Error(result.msg || '生成失败');
             }
         } catch (error) {
             console.error('生成图片失败:', error);
             showToast('生成失败: ' + error.message, 'error');
-            resetGenerationState();
+            // 更新任务状态
+            task.status = 'failed';
+            task.error = error.message;
+            updateTaskManagerUI();
         }
     }
 
     // 轮询生成结果
-    async function pollResult(apiKey, requiredCredit) {
-        if (!appState.currentTaskId) return;
+    async function pollResult(task) {
+        if (!task.taskId) return;
         
         try {
             const baseURL = apiServers[appState.currentServer];
@@ -1678,10 +1818,10 @@
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${apiKey}`
+                    'Authorization': `Bearer ${task.apiKey}`
                 },
                 body: JSON.stringify({
-                    id: appState.currentTaskId
+                    id: task.taskId
                 })
             });
             
@@ -1694,18 +1834,12 @@
             if (result.code === 0) {
                 const data = result.data;
                 
-                // 更新进度显示
-                elements.previewResult.innerHTML = `
-                    <div class="flex flex-col items-center">
-                        <div class="w-full bg-gray-200 rounded-full h-2.5 mb-4">
-                            <div class="bg-primary h-2.5 rounded-full" style="width: ${data.progress}%"></div>
-                        </div>
-                        <p class="text-secondary mb-1">生成进度: ${data.progress}%</p>
-                        <p class="text-xs text-gray-500">状态: ${data.status}</p>
-                        ${data.failure_reason ? `<p class="text-xs text-danger mt-1">失败原因: ${data.failure_reason}</p>` : ''}
-                        ${data.error ? `<p class="text-xs text-danger mt-1">错误信息: ${data.error}</p>` : ''}
-                    </div>
-                `;
+                // 更新任务进度
+                task.progress = data.progress;
+                task.status = data.status;
+                
+                // 更新任务管理UI
+                updateTaskManagerUI();
                 
                 // 检查是否完成
                 if (data.status === 'succeeded' && data.results && data.results.length > 0) {
@@ -1713,22 +1847,16 @@
                     const imageUrl = data.results[0].url;
                     const imageContent = data.results[0].content || '生成完成';
                     
-                    elements.previewResult.innerHTML = `
-                        <img src="${imageUrl}" alt="生成的图片" class="max-w-full max-h-[300px] object-contain rounded-lg zoomable-image" id="generatedImage">
-                        <p class="text-xs text-gray-500 mt-2">${imageContent}</p>
-                        <p class="text-xs text-success mt-1">生成完成 - 已自动保存到历史记录</p>
-                    `;
-                    elements.resultActions.classList.remove('hidden');
-                    resetGenerationState();
+                    // 更新任务信息
+                    task.imageUrl = imageUrl;
+                    task.content = imageContent;
+                    task.endTime = new Date();
+                    
+                    // 更新任务管理UI
+                    updateTaskManagerUI();
                     
                     // 保存生成的图片URL
                     appState.currentImageUrl = imageUrl;
-                    
-                    // 为生成的图片添加点击放大功能
-                    document.getElementById('generatedImage').addEventListener('click', () => {
-                        document.getElementById('previewModalImg').src = imageUrl;
-                        document.getElementById('imagePreviewModal').classList.remove('hidden');
-                    });
                     
                     // 自动保存到历史记录
                     saveToHistory(true);
@@ -1736,7 +1864,7 @@
                     showToast('图片生成成功，已自动保存到历史记录', 'success');
                     
                     // 扣除积分
-                    appState.credits[apiKey] -= requiredCredit;
+                    appState.credits[task.apiKey] -= task.requiredCredit;
                     // 刷新积分显示
                     updateCreditDisplay();
                     
@@ -1748,29 +1876,84 @@
                     if (data.error) {
                         errorMessage += ` (${data.error})`;
                     }
+                    task.status = 'failed';
+                    task.error = errorMessage;
+                    task.endTime = new Date();
+                    
+                    // 从任务列表中移除失败的任务
+                    setTimeout(() => {
+                        const taskIndex = appState.tasks.findIndex(t => t.id === task.id);
+                        if (taskIndex !== -1) {
+                            appState.tasks.splice(taskIndex, 1);
+                            updateTaskManagerUI();
+                        }
+                    }, 2000); // 2秒后移除，让用户有时间看到失败状态
+                    
                     throw new Error(errorMessage);
                 } else {
                     // 继续轮询
-                    setTimeout(() => pollResult(apiKey, requiredCredit), 2000);
+                    setTimeout(() => pollResult(task), 2000);
                 }
             } else if (result.code === -22) {
                 // 任务不存在
+                task.status = 'failed';
+                task.error = '任务不存在或已过期';
+                task.endTime = new Date();
+                
+                // 从任务列表中移除失败的任务
+                setTimeout(() => {
+                    const taskIndex = appState.tasks.findIndex(t => t.id === task.id);
+                    if (taskIndex !== -1) {
+                        appState.tasks.splice(taskIndex, 1);
+                        updateTaskManagerUI();
+                    }
+                }, 2000); // 2秒后移除，让用户有时间看到失败状态
+                
                 throw new Error('任务不存在或已过期');
             } else {
+                task.status = 'failed';
+                task.error = result.msg || '获取结果失败';
+                task.endTime = new Date();
+                
+                // 从任务列表中移除失败的任务
+                setTimeout(() => {
+                    const taskIndex = appState.tasks.findIndex(t => t.id === task.id);
+                    if (taskIndex !== -1) {
+                        appState.tasks.splice(taskIndex, 1);
+                        updateTaskManagerUI();
+                    }
+                }, 2000); // 2秒后移除，让用户有时间看到失败状态
+                
                 throw new Error(result.msg || '获取结果失败');
             }
         } catch (error) {
             console.error('轮询结果失败:', error);
             showToast('获取结果失败: ' + error.message, 'error');
-            resetGenerationState();
+            
+            // 标记任务为失败并从任务列表中移除
+            task.status = 'failed';
+            task.error = error.message;
+            task.endTime = new Date();
+            
+            setTimeout(() => {
+                const taskIndex = appState.tasks.findIndex(t => t.id === task.id);
+                if (taskIndex !== -1) {
+                    appState.tasks.splice(taskIndex, 1);
+                    updateTaskManagerUI();
+                }
+            }, 2000); // 2秒后移除，让用户有时间看到失败状态
         }
     }
 
     // 重置生成状态
     function resetGenerationState() {
-        appState.isGenerating = false;
-        elements.generateBtn.disabled = false;
-        elements.generationStatus.classList.add('hidden');
+        // 不再需要设置isGenerating，因为我们使用任务队列
+        // 检查是否还有运行中的任务
+        const runningTasks = appState.tasks.filter(task => task.status === 'running').length;
+        if (runningTasks === 0) {
+            elements.generateBtn.disabled = false;
+            elements.generationStatus.classList.add('hidden');
+        }
     }
 
     // 获取最佳API Key（积分最高的）
@@ -1789,19 +1972,15 @@
     }
 
     // 下载图片 - 修复版本，添加文件名前缀
-    async function downloadImage() {
-        if (!appState.currentImageUrl) {
+    async function downloadImage(imageUrl = appState.currentImageUrl) {
+        if (!imageUrl) {
             showToast('没有可下载的图片', 'warning');
             return;
         }
         
         try {
-            // 显示下载状态
-            elements.downloadBtn.disabled = true;
-            elements.downloadBtn.innerHTML = '<i class="fa fa-spinner fa-spin"></i><span>下载中...</span>';
-            
             // 获取图片数据
-            const response = await fetch(appState.currentImageUrl);
+            const response = await fetch(imageUrl);
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
@@ -1815,7 +1994,7 @@
             a.href = url;
             
             // 从URL提取文件名，如果没有则使用默认名称
-            const urlParts = appState.currentImageUrl.split('/');
+            const urlParts = imageUrl.split('/');
             let filename = 'generated-image.jpg';
             if (urlParts.length > 0) {
                 const lastPart = urlParts[urlParts.length - 1];
@@ -1844,7 +2023,7 @@
             
             // 备用方法：直接打开图片链接
             const a = document.createElement('a');
-            a.href = appState.currentImageUrl;
+            a.href = imageUrl;
             a.target = '_blank';
             a.rel = 'noopener noreferrer';
             document.body.appendChild(a);
@@ -1852,10 +2031,6 @@
             document.body.removeChild(a);
             
             showToast('已在新标签页打开图片，请右键另存为', 'info');
-        } finally {
-            // 恢复按钮状态
-            elements.downloadBtn.disabled = false;
-            elements.downloadBtn.innerHTML = '<i class="fa fa-download"></i><span>下载图片</span>';
         }
     }
 
@@ -1970,7 +2145,7 @@
             const historyItem = document.createElement('div');
             historyItem.className = 'rounded-lg overflow-hidden border border-gray-200 cursor-pointer';
             historyItem.innerHTML = `
-                <img src="${item.imageUrl}" alt="历史图片" class="w-full h-20 object-cover">
+                <img src="${item.imageUrl}" alt="历史图片" class="w-full h-24 object-cover">
             `;
             historyItem.addEventListener('click', () => {
                 document.getElementById('previewModalImg').src = item.imageUrl;
@@ -2030,6 +2205,67 @@
             });
         } else {
             elements.selectedTagsContainer.classList.add('hidden');
+        }
+    }
+
+    // 更新任务管理UI
+    function updateTaskManagerUI() {
+        const runningTaskCount = document.getElementById('runningTaskCount');
+        
+        // 计算运行中任务数量
+        const runningTasks = appState.tasks.filter(task => task.status === 'running').length;
+        runningTaskCount.textContent = runningTasks;
+        
+        // 更新预览区域
+        appState.tasks.forEach((task, index) => {
+            updatePreviewArea(task, index);
+        });
+    }
+
+    // 更新预览区域
+    function updatePreviewArea(task, index) {
+        // 只处理前6个任务
+        if (index >= 6) return;
+        
+        const previewId = `preview${index + 1}`;
+        const progressId = `progress${index + 1}`;
+        const progressTextId = `progressText${index + 1}`;
+        
+        const previewElement = document.getElementById(previewId);
+        const progressElement = document.getElementById(progressId);
+        const progressTextElement = document.getElementById(progressTextId);
+        
+        if (!previewElement || !progressElement || !progressTextElement) return;
+        
+        // 更新进度
+        const progress = task.progress || 0;
+        const offset = 100 - progress;
+        progressElement.style.strokeDashoffset = offset;
+        progressTextElement.textContent = `${progress}%`;
+        
+        // 更新预览图
+        if (task.status === 'succeeded' && task.imageUrl) {
+            previewElement.innerHTML = `
+                <img src="${task.imageUrl}" alt="生成的图片" class="max-w-full max-h-[80px] object-contain rounded cursor-pointer zoomable-image" data-url="${task.imageUrl}">
+            `;
+            // 添加点击放大功能
+            const imgElement = previewElement.querySelector('img');
+            if (imgElement) {
+                imgElement.addEventListener('click', () => {
+                    document.getElementById('previewModalImg').src = task.imageUrl;
+                    document.getElementById('imagePreviewModal').classList.remove('hidden');
+                });
+            }
+        } else if (task.status === 'failed') {
+            previewElement.innerHTML = `
+                <i class="fa fa-times-circle text-2xl text-red-300 mb-1"></i>
+                <p class="text-xs text-red-500">生成失败</p>
+            `;
+        } else if (task.status === 'running') {
+            previewElement.innerHTML = `
+                <i class="fa fa-spinner fa-spin text-2xl text-primary mb-1"></i>
+                <p class="text-xs text-gray-500">生成中...</p>
+            `;
         }
     }
 
