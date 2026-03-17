@@ -211,7 +211,7 @@
                             <input type="file" id="imageUpload" accept="image/*" multiple class="hidden">
                             <i class="fa fa-cloud-upload text-4xl text-gray-400 mb-3"></i>
                             <p class="text-secondary mb-2">点击或拖拽图片至此处上传</p>
-                            <p class="text-xs text-gray-500">支持JPG、PNG格式，最多上传5张</p>
+                            <p class="text-xs text-gray-500">支持JPG、PNG格式</p>
                         </div>
                         <div id="uploadProgress" class="mt-2 hidden">
                             <div class="flex justify-between text-xs text-gray-600 mb-1">
@@ -243,6 +243,12 @@
                         <i class="fa fa-comment text-primary"></i>
                         描述词配置
                     </h2>
+                    <div class="mb-4 flex gap-4">
+                        <button id="effectBtn" class="bg-primary text-white font-medium py-1.5 px-4 rounded-lg btn-hover flex items-center gap-2">
+                            <i class="fa fa-magic"></i>
+                            <span>一键效果图</span>
+                        </button>
+                    </div>
                     <div class="mb-4">
                         <div class="flex flex-wrap gap-2 max-h-40 overflow-y-auto pr-1" id="presetTags">
                             <span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="提取主体，删除背景，增强画质，提高清晰度。">提取主体</span>
@@ -271,9 +277,6 @@
 							<span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="消除图中内容的透视角度，改为正面图，复原为可以印刷的平面设计稿件，修补所有划痕破损瑕疵">复原设计稿</span>
 							<span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="消除图中内容的透视角度，改为正面图，复原为可以印刷的平面设计稿件，严格按照手绘稿的设计复原，按3x3的正方形生成多种风格。">复原手绘稿</span>
 							<span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="按照要求的比例根据我提供的菜品名称菜品价格及备注要求，不要更改内容和添加内容，所有内容合理排版，设计一个点菜单海报，风格根据菜品类型智能选择。参考图是手写的菜品目录，识别文字和价格，确定文字正确性，所有内容合理排版，不要更改内容和添加内容海报，配图要真实的摄影照片。">手写菜单</span>
-							<span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="参考图一是平面设计图，参考图二是现场照片，根据平面设计图的布局和结构，在现场照片的基础上做一个逼真的白天发光字效果的门头招牌效果图。">门头(白天)效果图</span>
-							<span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="参考图一是平面设计图，参考图二是现场照片，根据平面设计图的布局和结构，在现场照片的基础上做一个逼真的夜间发光字效果的门头招牌效果图。">门头(夜晚)效果图</span>
-							<span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="参考图一是平面设计图，参考图二是现场照片，根据平面设计图的布局和结构，在现场照片的基础上做一个逼真的文化墙效果图。">形象墙效果图 </span>
 							<span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="消除图中手绘稿的透视偏斜，改为正面图，并转换为CAD黑白图纸">手绘稿转CAD平面图</span>
 							<span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="生成海报，按照要求的比例生成电子版海报，海报内容：">生成海报</span>
 							<span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="去除所有包含数字的圆形标记，不改动标记外的所有内容；标记1更改为XX；标记2更改为XX；标记3更改为XX；标记4更改为XX；标记5更改为XX；">修改指定区域</span>
@@ -538,6 +541,199 @@
         <img id="previewModalImg" src="" alt="放大预览" class="max-w-[90%] max-h-[90vh] object-contain">
     </div>
 
+    <!-- 一键效果图模态框 -->
+    <div id="effectModal" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center hidden">
+        <div class="bg-white rounded-xl p-6 w-full max-w-2xl mx-4 shadow-xl">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-semibold">一键效果图</h3>
+                <div class="flex gap-2">
+                    <button id="minimizeEffectModal" class="text-gray-400 hover:text-gray-600">
+                        <i class="fa fa-window-minimize"></i>
+                    </button>
+                    <button id="closeEffectModal" class="text-gray-400 hover:text-gray-600">
+                        <i class="fa fa-times"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- 上传区域 -->
+            <div class="grid grid-cols-3 gap-4 mb-6">
+                <div class="upload-box border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-primary transition-colors cursor-pointer bg-gray-50" data-type="平面设计图">
+                    <input type="file" class="effect-upload hidden" accept="image/*">
+                    <i class="fa fa-plus text-4xl text-gray-400 mb-2"></i>
+                    <p class="text-sm text-gray-600">平面设计图</p>
+                </div>
+                <div class="upload-box border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-primary transition-colors cursor-pointer bg-gray-50" data-type="现场照片">
+                    <input type="file" class="effect-upload hidden" accept="image/*">
+                    <i class="fa fa-plus text-4xl text-gray-400 mb-2"></i>
+                    <p class="text-sm text-gray-600">现场照片</p>
+                </div>
+                <div class="upload-box border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-primary transition-colors cursor-pointer bg-gray-50" data-type="参考效果图">
+                    <input type="file" class="effect-upload hidden" accept="image/*">
+                    <i class="fa fa-plus text-4xl text-gray-400 mb-2"></i>
+                    <p class="text-sm text-gray-600">参考效果图</p>
+                </div>
+            </div>
+            
+            <!-- 效果选择 -->
+            <div class="mb-6">
+                <div class="flex gap-4 mb-4">
+                    <label class="flex items-center gap-1">
+                        <input type="radio" name="effectType" value="culture" class="text-primary">
+                        <span class="text-sm">文化墙效果</span>
+                    </label>
+                    <label class="flex items-center gap-1">
+                        <input type="radio" name="effectType" value="door" class="text-primary">
+                        <span class="text-sm">门头效果</span>
+                    </label>
+                    <label class="flex items-center gap-1">
+                        <input type="radio" name="timeType" value="day" class="text-primary">
+                        <span class="text-sm">白天效果</span>
+                    </label>
+                    <label class="flex items-center gap-1">
+                        <input type="radio" name="timeType" value="night" class="text-primary">
+                        <span class="text-sm">夜间效果</span>
+                    </label>
+                </div>
+            </div>
+            
+            <!-- 效果预设 -->
+            <div class="mb-6">
+                <h4 class="text-sm font-medium text-gray-600 mb-3">效果预设：</h4>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="flex items-center gap-2">
+                        <label class="text-sm">发光字</label>
+                        <select id="glowTextSelect" class="border border-gray-300 rounded px-2 py-1 text-sm">
+                            <option>选择效果</option>
+                            <option>不锈钢包边字</option>
+                            <option>无边字</option>
+                            <option>迷你字</option>
+                            <option>冲孔字</option>
+                            <option>树脂字</option>
+                            <option>通体字</option>
+                            <option>不锈钢支脚</option>
+                            <option>柔性霓虹灯</option>
+                            <option>金属三维字</option>
+                        </select>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <label class="text-sm">不发光</label>
+                        <select id="noGlowSelect" class="border border-gray-300 rounded px-2 py-1 text-sm">
+                            <option>选择效果</option>
+                            <option>PVC字</option>
+                            <option>不锈钢字</option>
+                            <option>铁皮烤漆字</option>
+                            <option>亚克力水晶字</option>
+                            <option>钛金球面字</option>
+                        </select>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <label class="text-sm">光样式</label>
+                        <select id="lightStyleSelect" class="border border-gray-300 rounded px-2 py-1 text-sm">
+                            <option>选择样式</option>
+                            <option>正面发光</option>
+                            <option>背面发光</option>
+                            <option>侧面发光</option>
+                            <option>正面背面发光</option>
+                        </select>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="flex items-center gap-2">
+                            <label class="text-sm">颜色</label>
+                            <select id="colorSelect" class="border border-gray-300 rounded px-2 py-1 text-sm">
+                                <option>选择颜色</option>
+                                <option>红色</option>
+                                <option>橙色</option>
+                                <option>黄色</option>
+                                <option>绿色</option>
+                                <option>蓝色</option>
+                                <option>青色</option>
+                                <option>紫色</option>
+                            </select>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <label class="text-sm">底板</label>
+                            <select id="deerBoardSelect" class="border border-gray-300 rounded px-2 py-1 text-sm">
+                                <option>选择效果</option>
+                                <option>铝塑板</option>
+                                <option>铝单板</option>
+                                <option>长城板</option>
+                                <option>扣板</option>
+                                <option>穿孔板</option>
+                                <option>波浪板</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <label class="text-sm">灯颜色</label>
+                        <select id="lightColorSelect" class="border border-gray-300 rounded px-2 py-1 text-sm">
+                            <option>选择颜色</option>
+                            <option>白光</option>
+                            <option>暖光</option>
+                            <option>冷光</option>
+                        </select>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <label class="text-sm">其他</label>
+                        <select id="otherEffectSelect" class="border border-gray-300 rounded px-2 py-1 text-sm">
+                            <option>选择效果</option>
+                            <option>软膜灯箱</option>
+                            <option>拉布灯箱</option>
+                            <option>亚克力通体灯箱</option>
+                            <option>不锈钢包边亚克力面灯箱</option>
+                            <option>四周灯带</option>
+                            <option>四周跑马灯</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 详细描述词 -->
+            <div class="mb-6">
+                <label for="detailedPrompt" class="block text-sm font-medium text-gray-600 mb-2">输入详细描述词：</label>
+                <textarea id="detailedPrompt" rows="3" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary"></textarea>
+            </div>
+            
+            <!-- 模型选择和分辨率选择 -->
+            <div class="mb-6">
+                <div class="flex gap-4">
+                    <label class="flex items-center gap-1">
+                        <input type="radio" name="bananaModel" value="nano-banana-2" class="text-primary" checked>
+                        <span class="text-sm">nano-banana-2</span>
+                    </label>
+                    <label class="flex items-center gap-1">
+                        <input type="radio" name="bananaModel" value="nano-banana-pro" class="text-primary">
+                        <span class="text-sm">nano-banana-pro</span>
+                    </label>
+                    <label class="flex items-center gap-1">
+                        <input type="radio" name="resolution" value="2K" class="text-primary" checked>
+                        <span class="text-sm">2K</span>
+                    </label>
+                    <label class="flex items-center gap-1">
+                        <input type="radio" name="resolution" value="4K" class="text-primary">
+                        <span class="text-sm">4K</span>
+                    </label>
+                </div>
+            </div>
+            
+            <!-- 按钮 -->
+            <div class="flex justify-center gap-4">
+                <button id="startEffectBtn" class="bg-primary text-white font-medium py-2.5 px-6 rounded-lg btn-hover flex items-center justify-center gap-2">
+                    <i class="fa fa-magic"></i>
+                    <span>开始生成效果图</span>
+                </button>
+                <button id="clearEffectBtn" class="bg-gray-200 text-gray-700 font-medium py-2.5 px-6 rounded-lg btn-hover flex items-center justify-center gap-2">
+                    <i class="fa fa-refresh"></i>
+                    <span>清空重置</span>
+                </button>
+                <button id="clearReferenceBtn" class="bg-gray-200 text-gray-700 font-medium py-2.5 px-6 rounded-lg btn-hover flex items-center justify-center gap-2">
+                    <i class="fa fa-trash"></i>
+                    <span>删除所有参考图</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
 
 
     <!-- Toast 消息容器 -->
@@ -626,6 +822,37 @@
 
     // 绑定事件
     function bindEvents() {
+        // 一键效果图按钮点击事件 - 打开一键效果图模态框
+        document.getElementById('effectBtn').addEventListener('click', () => {
+            document.getElementById('effectModal').classList.remove('hidden');
+        });
+        
+
+        
+        // 关闭一键效果图模态框事件
+        document.getElementById('closeEffectModal').addEventListener('click', () => {
+            document.getElementById('effectModal').classList.add('hidden');
+        });
+        
+
+        
+        // 缩小一键效果图模态框事件
+        document.getElementById('minimizeEffectModal').addEventListener('click', () => {
+            // 最小化模态框（这里只是关闭模态框，因为网页模态框通常没有最小化功能）
+            document.getElementById('effectModal').classList.add('hidden');
+        });
+        
+
+        
+        // 点击一键效果图模态框背景关闭
+        document.getElementById('effectModal').addEventListener('click', (e) => {
+            if (e.target === document.getElementById('effectModal')) {
+                document.getElementById('effectModal').classList.add('hidden');
+            }
+        });
+        
+
+        
         // 预设描述词点击事件
         elements.presetTags.addEventListener('click', (e) => {
             if (e.target.tagName === 'SPAN' && e.target.dataset.tag) {
@@ -671,6 +898,9 @@
             if (e.key === 'Escape' && !elements.apiModal.classList.contains('hidden')) {
                 hideApiModal();
             }
+            if (e.key === 'Escape' && !document.getElementById('effectModal').classList.contains('hidden')) {
+                document.getElementById('effectModal').classList.add('hidden');
+            }
         });
 
         // 模型选择器事件
@@ -706,6 +936,224 @@
                 document.getElementById('previewModalImg').src = imgSrc;
                 document.getElementById('imagePreviewModal').classList.remove('hidden');
             });
+        });
+        
+        // 一键效果图上传区域点击事件
+        document.querySelectorAll('.upload-box').forEach(box => {
+            // 绑定初始点击事件
+            function bindUploadEvent() {
+                // 移除之前的点击事件
+                box.removeEventListener('click', bindUploadEvent);
+                
+                // 触发文件选择
+                const fileInput = box.querySelector('.effect-upload');
+                fileInput.click();
+                
+                // 绑定文件选择事件
+                fileInput.addEventListener('change', async (e) => {
+                    const file = e.target.files[0];
+                    if (file) {
+                        try {
+                            // 上传图片到图床
+                            const imageUrl = await uploadImageToImgBB(file, 0, 1, true);
+                            if (imageUrl) {
+                                // 更新上传区域显示
+                                updateUploadBox(box, imageUrl);
+                                // 将图片信息添加到描述词框内
+                                addImageToPrompt();
+                            }
+                        } catch (error) {
+                            console.error('上传失败:', error);
+                            showToast('上传失败，请重试', 'danger');
+                            // 上传失败后重新绑定点击事件
+                            box.addEventListener('click', bindUploadEvent);
+                        }
+                    } else {
+                        // 用户取消选择后重新绑定点击事件
+                        box.addEventListener('click', bindUploadEvent);
+                    }
+                });
+            }
+            
+            // 绑定初始点击事件
+            box.addEventListener('click', bindUploadEvent);
+        });
+        
+
+        
+        // 效果预设下拉框变化事件
+        const effectSelects = document.querySelectorAll('#effectModal select');
+        effectSelects.forEach(select => {
+            select.addEventListener('change', () => {
+                updateEffectPrompt();
+            });
+        });
+        
+        // 效果类型单选框点击事件
+        const effectTypeRadios = document.querySelectorAll('#effectModal input[type="radio"]');
+        effectTypeRadios.forEach(radio => {
+            radio.addEventListener('change', () => {
+                updateEffectPrompt();
+            });
+        });
+        
+        // 开始生成效果图按钮点击事件
+        document.getElementById('startEffectBtn').addEventListener('click', () => {
+            // 检查是否上传了平面设计图和现场照片
+            let hasPlan = false;
+            let hasSite = false;
+            
+            const uploadBoxes = document.querySelectorAll('.upload-box');
+            uploadBoxes.forEach(box => {
+                if (box.querySelector('img')) {
+                    if (box.dataset.type === '平面设计图') {
+                        hasPlan = true;
+                    } else if (box.dataset.type === '现场照片') {
+                        hasSite = true;
+                    }
+                }
+            });
+            
+            // 如果没有上传平面设计图或现场照片，禁止生成
+            if (!hasPlan || !hasSite) {
+                showToast('平面设计图和现场照片都没上传怎么起飞呢？~', 'warning');
+                return;
+            }
+            
+            // 获取详细描述词
+            const detailedPrompt = document.getElementById('detailedPrompt').value;
+            // 将详细描述词添加到主描述词框
+            if (detailedPrompt) {
+                document.getElementById('customPrompt').value = detailedPrompt;
+            }
+            // 关闭模态框
+            document.getElementById('effectModal').classList.add('hidden');
+            // 触发开始生成按钮
+            document.getElementById('generateBtn').click();
+        });
+        
+
+        
+
+        
+
+        
+        // 清空重置按钮点击事件
+        document.getElementById('clearEffectBtn').addEventListener('click', () => {
+            // 清空上传区域
+            document.querySelectorAll('.upload-box').forEach(box => {
+                box.innerHTML = `
+                    <input type="file" class="effect-upload hidden" accept="image/*">
+                    <i class="fa fa-plus text-4xl text-gray-400 mb-2"></i>
+                    <p class="text-sm text-gray-600">${box.dataset.type}</p>
+                `;
+                // 重新绑定事件
+                box.addEventListener('click', () => {
+                    box.querySelector('.effect-upload').click();
+                });
+                const fileInput = box.querySelector('.effect-upload');
+                fileInput.addEventListener('change', async (e) => {
+                    const file = e.target.files[0];
+                    if (file) {
+                        try {
+                            const imageUrl = await uploadImageToImgBB(file, 0, 1, false);
+                            if (imageUrl) {
+                                updateUploadBox(box, imageUrl);
+                                addImageToPrompt();
+                            }
+                        } catch (error) {
+                            console.error('上传失败:', error);
+                            showToast('上传失败，请重试', 'danger');
+                        }
+                    }
+                });
+            });
+            // 清空效果选择
+            document.querySelectorAll('input[type="radio"]').forEach(radio => {
+                radio.checked = false;
+            });
+            // 清空效果预设
+            document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+                checkbox.checked = false;
+            });
+            // 清空详细描述词
+            document.getElementById('detailedPrompt').value = '';
+            // 清空主页面上传的参考图片
+            appState.uploadedImageUrls = [];
+            // 更新主页面上传区域显示
+            const uploadedUrlsList = document.getElementById('uploadedUrlsList');
+            const uploadedUrlsContainer = document.getElementById('uploadedUrlsContainer');
+            if (uploadedUrlsList) {
+                uploadedUrlsList.innerHTML = '';
+            }
+            if (uploadedUrlsContainer) {
+                uploadedUrlsContainer.classList.add('hidden');
+            }
+        });
+        
+
+        
+
+        
+        // 删除所有参考图按钮点击事件
+        document.getElementById('clearReferenceBtn').addEventListener('click', () => {
+            // 清空主页面上传的参考图片
+            appState.uploadedImageUrls = [];
+            // 更新主页面上传区域显示
+            const uploadedUrlsList = document.getElementById('uploadedUrlsList');
+            const uploadedUrlsContainer = document.getElementById('uploadedUrlsContainer');
+            if (uploadedUrlsList) {
+                uploadedUrlsList.innerHTML = '';
+            }
+            if (uploadedUrlsContainer) {
+                uploadedUrlsContainer.classList.add('hidden');
+            }
+            // 清空一键效果图模态框中的上传区域
+            document.querySelectorAll('.upload-box').forEach(box => {
+                box.innerHTML = `
+                    <input type="file" class="effect-upload hidden" accept="image/*">
+                    <i class="fa fa-plus text-4xl text-gray-400 mb-2"></i>
+                    <p class="text-sm text-gray-600">${box.dataset.type}</p>
+                `;
+                // 重新绑定事件
+                function bindUploadEvent() {
+                    // 移除之前的点击事件
+                    box.removeEventListener('click', bindUploadEvent);
+                    
+                    // 触发文件选择
+                    const fileInput = box.querySelector('.effect-upload');
+                    fileInput.click();
+                    
+                    // 绑定文件选择事件
+                    fileInput.addEventListener('change', async (e) => {
+                        const file = e.target.files[0];
+                        if (file) {
+                            try {
+                                // 上传图片到图床
+                                const imageUrl = await uploadImageToImgBB(file, 0, 1, true);
+                                if (imageUrl) {
+                                    // 更新上传区域显示
+                                    updateUploadBox(box, imageUrl);
+                                    // 将图片信息添加到描述词框内
+                                    addImageToPrompt();
+                                }
+                            } catch (error) {
+                                console.error('上传失败:', error);
+                                showToast('上传失败，请重试', 'danger');
+                                // 上传失败后重新绑定点击事件
+                                box.addEventListener('click', bindUploadEvent);
+                            }
+                        } else {
+                            // 用户取消选择后重新绑定点击事件
+                            box.addEventListener('click', bindUploadEvent);
+                        }
+                    });
+                }
+                box.addEventListener('click', bindUploadEvent);
+            });
+            // 清空详细描述词
+            document.getElementById('detailedPrompt').value = '';
+            showToast('所有参考图已删除', 'success');
         });
 
         // 关闭图片预览模态框
@@ -896,7 +1344,7 @@
     }
 
     // 使用ImgBB API上传图片到图床
-    async function uploadImageToImgBB(file, index, total) {
+    async function uploadImageToImgBB(file, index, total, addToUploadedList = true) {
         // 安全检查
         if (!file || !file.type) {
             console.error('Invalid file object in uploadImageToImgBB');
@@ -916,7 +1364,9 @@
             formData.append('image', file);
             
             // 显示上传进度
-            updateUploadProgress(0, index, total);
+            if (addToUploadedList) {
+                updateUploadProgress(0, index, total);
+            }
             
             // 发送请求到ImgBB API
             const response = await fetch(IMGBB_UPLOAD_URL, {
@@ -935,36 +1385,52 @@
                 const imageUrl = result.data.url;
                 
                 // 添加到已上传图片列表
-                appState.uploadedImageUrls.push(imageUrl);
+                if (addToUploadedList) {
+                    appState.uploadedImageUrls.push(imageUrl);
+                    
+                    // 更新UI显示
+                    if (typeof updateUploadedUrlsList === 'function') {
+                        updateUploadedUrlsList();
+                    }
+                    
+                    // 完成进度
+                    if (typeof updateUploadProgress === 'function') {
+                        updateUploadProgress(100, index, total);
+                    }
+                    
+                    showToast(`图片 ${index + 1}/${total} 上传成功`, 'success');
+                    
+                    // 修复：上传成功后重置文件输入框
+                    if (elements && elements.imageUpload) {
+                        elements.imageUpload.value = '';
+                    }
+                }
                 
-                // 更新UI显示
-                updateUploadedUrlsList();
-                
-                // 完成进度
-                updateUploadProgress(100, index, total);
-                
-                showToast(`图片 ${index + 1}/${total} 上传成功`, 'success');
-                
-                // 修复：上传成功后重置文件输入框
-                elements.imageUpload.value = '';
-                
+                return imageUrl;
             } else {
                 throw new Error(result.error?.message || '上传失败');
             }
             
         } catch (error) {
             console.error('图片上传失败:', error);
-            showToast(`图片 ${index + 1}/${total} 上传失败: ${error.message}`, 'error');
+            // 无论addToUploadedList是否为true，都显示错误信息
+            showToast(`上传失败: ${error.message}`, 'error');
             
-            // 修复：上传失败后也重置文件输入框
-            elements.imageUpload.value = '';
-            
-            // 如果所有图片都上传完成，隐藏进度条
-            if (index === total - 1) {
-                setTimeout(() => {
-                    elements.uploadProgress.classList.add('hidden');
-                }, 1000);
+            if (addToUploadedList) {
+                // 修复：上传失败后也重置文件输入框
+                if (elements && elements.imageUpload) {
+                    elements.imageUpload.value = '';
+                }
+                
+                // 如果所有图片都上传完成，隐藏进度条
+                if (index === total - 1 && elements && elements.uploadProgress) {
+                    setTimeout(() => {
+                        elements.uploadProgress.classList.add('hidden');
+                    }, 1000);
+                }
             }
+            
+            return null;
         }
     }
 
@@ -1125,9 +1591,6 @@
         // GPT支持的尺寸选项（根据API文档）
         const gptOptions = [
             { value: 'auto', text: '自动' },
-            { value: '1:1', text: '1:1（正方形）' },
-            { value: '3:2', text: '3:2（横屏）' },
-            { value: '2:3', text: '2:3（竖屏）' }
         ];
         
         // 清空现有选项
@@ -1158,16 +1621,6 @@
         // Banana支持的所有尺寸选项
         const bananaOptions = [
             { value: 'auto', text: '自动' },
-            { value: '1:1', text: '1:1（正方形）' },
-            { value: '3:2', text: '3:2（横屏）' },
-            { value: '2:3', text: '2:3（竖屏）' },
-            { value: '16:9', text: '16:9（宽屏）' },
-            { value: '9:16', text: '9:16（竖屏视频）' },
-            { value: '4:3', text: '4:3（传统电视）' },
-            { value: '3:4', text: '3:4（竖屏照片）' },
-            { value: '5:4', text: '5:4（打印照片）' },
-            { value: '4:5', text: '4:5（竖屏照片）' },
-            { value: '21:9', text: '21:9（电影宽屏）' }
         ];
         
         // 清空现有选项
@@ -2302,6 +2755,202 @@
             setTimeout(() => toastContainer.removeChild(toast), 300);
         }, 3000);
     }
+    
+    // 更新上传区域显示
+    function updateUploadBox(box, imageUrl) {
+        // 移除之前的所有点击事件
+        const newBox = box.cloneNode(true);
+        box.parentNode.replaceChild(newBox, box);
+        box = newBox;
+        
+        box.innerHTML = `
+            <div class="relative">
+                <img src="${imageUrl}" alt="${box.dataset.type}" class="w-full h-32 object-cover rounded">
+                <button class="absolute top-2 right-2 bg-white/80 text-danger rounded-full p-1 hover:bg-white delete-btn">
+                    <i class="fa fa-times"></i>
+                </button>
+            </div>
+            <p class="text-sm text-gray-600 mt-2">${box.dataset.type}</p>
+        `;
+        
+        // 添加删除按钮事件
+        box.querySelector('.delete-btn').addEventListener('click', (e) => {
+            e.stopPropagation();
+            // 确定文件输入框的类名
+            const inputClass = 'effect-upload';
+            
+            // 重新显示上传输入框
+            box.innerHTML = `
+                <input type="file" class="${inputClass} hidden" accept="image/*">
+                <i class="fa fa-plus text-4xl text-gray-400 mb-2"></i>
+                <p class="text-sm text-gray-600">${box.dataset.type}</p>
+            `;
+            
+            // 绑定文件选择事件
+            const fileInput = box.querySelector(`.${inputClass}`);
+            fileInput.addEventListener('change', async (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    try {
+                        // 上传图片到图床，不添加到已上传列表（避免重复）
+                        const imageUrl = await uploadImageToImgBB(file, 0, 1, false);
+                        if (imageUrl) {
+                            updateUploadBox(box, imageUrl);
+                            // 更新描述词
+                            addImageToPrompt();
+                        }
+                    } catch (error) {
+                        console.error('上传失败:', error);
+                        showToast('上传失败，请重试', 'danger');
+                    }
+                }
+            });
+            
+            // 绑定点击事件
+            function bindUploadEvent() {
+                // 移除之前的点击事件
+                box.removeEventListener('click', bindUploadEvent);
+                
+                // 触发文件选择
+                const fileInput = box.querySelector(`.${inputClass}`);
+                fileInput.click();
+                
+                // 绑定文件选择事件
+                fileInput.addEventListener('change', async (e) => {
+                    const file = e.target.files[0];
+                    if (file) {
+                        try {
+                            // 上传图片到图床
+                            const imageUrl = await uploadImageToImgBB(file, 0, 1, true);
+                            if (imageUrl) {
+                                // 更新上传区域显示
+                                updateUploadBox(box, imageUrl);
+                                // 更新描述词
+                                addImageToPrompt();
+                            }
+                        } catch (error) {
+                            console.error('上传失败:', error);
+                            showToast('上传失败，请重试', 'danger');
+                            // 上传失败后重新绑定点击事件
+                            box.addEventListener('click', bindUploadEvent);
+                        }
+                    } else {
+                        // 用户取消选择后重新绑定点击事件
+                        box.addEventListener('click', bindUploadEvent);
+                    }
+                });
+            }
+            box.addEventListener('click', bindUploadEvent);
+            
+            // 更新描述词
+            addImageToPrompt();
+        });
+    }
+    
+    // 将图片信息添加到描述词框内
+    function addImageToPrompt() {
+        updateEffectPrompt();
+    }
+    
+
+    
+    // 更新效果描述词
+    function updateEffectPrompt() {
+        const customPrompt = document.getElementById('detailedPrompt');
+        
+        // 构建图片信息字符串
+        let imageInfo = '';
+        
+        // 检查是否有上传的图片
+        const uploadBoxes = document.querySelectorAll('.upload-box');
+        let hasPlan = false;
+        let hasSite = false;
+        let hasReference = false;
+        
+        uploadBoxes.forEach(box => {
+            if (box.querySelector('img')) {
+                if (box.dataset.type === '平面设计图') {
+                    hasPlan = true;
+                } else if (box.dataset.type === '现场照片') {
+                    hasSite = true;
+                } else if (box.dataset.type === '参考效果图') {
+                    hasReference = true;
+                }
+            }
+        });
+        
+        // 根据上传的图片类型构建描述词
+        if (hasPlan) {
+            imageInfo += '参考图一是平面设计图，';
+        }
+        if (hasSite) {
+            imageInfo += '参考图二是现场照片，';
+        }
+        if (hasReference) {
+            imageInfo += '参考图三是参考效果图，根据图中的配色和和材质，给参考图二做一个效果图，特别注意：只参考配色和材质，不要改变参考图二的样式！';
+        }
+        
+        // 添加效果类型
+        const effectTypeRadios = document.querySelectorAll('#effectModal input[type="radio"]');
+        effectTypeRadios.forEach(radio => {
+            if (radio.checked) {
+                if (radio.value === 'culture') {
+                    imageInfo += '根据参考图一的布局和结构，在参考图二的黄色矩形框内生成一张逼真的文化墙效果图，生成的时候去掉参考图二中的黄色矩形框。';
+                } else if (radio.value === 'door') {
+                    imageInfo += '根据参考图一的布局和结构，在参考图二的黄色矩形框内生成一张逼真的门头招牌效果图，生成的时候去掉参考图二中的黄色矩形框。';
+                } else if (radio.value === 'day') {
+                    imageInfo += '白天的效果。';
+                } else if (radio.value === 'night') {
+                    imageInfo += '夜间的效果。';
+                }
+            }
+        });
+        
+        // 添加效果预设
+        const glowTextSelect = document.getElementById('glowTextSelect');
+        if (glowTextSelect && glowTextSelect.value !== '选择效果') {
+            imageInfo += `发光字类型：${glowTextSelect.value}，`;
+        }
+        
+        const noGlowSelect = document.getElementById('noGlowSelect');
+        if (noGlowSelect && noGlowSelect.value !== '选择效果') {
+            imageInfo += `不发光：${noGlowSelect.value}，`;
+        }
+        
+        const lightColorSelect = document.getElementById('lightColorSelect');
+        if (lightColorSelect && lightColorSelect.value !== '选择颜色') {
+            imageInfo += `灯光颜色：${lightColorSelect.value}，`;
+        }
+        
+        const colorSelect = document.getElementById('colorSelect');
+        const deerBoardSelect = document.getElementById('deerBoardSelect');
+        if (deerBoardSelect && deerBoardSelect.value !== '选择效果') {
+            let boardText = deerBoardSelect.value;
+            if (colorSelect && colorSelect.value !== '选择颜色') {
+                boardText = `${colorSelect.value}${boardText}`;
+            }
+            imageInfo += `底板：${boardText}，`;
+        } else if (colorSelect && colorSelect.value !== '选择颜色') {
+            // 单独选择颜色时，不单独显示，等选择底板后再合并
+        }
+        
+        const lightStyleSelect = document.getElementById('lightStyleSelect');
+        if (lightStyleSelect && lightStyleSelect.value !== '选择样式') {
+            imageInfo += `发光样式：${lightStyleSelect.value}，`;
+        }
+        
+        const otherEffectSelect = document.getElementById('otherEffectSelect');
+        if (otherEffectSelect && otherEffectSelect.value !== '选择效果') {
+            imageInfo += `${otherEffectSelect.value}效果，`;
+        }
+        
+        // 更新描述词框
+        customPrompt.value = imageInfo;
+    }
+    
+
+    
+
 
     // 页面加载完成后初始化
     document.addEventListener('DOMContentLoaded', async () => {
