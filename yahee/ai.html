@@ -2321,6 +2321,14 @@
                     // 刷新积分显示
                     updateCreditDisplay();
                     
+                    // 任务完成后，从任务列表中移除并清空预览区域
+                    setTimeout(() => {
+                        const taskIndex = appState.tasks.findIndex(t => t.id === task.id);
+                        if (taskIndex !== -1) {
+                            appState.tasks.splice(taskIndex, 1);
+                            updateTaskManagerUI();
+                        }
+                    }, 2000); // 2秒后移除，让用户有时间看到成功状态
                 } else if (data.status === 'failed') {
                     let errorMessage = '生成失败';
                     if (data.failure_reason) {
@@ -2668,6 +2676,26 @@
         // 计算运行中任务数量
         const runningTasks = appState.tasks.filter(task => task.status === 'running').length;
         runningTaskCount.textContent = runningTasks;
+        
+        // 重置所有预览区域
+        for (let i = 0; i < 6; i++) {
+            const previewId = `preview${i + 1}`;
+            const progressId = `progress${i + 1}`;
+            const progressTextId = `progressText${i + 1}`;
+            
+            const previewElement = document.getElementById(previewId);
+            const progressElement = document.getElementById(progressId);
+            const progressTextElement = document.getElementById(progressTextId);
+            
+            if (previewElement && progressElement && progressTextElement) {
+                // 默认重置为初始状态
+                previewElement.innerHTML = `
+                    <i class="fa fa-image text-2xl text-gray-300 mb-1"></i>
+                `;
+                progressElement.style.strokeDashoffset = 100;
+                progressTextElement.textContent = '0%';
+            }
+        }
         
         // 更新预览区域
         appState.tasks.forEach((task, index) => {
