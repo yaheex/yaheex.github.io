@@ -248,40 +248,37 @@
                             <i class="fa fa-magic"></i>
                             <span>一键效果图</span>
                         </button>
+                        <button id="copyBtn" class="bg-primary text-white font-medium py-1.5 px-4 rounded-lg btn-hover flex items-center gap-2">
+                            <i class="fa fa-copy"></i>
+                            <span>一键复制</span>
+                        </button>
+                        <button id="designBtn" class="bg-primary text-white font-medium py-1.5 px-4 rounded-lg btn-hover flex items-center gap-2">
+                            <i class="fa fa-paint-brush"></i>
+                            <span>一键设计稿</span>
+                        </button>
                     </div>
                     <div class="mb-4">
                         <div class="flex flex-wrap gap-2 max-h-40 overflow-y-auto pr-1" id="presetTags">
-                            <span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="提取主体，删除背景，增强画质，提高清晰度。">提取主体</span>
-							<span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="去除所有黑色文字，保持图章文字的完整性，白色背景，图片变清晰">提取图章</span>
-                            <span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="移除所有的内容提取出菜品，只保留菜品">提取菜品</span>
-							<span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="移除所有的内容提取出背景，只保留背景图。">提取背景</span>
-							<span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="删除图中所有中文，英文，数字等文字。请仔细检查，确保图像中不保留任何文字。">去掉文字</span>
+							<span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="去除所有黑色文字，保持图章文字的完整性，保留图章字体细节不要改变字体，白色背景，图片变清晰">提取图章</span>
+							<span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="移除所有中文，英文，数字等，只保留背景图。">提取背景</span>
+							<span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="删除图中所有中文，英文，数字等文字。请仔细检查，确保图像中不保留任何文字。">删除文字</span>
                             <span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="白底黑内容">白底黑内容</span>
-                            <span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="移除背景，改为白色背景">白色背景</span>
                             <span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="对照片中的物品进行高品质修复，去除划痕、灰尘、锈迹与凹痕，提升画面清晰度与材质纹理表现，同时保持原始光影、拍摄角度与图像构图不变。">物品材质修复</span>
                             <span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="提取出图中的图案花纹，展平为平面的图形，并无缝拼接覆盖整个画面">提取无缝图案</span>
                             <span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="移除所有破损划痕和噪点，纠正角度生成人像照，增强画质，照片修复，还原人物所有细节，转高清图，摄影画质，补全完整人物，上色。">修老照片</span>
-							<span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="以高保真度将此图像还原为现代照片质量，采用全彩色">修老照片2</span>
                             <span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="消除图中内容的透视角度，改为正面图，转换为矢量图风格，适合于矢量追踪">转为平面图</span>
                             <span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="根据图中内容，绘制为黑白线稿的草图，并适合矢量追踪">转为线稿图</span>
                             <span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="转为矢量图风格，去掉所有阴影效果，去掉所有灯光效果。轮廓平滑干净。要尽量减少颜色过渡，临近颜色取中间值填充纯色。">转为二维图</span>
-                            <span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="给文字内容搭配一个背景，去掉所有文字，只要背景">生成背景图</span>
+                            <span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="给文字内容搭配一个背景图，去掉所有文字，只要背景图">生成背景图</span>
                             <span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="消除布纹、褶皱、折痕，优化布纹处细节，移除噪点，色块平滑。保持内容不变">去布纹理</span>
-                            <span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="改为夜间亮化效果图，发光字，发光灯带">夜间亮化效果图</span>
                             <span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="将图像中的所有设计元素完全分离，转换为独立的平面设计素材。每个元素必须：1) 完全独立无连接；2) 元素间保持至少20像素的最小间距；3) 采用严格的网格化布局排列；4) 所有元素正面朝向，无角度倾斜；5) 按元素类型和大小智能分组排列；6) 浅灰色(#f5f5f5)极简背景，无任何装饰元素；7) 元素排列遵循从左到右、从上到下的阅读顺序；8) 如元素过多则自动创建多行多列布局，确保所有元素完整可见；9) 生成前进行重叠检测，如有重叠风险则自动调整元素位置和大小。">拆分(大件)</span>
 							<span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="把每个元素提取出来，先从左往右依次排列，放不下了再从上到下依次把每个元素平铺排列在9:21的灰色画布上。要求每个元素完整展示，元素之间不要重叠，元素与元素之间留一定间距。去掉装饰的气球。保证展开图我能直接使用！">拆分(细小)</span>
-							<span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="将这个海报不和谐的元素融合，优化细节，提高整体清晰度，并精准识别图片中所有文字，确保文字100%无错乱、无遗漏；">重排海报</span>
-							<span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="按照要求的比例，重新布局图中元素，保持元素不变。">改变布局</span>
-							<span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="把图片变清晰，增强画质，不要模糊效果，还原细节，并精准识别图片中所有文字，确保文字100%无错乱、无遗漏。">变清晰</span>
+							<span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="把图片变清晰，增强画质，还原图片细节。">变清晰</span>
 							<span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="这是一张拍摄的海报画面，截取海报部分，清除海报透视，垂直对齐正面视角，移除所有破损划痕和噪点，按照要求的比例把他变成电子版海报。">转电子版</span>
 							<span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="消除图中内容的透视角度，改为正面图，复原为可以印刷的平面设计稿件，修补所有划痕破损瑕疵">复原设计稿</span>
 							<span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="消除图中内容的透视角度，改为正面图，复原为可以印刷的平面设计稿件，严格按照手绘稿的设计复原，按3x3的正方形生成多种风格。">复原手绘稿</span>
-							<span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="按照要求的比例根据我提供的菜品名称菜品价格及备注要求，不要更改内容和添加内容，所有内容合理排版，设计一个点菜单海报，风格根据菜品类型智能选择。参考图是手写的菜品目录，识别文字和价格，确定文字正确性，所有内容合理排版，不要更改内容和添加内容海报，配图要真实的摄影照片。">手写菜单</span>
 							<span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="消除图中手绘稿的透视偏斜，改为正面图，并转换为CAD黑白图纸">手绘稿转CAD平面图</span>
-							<span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="生成海报，按照要求的比例生成电子版海报，海报内容：">生成海报</span>
-							<span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="去除所有包含数字的圆形标记，不改动标记外的所有内容；标记1更改为XX；标记2更改为XX；标记3更改为XX；标记4更改为XX；标记5更改为XX；">修改指定区域</span>
-							<span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="将这个图片重新排版，尺寸修改为：800x1800cm">修改尺寸-重新排版</span>
-
+							<span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="去除所有包含数字的圆形标记，不改动标记外的所有内容；标记1更改为XX；标记2更改为XX；标记3更改为XX；标记4更改为XX；标记5更改为XX；">修改指定区域（截图标记好位置）</span>
                         </div>
                     </div>
                     <div class="mb-4">
@@ -304,7 +301,7 @@
                                     任务管理
                                 </h2>
                                 <span id="taskCount" class="text-sm text-secondary">
-                                    运行中: <span id="runningTaskCount">0</span>/6
+                                    运行中: <span id="runningTaskCount">0</span>/12
                                 </span>
                             </div>
                             <!-- 预览区域 -->
@@ -320,13 +317,8 @@
                                                 </svg>
                                                 <div id="progressText1" class="absolute inset-0 flex items-center justify-center text-xs font-medium">0%</div>
                                             </div>
+                                            <div class="text-xs text-primary">①</div>
                                         </div>
-                                        <div id="preview1" class="rounded-lg p-2 min-h-[100px] flex flex-col items-center justify-center bg-gray-50">
-                                            <i class="fa fa-image text-2xl text-gray-300 mb-1"></i>
-                                        </div>
-                                        <button class="mt-2 text-xs bg-primary/10 text-primary px-2 py-1 rounded download-btn" data-task="1">
-                                            <i class="fa fa-download mr-1"></i>下载
-                                        </button>
                                     </div>
                                     <!-- 任务2 -->
                                     <div class="text-center">
@@ -338,13 +330,8 @@
                                                 </svg>
                                                 <div id="progressText2" class="absolute inset-0 flex items-center justify-center text-xs font-medium">0%</div>
                                             </div>
+                                            <div class="text-xs text-primary">②</div>
                                         </div>
-                                        <div id="preview2" class="rounded-lg p-2 min-h-[100px] flex flex-col items-center justify-center bg-gray-50">
-                                            <i class="fa fa-image text-2xl text-gray-300 mb-1"></i>
-                                        </div>
-                                        <button class="mt-2 text-xs bg-primary/10 text-primary px-2 py-1 rounded download-btn" data-task="2">
-                                            <i class="fa fa-download mr-1"></i>下载
-                                        </button>
                                     </div>
                                     <!-- 任务3 -->
                                     <div class="text-center">
@@ -356,13 +343,8 @@
                                                 </svg>
                                                 <div id="progressText3" class="absolute inset-0 flex items-center justify-center text-xs font-medium">0%</div>
                                             </div>
+                                            <div class="text-xs text-primary">③</div>
                                         </div>
-                                        <div id="preview3" class="rounded-lg p-2 min-h-[100px] flex flex-col items-center justify-center bg-gray-50">
-                                            <i class="fa fa-image text-2xl text-gray-300 mb-1"></i>
-                                        </div>
-                                        <button class="mt-2 text-xs bg-primary/10 text-primary px-2 py-1 rounded download-btn" data-task="3">
-                                            <i class="fa fa-download mr-1"></i>下载
-                                        </button>
                                     </div>
                                     <!-- 任务4 -->
                                     <div class="text-center">
@@ -374,13 +356,8 @@
                                                 </svg>
                                                 <div id="progressText4" class="absolute inset-0 flex items-center justify-center text-xs font-medium">0%</div>
                                             </div>
+                                            <div class="text-xs text-primary">④</div>
                                         </div>
-                                        <div id="preview4" class="rounded-lg p-2 min-h-[100px] flex flex-col items-center justify-center bg-gray-50">
-                                            <i class="fa fa-image text-2xl text-gray-300 mb-1"></i>
-                                        </div>
-                                        <button class="mt-2 text-xs bg-primary/10 text-primary px-2 py-1 rounded download-btn" data-task="4">
-                                            <i class="fa fa-download mr-1"></i>下载
-                                        </button>
                                     </div>
                                     <!-- 任务5 -->
                                     <div class="text-center">
@@ -392,13 +369,8 @@
                                                 </svg>
                                                 <div id="progressText5" class="absolute inset-0 flex items-center justify-center text-xs font-medium">0%</div>
                                             </div>
+                                            <div class="text-xs text-primary">⑤</div>
                                         </div>
-                                        <div id="preview5" class="rounded-lg p-2 min-h-[100px] flex flex-col items-center justify-center bg-gray-50">
-                                            <i class="fa fa-image text-2xl text-gray-300 mb-1"></i>
-                                        </div>
-                                        <button class="mt-2 text-xs bg-primary/10 text-primary px-2 py-1 rounded download-btn" data-task="5">
-                                            <i class="fa fa-download mr-1"></i>下载
-                                        </button>
                                     </div>
                                     <!-- 任务6 -->
                                     <div class="text-center">
@@ -410,17 +382,90 @@
                                                 </svg>
                                                 <div id="progressText6" class="absolute inset-0 flex items-center justify-center text-xs font-medium">0%</div>
                                             </div>
+                                            <div class="text-xs text-primary">⑥</div>
                                         </div>
-                                        <div id="preview6" class="rounded-lg p-2 min-h-[100px] flex flex-col items-center justify-center bg-gray-50">
-                                            <i class="fa fa-image text-2xl text-gray-300 mb-1"></i>
+                                    </div>
+                                    <!-- 任务7 -->
+                                    <div class="text-center">
+                                        <div class="flex flex-col items-center mb-2">
+                                            <div class="relative w-8 h-8 mb-2">
+                                                <svg class="w-full h-full" viewBox="0 0 36 36">
+                                                    <circle class="text-gray-200" stroke-width="2" stroke="currentColor" fill="transparent" r="16" cx="18" cy="18"/>
+                                                    <circle id="progress7" class="text-primary" stroke-width="2" stroke="currentColor" fill="transparent" r="16" cx="18" cy="18" stroke-dasharray="100" stroke-dashoffset="100" stroke-linecap="round"/>
+                                                </svg>
+                                                <div id="progressText7" class="absolute inset-0 flex items-center justify-center text-xs font-medium">0%</div>
+                                            </div>
+                                            <div class="text-xs text-primary">⑦</div>
                                         </div>
-                                        <button class="mt-2 text-xs bg-primary/10 text-primary px-2 py-1 rounded download-btn" data-task="6">
-                                            <i class="fa fa-download mr-1"></i>下载
-                                        </button>
+                                    </div>
+                                    <!-- 任务8 -->
+                                    <div class="text-center">
+                                        <div class="flex flex-col items-center mb-2">
+                                            <div class="relative w-8 h-8 mb-2">
+                                                <svg class="w-full h-full" viewBox="0 0 36 36">
+                                                    <circle class="text-gray-200" stroke-width="2" stroke="currentColor" fill="transparent" r="16" cx="18" cy="18"/>
+                                                    <circle id="progress8" class="text-primary" stroke-width="2" stroke="currentColor" fill="transparent" r="16" cx="18" cy="18" stroke-dasharray="100" stroke-dashoffset="100" stroke-linecap="round"/>
+                                                </svg>
+                                                <div id="progressText8" class="absolute inset-0 flex items-center justify-center text-xs font-medium">0%</div>
+                                            </div>
+                                            <div class="text-xs text-primary">⑧</div>
+                                        </div>
+                                    </div>
+                                    <!-- 任务9 -->
+                                    <div class="text-center">
+                                        <div class="flex flex-col items-center mb-2">
+                                            <div class="relative w-8 h-8 mb-2">
+                                                <svg class="w-full h-full" viewBox="0 0 36 36">
+                                                    <circle class="text-gray-200" stroke-width="2" stroke="currentColor" fill="transparent" r="16" cx="18" cy="18"/>
+                                                    <circle id="progress9" class="text-primary" stroke-width="2" stroke="currentColor" fill="transparent" r="16" cx="18" cy="18" stroke-dasharray="100" stroke-dashoffset="100" stroke-linecap="round"/>
+                                                </svg>
+                                                <div id="progressText9" class="absolute inset-0 flex items-center justify-center text-xs font-medium">0%</div>
+                                            </div>
+                                            <div class="text-xs text-primary">⑨</div>
+                                        </div>
+                                    </div>
+                                    <!-- 任务10 -->
+                                    <div class="text-center">
+                                        <div class="flex flex-col items-center mb-2">
+                                            <div class="relative w-8 h-8 mb-2">
+                                                <svg class="w-full h-full" viewBox="0 0 36 36">
+                                                    <circle class="text-gray-200" stroke-width="2" stroke="currentColor" fill="transparent" r="16" cx="18" cy="18"/>
+                                                    <circle id="progress10" class="text-primary" stroke-width="2" stroke="currentColor" fill="transparent" r="16" cx="18" cy="18" stroke-dasharray="100" stroke-dashoffset="100" stroke-linecap="round"/>
+                                                </svg>
+                                                <div id="progressText10" class="absolute inset-0 flex items-center justify-center text-xs font-medium">0%</div>
+                                            </div>
+                                            <div class="text-xs text-primary">⑩</div>
+                                        </div>
+                                    </div>
+                                    <!-- 任务11 -->
+                                    <div class="text-center">
+                                        <div class="flex flex-col items-center mb-2">
+                                            <div class="relative w-8 h-8 mb-2">
+                                                <svg class="w-full h-full" viewBox="0 0 36 36">
+                                                    <circle class="text-gray-200" stroke-width="2" stroke="currentColor" fill="transparent" r="16" cx="18" cy="18"/>
+                                                    <circle id="progress11" class="text-primary" stroke-width="2" stroke="currentColor" fill="transparent" r="16" cx="18" cy="18" stroke-dasharray="100" stroke-dashoffset="100" stroke-linecap="round"/>
+                                                </svg>
+                                                <div id="progressText11" class="absolute inset-0 flex items-center justify-center text-xs font-medium">0%</div>
+                                            </div>
+                                            <div class="text-xs text-primary">⑪</div>
+                                        </div>
+                                    </div>
+                                    <!-- 任务12 -->
+                                    <div class="text-center">
+                                        <div class="flex flex-col items-center mb-2">
+                                            <div class="relative w-8 h-8 mb-2">
+                                                <svg class="w-full h-full" viewBox="0 0 36 36">
+                                                    <circle class="text-gray-200" stroke-width="2" stroke="currentColor" fill="transparent" r="16" cx="18" cy="18"/>
+                                                    <circle id="progress12" class="text-primary" stroke-width="2" stroke="currentColor" fill="transparent" r="16" cx="18" cy="18" stroke-dasharray="100" stroke-dashoffset="100" stroke-linecap="round"/>
+                                                </svg>
+                                                <div id="progressText12" class="absolute inset-0 flex items-center justify-center text-xs font-medium">0%</div>
+                                            </div>
+                                            <div class="text-xs text-primary">⑫</div>
+                                        </div>
                                     </div>
                                 </div>
                                 <div id="resultActions" class="mt-4 flex justify-center gap-3 hidden">
-                                    <button id="downloadBtn" class="bg-success text-white px-4 py-2 rounded-lg btn-hover flex items-center gap-1">
+                                    <button id="downloadBtn" class="bg-primary text-white px-4 py-2 rounded-lg btn-hover flex items-center gap-1">
                                         <i class="fa fa-download"></i>
                                         <span>下载图片</span>
                                     </button>
@@ -433,6 +478,7 @@
                                         <span>重新生成</span>
                                     </button>
                                 </div>
+
                             </div>
                         </div>
                     </div>
@@ -441,12 +487,18 @@
                     <div class="lg:col-span-1">
                         <div class="bg-white rounded-xl p-5 shadow-sm card-shadow h-full">
                             <div class="flex justify-between items-center mb-4">
-                                <h2 class="text-lg font-semibold flex items-center gap-2">
-                                    <i class="fa fa-history text-primary"></i>
-                                    历史记录
-                                </h2>
-                                <button id="clearHistoryBtn" class="text-sm text-danger hover:underline">清空</button>
-                            </div>
+                <h2 class="text-lg font-semibold flex items-center gap-2">
+                    <i class="fa fa-history text-primary"></i>
+                    历史记录
+                </h2>
+                <div class="flex gap-3">
+                    <button id="downloadAllHistoryBtn" class="text-sm text-primary hover:underline flex items-center gap-1">
+                        <i class="fa fa-download"></i>
+                        <span>下载全部</span>
+                    </button>
+                    <button id="clearHistoryBtn" class="text-sm text-danger hover:underline">清空</button>
+                </div>
+            </div>
                             <div id="historyContainer" class="grid grid-cols-3 gap-3 max-h-[650px] overflow-y-auto">
                                 <div class="col-span-full text-center py-8 text-secondary">
                                     <i class="fa fa-folder-open-o text-3xl mb-3"></i>
@@ -734,6 +786,282 @@
         </div>
     </div>
 
+    <!-- 一键复制模态框 -->
+    <div id="copyModal" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center hidden">
+        <div class="bg-white rounded-xl p-6 w-full max-w-2xl mx-4 shadow-xl">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-semibold">一键复制</h3>
+                <div class="flex gap-2">
+                    <button id="minimizeCopyModal" class="text-gray-400 hover:text-gray-600">
+                        <i class="fa fa-window-minimize"></i>
+                    </button>
+                    <button id="closeCopyModal" class="text-gray-400 hover:text-gray-600">
+                        <i class="fa fa-times"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- 上传区域 -->
+            <div class="grid grid-cols-1 gap-4 mb-6">
+                <div class="upload-box border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-primary transition-colors cursor-pointer bg-gray-50" data-type="上传复制样图">
+                    <input type="file" class="copy-upload hidden" accept="image/*">
+                    <i class="fa fa-plus text-4xl text-gray-400 mb-2"></i>
+                    <p class="text-sm text-gray-600">上传复制样图</p>
+                </div>
+            </div>
+            
+            <!-- 单项功能选择 -->
+            <div class="mb-6">
+                <div class="flex gap-4 mb-4">
+                    <label class="flex items-center gap-1">
+                        <input type="radio" name="functionType" value="copyMaster" class="text-primary" checked>
+                        <span class="text-sm">复制大师</span>
+                    </label>
+                    <label class="flex items-center gap-1">
+                        <input type="radio" name="functionType" value="rearrange" class="text-primary">
+                        <span class="text-sm">重排大师</span>
+                    </label>
+                </div>
+            </div>
+            
+            <!-- 效果选择 -->
+            <div class="mb-6">
+                <div class="flex gap-4 mb-4">
+                    <label class="flex items-center gap-1">
+                        <span class="text-sm">复制大师专用：</span>
+                        <input type="radio" name="copyType" value="poster" class="text-primary">
+                        <span class="text-sm">海报</span>
+                    </label>
+                    <label class="flex items-center gap-1">
+                        <input type="radio" name="copyType" value="flyer" class="text-primary">
+                        <span class="text-sm">传单</span>
+                    </label>
+                    <label class="flex items-center gap-1">
+                        <input type="radio" name="copyType" value="business" class="text-primary">
+                        <span class="text-sm">文化墙</span>
+                    </label>
+                    <label class="flex items-center gap-1">
+                        <input type="radio" name="copyType" value="display" class="text-primary">
+                        <span class="text-sm">展架</span>
+                    </label>
+                    <label class="flex items-center gap-1">
+                        <input type="radio" name="copyType" value="menu" class="text-primary">
+                        <span class="text-sm">点餐单</span>
+                    </label>
+                    <label class="flex items-center gap-1">
+                        <input type="radio" name="copyType" value="price" class="text-primary">
+                        <span class="text-sm">价目表</span>
+                    </label>
+                    <label class="flex items-center gap-1">
+                        <input type="radio" name="copyType" value="signboard" class="text-primary">
+                        <span class="text-sm">门头招牌</span>
+                    </label>
+                </div>
+            </div>
+            
+            <!-- 目标尺寸 -->
+            <div class="mb-6">
+                <div class="flex items-center gap-2">
+                    <span class="text-sm">目标尺寸（mm）：</span>
+                    <input type="number" id="copyWidth" class="w-24 border border-gray-300 rounded px-2 py-1 text-sm" placeholder="宽度">
+                    <span class="text-sm">×</span>
+                    <input type="number" id="copyHeight" class="w-24 border border-gray-300 rounded px-2 py-1 text-sm" placeholder="高度">
+                    <span class="text-sm text-red-500">(建议输入常用尺寸)</span>
+                </div>
+            </div>
+            
+            <!-- 排版内容 -->
+            <div class="mb-6">
+                <div class="flex items-center gap-2">
+                    <span class="text-sm">排版内容：</span>
+                    <input type="text" id="layoutContent" class="flex-1 border border-gray-300 rounded px-2 py-1 text-sm" placeholder="输入排版内容">
+                </div>
+            </div>
+            
+            <!-- 详细描述词 -->
+            <div class="mb-6">
+                <label for="copyPrompt" class="block text-sm font-medium text-gray-600 mb-2">输入详细描述词：</label>
+                <textarea id="copyPrompt" rows="3" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary"></textarea>
+            </div>
+            
+            <!-- 模型选择和分辨率选择 -->
+            <div class="mb-6">
+                <div class="flex gap-4">
+                    <label class="flex items-center gap-1">
+                        <input type="radio" name="copyBananaModel" value="nano-banana-2" class="text-primary" checked>
+                        <span class="text-sm">nano-banana-2</span>
+                    </label>
+                    <label class="flex items-center gap-1">
+                        <input type="radio" name="copyBananaModel" value="nano-banana-pro" class="text-primary">
+                        <span class="text-sm">nano-banana-pro</span>
+                    </label>
+                    <label class="flex items-center gap-1">
+                        <input type="radio" name="copyResolution" value="2K" class="text-primary" checked>
+                        <span class="text-sm">2K</span>
+                    </label>
+                    <label class="flex items-center gap-1">
+                        <input type="radio" name="copyResolution" value="4K" class="text-primary">
+                        <span class="text-sm">4K</span>
+                    </label>
+                </div>
+            </div>
+            
+            <!-- 按钮 -->
+            <div class="flex justify-center gap-4">
+                <button id="startCopyBtn" class="bg-primary text-white font-medium py-2.5 px-6 rounded-lg btn-hover flex items-center justify-center gap-2">
+                    <i class="fa fa-magic"></i>
+                    <span>开始生成</span>
+                </button>
+                <button id="clearCopyBtn" class="bg-gray-200 text-gray-700 font-medium py-2.5 px-6 rounded-lg btn-hover flex items-center justify-center gap-2">
+                    <i class="fa fa-refresh"></i>
+                    <span>清空重置</span>
+                </button>
+                <button id="clearCopyReferenceBtn" class="bg-gray-200 text-gray-700 font-medium py-2.5 px-6 rounded-lg btn-hover flex items-center justify-center gap-2">
+                    <i class="fa fa-trash"></i>
+                    <span>删除复制样图</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 一键设计稿模态框 -->
+    <div id="designModal" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center hidden">
+        <div class="bg-white rounded-xl p-6 w-full max-w-2xl mx-4 shadow-xl">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-semibold">一键设计稿</h3>
+                <div class="flex gap-2">
+                    <button id="minimizeDesignModal" class="text-gray-400 hover:text-gray-600">
+                        <i class="fa fa-window-minimize"></i>
+                    </button>
+                    <button id="closeDesignModal" class="text-gray-400 hover:text-gray-600">
+                        <i class="fa fa-times"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- 上传区域 -->
+            <div class="grid grid-cols-1 gap-4 mb-6">
+                <div class="upload-box border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-primary transition-colors cursor-pointer bg-gray-50" data-type="上传手写菜单样图">
+                    <input type="file" class="design-upload hidden" accept="image/*">
+                    <i class="fa fa-plus text-4xl text-gray-400 mb-2"></i>
+                    <p class="text-sm text-gray-600">上传手写菜单样图</p>
+                </div>
+            </div>
+            
+            <!-- 单项功能选择 -->
+            <div class="mb-6">
+                <div class="flex gap-4 mb-4">
+                    <label class="flex items-center gap-1">
+                        <input type="radio" name="designFunctionType" value="designMaster" class="text-primary" checked>
+                        <span class="text-sm">设计大师</span>
+                    </label>
+                    <label class="flex items-center gap-1">
+                        <input type="radio" name="designFunctionType" value="designRearrange" class="text-primary">
+                        <span class="text-sm">手写菜单</span>
+                    </label>
+                </div>
+            </div>
+            
+            <!-- 效果选择 -->
+            <div class="mb-6">
+                <div class="flex gap-4 mb-4">
+                    <label class="flex items-center gap-1">
+                        <span class="text-sm">设计大师专用：</span>
+                        <input type="radio" name="designType" value="poster" class="text-primary">
+                        <span class="text-sm">海报</span>
+                    </label>
+                    <label class="flex items-center gap-1">
+                        <input type="radio" name="designType" value="flyer" class="text-primary">
+                        <span class="text-sm">传单</span>
+                    </label>
+                    <label class="flex items-center gap-1">
+                        <input type="radio" name="designType" value="business" class="text-primary">
+                        <span class="text-sm">文化墙</span>
+                    </label>
+                    <label class="flex items-center gap-1">
+                        <input type="radio" name="designType" value="display" class="text-primary">
+                        <span class="text-sm">展架</span>
+                    </label>
+                    <label class="flex items-center gap-1">
+                        <input type="radio" name="designType" value="menu" class="text-primary">
+                        <span class="text-sm">点餐单</span>
+                    </label>
+                    <label class="flex items-center gap-1">
+                        <input type="radio" name="designType" value="price" class="text-primary">
+                        <span class="text-sm">价目表</span>
+                    </label>
+                    <label class="flex items-center gap-1">
+                        <input type="radio" name="designType" value="signboard" class="text-primary">
+                        <span class="text-sm">门头招牌</span>
+                    </label>
+                </div>
+            </div>
+            
+            <!-- 目标尺寸 -->
+            <div class="mb-6">
+                <div class="flex items-center gap-2">
+                    <span class="text-sm">目标尺寸（mm）：</span>
+                    <input type="number" id="designWidth" class="w-24 border border-gray-300 rounded px-2 py-1 text-sm" placeholder="宽度">
+                    <span class="text-sm">×</span>
+                    <input type="number" id="designHeight" class="w-24 border border-gray-300 rounded px-2 py-1 text-sm" placeholder="高度">
+                    <span class="text-sm text-red-500">(建议输入常用尺寸)</span>
+                </div>
+            </div>
+            
+            <!-- 排版内容 -->
+            <div class="mb-6">
+                <div class="flex items-center gap-2">
+                    <span class="text-sm">排版内容：</span>
+                    <input type="text" id="designLayoutContent" class="flex-1 border border-gray-300 rounded px-2 py-1 text-sm" placeholder="输入排版内容">
+                </div>
+            </div>
+            
+            <!-- 详细描述词 -->
+            <div class="mb-6">
+                <label for="designPrompt" class="block text-sm font-medium text-gray-600 mb-2">输入详细描述词：</label>
+                <textarea id="designPrompt" rows="3" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary"></textarea>
+            </div>
+            
+            <!-- 模型选择和分辨率选择 -->
+            <div class="mb-6">
+                <div class="flex gap-4">
+                    <label class="flex items-center gap-1">
+                        <input type="radio" name="designBananaModel" value="nano-banana-2" class="text-primary" checked>
+                        <span class="text-sm">nano-banana-2</span>
+                    </label>
+                    <label class="flex items-center gap-1">
+                        <input type="radio" name="designBananaModel" value="nano-banana-pro" class="text-primary">
+                        <span class="text-sm">nano-banana-pro</span>
+                    </label>
+                    <label class="flex items-center gap-1">
+                        <input type="radio" name="designResolution" value="2K" class="text-primary" checked>
+                        <span class="text-sm">2K</span>
+                    </label>
+                    <label class="flex items-center gap-1">
+                        <input type="radio" name="designResolution" value="4K" class="text-primary">
+                        <span class="text-sm">4K</span>
+                    </label>
+                </div>
+            </div>
+            
+            <!-- 按钮 -->
+            <div class="flex justify-center gap-4">
+                <button id="startDesignBtn" class="bg-primary text-white font-medium py-2.5 px-6 rounded-lg btn-hover flex items-center justify-center gap-2">
+                    <i class="fa fa-magic"></i>
+                    <span>开始生成设计稿</span>
+                </button>
+                <button id="clearDesignBtn" class="bg-gray-200 text-gray-700 font-medium py-2.5 px-6 rounded-lg btn-hover flex items-center justify-center gap-2">
+                    <i class="fa fa-refresh"></i>
+                    <span>清空重置</span>
+                </button>
+                <button id="clearDesignReferenceBtn" class="bg-gray-200 text-gray-700 font-medium py-2.5 px-6 rounded-lg btn-hover flex items-center justify-center gap-2">
+                    <i class="fa fa-trash"></i>
+                    <span>删除手写菜单样图</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
 
 
     <!-- Toast 消息容器 -->
@@ -748,7 +1076,7 @@
         currentApiKey: null, // 当前使用的API Key
         currentServer: 'china', // 默认使用国内服务器
         tasks: [], // 任务队列
-        maxConcurrentTasks: 6, // 最大并发任务数
+        maxConcurrentTasks: 12, // 最大并发任务数
         uploadedImageUrls: [], // 存储上传到图床的图片URL
         currentImageUrl: null // 当前生成的图片URL
     };
@@ -827,14 +1155,30 @@
             document.getElementById('effectModal').classList.remove('hidden');
         });
         
-
+        // 一键复制按钮点击事件 - 打开一键复制模态框
+        document.getElementById('copyBtn').addEventListener('click', () => {
+            document.getElementById('copyModal').classList.remove('hidden');
+        });
+        
+        // 一键设计稿按钮点击事件 - 打开一键设计稿模态框
+        document.getElementById('designBtn').addEventListener('click', () => {
+            document.getElementById('designModal').classList.remove('hidden');
+        });
         
         // 关闭一键效果图模态框事件
         document.getElementById('closeEffectModal').addEventListener('click', () => {
             document.getElementById('effectModal').classList.add('hidden');
         });
         
-
+        // 关闭一键复制模态框事件
+        document.getElementById('closeCopyModal').addEventListener('click', () => {
+            document.getElementById('copyModal').classList.add('hidden');
+        });
+        
+        // 关闭一键设计稿模态框事件
+        document.getElementById('closeDesignModal').addEventListener('click', () => {
+            document.getElementById('designModal').classList.add('hidden');
+        });
         
         // 缩小一键效果图模态框事件
         document.getElementById('minimizeEffectModal').addEventListener('click', () => {
@@ -842,12 +1186,36 @@
             document.getElementById('effectModal').classList.add('hidden');
         });
         
-
+        // 缩小一键复制模态框事件
+        document.getElementById('minimizeCopyModal').addEventListener('click', () => {
+            // 最小化模态框（这里只是关闭模态框，因为网页模态框通常没有最小化功能）
+            document.getElementById('copyModal').classList.add('hidden');
+        });
+        
+        // 缩小一键设计稿模态框事件
+        document.getElementById('minimizeDesignModal').addEventListener('click', () => {
+            // 最小化模态框（这里只是关闭模态框，因为网页模态框通常没有最小化功能）
+            document.getElementById('designModal').classList.add('hidden');
+        });
         
         // 点击一键效果图模态框背景关闭
         document.getElementById('effectModal').addEventListener('click', (e) => {
             if (e.target === document.getElementById('effectModal')) {
                 document.getElementById('effectModal').classList.add('hidden');
+            }
+        });
+        
+        // 点击一键复制模态框背景关闭
+        document.getElementById('copyModal').addEventListener('click', (e) => {
+            if (e.target === document.getElementById('copyModal')) {
+                document.getElementById('copyModal').classList.add('hidden');
+            }
+        });
+        
+        // 点击一键设计稿模态框背景关闭
+        document.getElementById('designModal').addEventListener('click', (e) => {
+            if (e.target === document.getElementById('designModal')) {
+                document.getElementById('designModal').classList.add('hidden');
             }
         });
         
@@ -947,6 +1315,49 @@
                 
                 // 触发文件选择
                 const fileInput = box.querySelector('.effect-upload');
+                if (fileInput) {
+                    fileInput.click();
+                    
+                    // 绑定文件选择事件
+                    fileInput.addEventListener('change', async (e) => {
+                        const file = e.target.files[0];
+                        if (file) {
+                            try {
+                                // 上传图片到图床
+                                const imageUrl = await uploadImageToImgBB(file, 0, 1, true);
+                                if (imageUrl) {
+                                    // 更新上传区域显示
+                                    updateUploadBox(box, imageUrl);
+                                    // 将图片信息添加到描述词框内
+                                    addImageToPrompt();
+                                }
+                            } catch (error) {
+                                console.error('上传失败:', error);
+                                showToast('上传失败，请重试', 'danger');
+                                // 上传失败后重新绑定点击事件
+                                box.addEventListener('click', bindUploadEvent);
+                            }
+                        } else {
+                            // 用户取消选择后重新绑定点击事件
+                            box.addEventListener('click', bindUploadEvent);
+                        }
+                    });
+                }
+            }
+            
+            // 绑定初始点击事件
+            box.addEventListener('click', bindUploadEvent);
+        });
+        
+        // 一键复制模态框上传区域点击事件
+        document.querySelectorAll('#copyModal .upload-box').forEach(box => {
+            // 绑定初始点击事件
+            function bindCopyUploadEvent() {
+                // 移除之前的点击事件
+                box.removeEventListener('click', bindCopyUploadEvent);
+                
+                // 触发文件选择
+                const fileInput = box.querySelector('.copy-upload');
                 fileInput.click();
                 
                 // 绑定文件选择事件
@@ -966,17 +1377,58 @@
                             console.error('上传失败:', error);
                             showToast('上传失败，请重试', 'danger');
                             // 上传失败后重新绑定点击事件
-                            box.addEventListener('click', bindUploadEvent);
+                            box.addEventListener('click', bindCopyUploadEvent);
                         }
                     } else {
                         // 用户取消选择后重新绑定点击事件
-                        box.addEventListener('click', bindUploadEvent);
+                        box.addEventListener('click', bindCopyUploadEvent);
                     }
                 });
             }
             
             // 绑定初始点击事件
-            box.addEventListener('click', bindUploadEvent);
+            box.addEventListener('click', bindCopyUploadEvent);
+        });
+        
+        // 一键设计稿模态框上传区域点击事件
+        document.querySelectorAll('#designModal .upload-box').forEach(box => {
+            // 绑定初始点击事件
+            function bindDesignUploadEvent() {
+                // 移除之前的点击事件
+                box.removeEventListener('click', bindDesignUploadEvent);
+                
+                // 触发文件选择
+                const fileInput = box.querySelector('.design-upload');
+                fileInput.click();
+                
+                // 绑定文件选择事件
+                fileInput.addEventListener('change', async (e) => {
+                    const file = e.target.files[0];
+                    if (file) {
+                        try {
+                            // 上传图片到图床
+                            const imageUrl = await uploadImageToImgBB(file, 0, 1, true);
+                            if (imageUrl) {
+                                // 更新上传区域显示
+                                updateUploadBox(box, imageUrl);
+                                // 将图片信息添加到描述词框内
+                                addImageToPrompt();
+                            }
+                        } catch (error) {
+                            console.error('上传失败:', error);
+                            showToast('上传失败，请重试', 'danger');
+                            // 上传失败后重新绑定点击事件
+                            box.addEventListener('click', bindDesignUploadEvent);
+                        }
+                    } else {
+                        // 用户取消选择后重新绑定点击事件
+                        box.addEventListener('click', bindDesignUploadEvent);
+                    }
+                });
+            }
+            
+            // 绑定初始点击事件
+            box.addEventListener('click', bindDesignUploadEvent);
         });
         
 
@@ -996,6 +1448,210 @@
                 updateEffectPrompt();
             });
         });
+        
+        // 一键复制模态框目标尺寸输入变化事件
+        const copyWidthInput = document.getElementById('copyWidth');
+        const copyHeightInput = document.getElementById('copyHeight');
+        const layoutContentInput = document.getElementById('layoutContent');
+        const copyTypeRadios = document.querySelectorAll('#copyModal input[name="copyType"]');
+        const functionTypeRadios = document.querySelectorAll('#copyModal input[name="functionType"]');
+        
+        function updateCopyPrompt() {
+            // 获取目标尺寸
+            const width = document.getElementById('copyWidth').value;
+            const height = document.getElementById('copyHeight').value;
+            
+            // 获取选择的功能类型
+            let functionType = '';
+            const functionRadios = document.querySelectorAll('input[name="functionType"]:checked');
+            if (functionRadios.length > 0) {
+                const value = functionRadios[0].value;
+                switch(value) {
+                    case 'copyMaster':
+                        functionType = '根据参考图的风格样式进行排版';
+                        break;
+                    case 'rearrange':
+                        functionType = '将参考图重新排版';
+                        break;
+                }
+            }
+            
+            // 获取选择的效果类型
+            let copyType = '';
+            const checkedRadios = document.querySelectorAll('input[name="copyType"]:checked');
+            if (checkedRadios.length > 0) {
+                const value = checkedRadios[0].value;
+                switch(value) {
+                    case 'poster':
+                        copyType = '海报';
+                        break;
+                    case 'flyer':
+                        copyType = '传单';
+                        break;
+                    case 'business':
+                        copyType = '文化墙';
+                        break;
+                    case 'display':
+                        copyType = '展架';
+                        break;
+                    case 'menu':
+                        copyType = '点餐单';
+                        break;
+                    case 'price':
+                        copyType = '价目表';
+                        break;
+                    case 'signboard':
+                        copyType = '门头招牌';
+                        break;
+                }
+            }
+            
+            // 获取排版内容
+            const layoutContent = document.getElementById('layoutContent').value;
+            
+            // 构建描述词
+            let prompt = '';
+            if (functionType) {
+                prompt = functionType;
+            }
+            if (copyType) {
+                prompt = prompt ? `${prompt}，设计类型：${copyType}` : `设计类型：${copyType}`;
+            }
+            if (width && height) {
+                prompt = prompt ? `${prompt}，画面尺寸：${width}cm×${height}cm` : `画面尺寸：${width}cm×${height}cm`;
+            }
+            if (layoutContent) {
+                prompt = prompt ? `${prompt}，画面内容为：${layoutContent}` : `画面内容为：${layoutContent}`;
+            }
+            
+            // 更新详细描述词
+            document.getElementById('copyPrompt').value = prompt;
+        }
+        
+        // 添加目标尺寸输入事件监听器
+        if (copyWidthInput) {
+            copyWidthInput.addEventListener('input', updateCopyPrompt);
+        }
+        if (copyHeightInput) {
+            copyHeightInput.addEventListener('input', updateCopyPrompt);
+        }
+        
+        // 添加效果类型单选框事件监听器
+        copyTypeRadios.forEach(radio => {
+            radio.addEventListener('change', updateCopyPrompt);
+        });
+        
+        // 添加功能类型单选框事件监听器
+        functionTypeRadios.forEach(radio => {
+            radio.addEventListener('change', updateCopyPrompt);
+        });
+        
+        // 添加排版内容输入事件监听器
+        if (layoutContentInput) {
+            layoutContentInput.addEventListener('input', updateCopyPrompt);
+        }
+        
+        // 一键设计稿模态框目标尺寸输入变化事件
+        const designWidthInput = document.getElementById('designWidth');
+        const designHeightInput = document.getElementById('designHeight');
+        const designLayoutContentInput = document.getElementById('designLayoutContent');
+        const designTypeRadios = document.querySelectorAll('#designModal input[name="designType"]');
+        const designFunctionTypeRadios = document.querySelectorAll('#designModal input[name="designFunctionType"]');
+        
+        function updateDesignPrompt() {
+            // 获取目标尺寸
+            const width = document.getElementById('designWidth').value;
+            const height = document.getElementById('designHeight').value;
+            
+            // 获取选择的功能类型
+            let functionType = '';
+            const functionRadios = document.querySelectorAll('input[name="designFunctionType"]:checked');
+            if (functionRadios.length > 0) {
+                const value = functionRadios[0].value;
+                switch(value) {
+                    case 'designMaster':
+                        functionType = '生成设计稿，风格样式根据画面内容智能选择';
+                        break;
+                    case 'designRearrange':
+                        functionType = '根据我提供的菜品名称、菜品价格及备注要求，设计一个点菜单海报，风格根据菜品类型智能选择。参考图是手写的菜品目录，精准识别所有文字，确保文字100%无错乱、无遗漏，所有内容合理排版，不要更改内容和添加内容，适当增加配图（配图要真实的菜品摄影照片）';
+                        break;
+                }
+            }
+            
+            // 获取选择的效果类型
+            let designType = '';
+            const checkedRadios = document.querySelectorAll('input[name="designType"]:checked');
+            if (checkedRadios.length > 0) {
+                const value = checkedRadios[0].value;
+                switch(value) {
+                    case 'poster':
+                        designType = '海报';
+                        break;
+                    case 'flyer':
+                        designType = '传单';
+                        break;
+                    case 'business':
+                        designType = '文化墙';
+                        break;
+                    case 'display':
+                        designType = '展架';
+                        break;
+                    case 'menu':
+                        designType = '点餐单，适当增加配图（配图要真实的菜品摄影照片）';
+                        break;
+                    case 'price':
+                        designType = '价目表，适当增加配图（配图要真实的菜品摄影照片）';
+                        break;
+                    case 'signboard':
+                        designType = '门头招牌';
+                        break;
+                }
+            }
+            
+            // 获取排版内容
+            const layoutContent = document.getElementById('designLayoutContent').value;
+            
+            // 构建描述词
+            let prompt = '';
+            if (functionType) {
+                prompt = functionType;
+            }
+            if (designType) {
+                prompt = prompt ? `${prompt}，设计类型：${designType}` : `设计类型：${designType}`;
+            }
+            if (width && height) {
+                prompt = prompt ? `${prompt}，画面尺寸：${width}cm×${height}cm` : `画面尺寸：${width}cm×${height}cm`;
+            }
+            if (layoutContent) {
+                prompt = prompt ? `${prompt}，画面内容为：${layoutContent}` : `画面内容为：${layoutContent}`;
+            }
+            
+            // 更新详细描述词
+            document.getElementById('designPrompt').value = prompt;
+        }
+        
+        // 添加目标尺寸输入事件监听器
+        if (designWidthInput) {
+            designWidthInput.addEventListener('input', updateDesignPrompt);
+        }
+        if (designHeightInput) {
+            designHeightInput.addEventListener('input', updateDesignPrompt);
+        }
+        
+        // 添加效果类型单选框事件监听器
+        designTypeRadios.forEach(radio => {
+            radio.addEventListener('change', updateDesignPrompt);
+        });
+        
+        // 添加功能类型单选框事件监听器
+        designFunctionTypeRadios.forEach(radio => {
+            radio.addEventListener('change', updateDesignPrompt);
+        });
+        
+        // 添加排版内容输入事件监听器
+        if (designLayoutContentInput) {
+            designLayoutContentInput.addEventListener('input', updateDesignPrompt);
+        }
         
         // 开始生成效果图按钮点击事件
         document.getElementById('startEffectBtn').addEventListener('click', () => {
@@ -1028,6 +1684,78 @@
             }
             // 关闭模态框
             document.getElementById('effectModal').classList.add('hidden');
+            // 触发开始生成按钮
+            document.getElementById('generateBtn').click();
+        });
+        
+        // 开始生成一键复制按钮点击事件
+        document.getElementById('startCopyBtn').addEventListener('click', () => {
+            // 检查是否上传了复制样图
+            let hasReference = false;
+            
+            const copyUploadBoxes = document.querySelectorAll('#copyModal .upload-box');
+            copyUploadBoxes.forEach(box => {
+                if (box.querySelector('img')) {
+                    if (box.dataset.type === '上传复制样图') {
+                        hasReference = true;
+                    }
+                }
+            });
+            
+            // 如果没有上传复制样图，禁止生成
+            if (!hasReference) {
+                showToast('复制样图都没上传怎么起飞呢？~', 'warning');
+                return;
+            }
+            
+            // 获取详细描述词
+            const copyPrompt = document.getElementById('copyPrompt').value;
+            // 获取目标尺寸
+            const width = document.getElementById('copyWidth').value;
+            const height = document.getElementById('copyHeight').value;
+            
+            // 构建描述词
+            let prompt = copyPrompt;
+            if (width && height) {
+                // 检查prompt中是否已经包含尺寸信息
+                if (!prompt.includes('尺寸：')) {
+                    prompt = `${prompt}，尺寸：${width}×${height}`;
+                }
+            }
+            
+            // 将详细描述词添加到主描述词框
+            if (prompt) {
+                document.getElementById('customPrompt').value = prompt;
+            }
+            // 关闭模态框
+            document.getElementById('copyModal').classList.add('hidden');
+            // 触发开始生成按钮
+            document.getElementById('generateBtn').click();
+        });
+        
+        // 开始生成一键设计稿按钮点击事件
+        document.getElementById('startDesignBtn').addEventListener('click', () => {
+            // 获取详细描述词
+            const designPrompt = document.getElementById('designPrompt').value;
+            // 获取目标尺寸
+            const width = document.getElementById('designWidth').value;
+            const height = document.getElementById('designHeight').value;
+            
+            // 构建描述词
+            let prompt = designPrompt;
+            if (width && height) {
+                // 检查prompt中是否已经包含尺寸信息
+                if (!prompt.includes('尺寸：')) {
+                    prompt = `${prompt}，尺寸：${width}×${height}`;
+                }
+            }
+            
+            // 将详细描述词添加到主描述词框
+            if (prompt) {
+                document.getElementById('customPrompt').value = prompt;
+            }
+            // 关闭模态框
+            document.getElementById('designModal').classList.add('hidden');
             // 触发开始生成按钮
             document.getElementById('generateBtn').click();
         });
@@ -1078,6 +1806,144 @@
             });
             // 清空详细描述词
             document.getElementById('detailedPrompt').value = '';
+            // 清空主页面上传的参考图片
+            appState.uploadedImageUrls = [];
+            // 更新主页面上传区域显示
+            const uploadedUrlsList = document.getElementById('uploadedUrlsList');
+            const uploadedUrlsContainer = document.getElementById('uploadedUrlsContainer');
+            if (uploadedUrlsList) {
+                uploadedUrlsList.innerHTML = '';
+            }
+            if (uploadedUrlsContainer) {
+                uploadedUrlsContainer.classList.add('hidden');
+            }
+        });
+        
+        // 一键复制模态框清空重置按钮点击事件
+        document.getElementById('clearCopyBtn').addEventListener('click', () => {
+            // 清空上传区域
+            document.querySelectorAll('#copyModal .upload-box').forEach(box => {
+                box.innerHTML = `
+                    <input type="file" class="copy-upload hidden" accept="image/*">
+                    <i class="fa fa-plus text-4xl text-gray-400 mb-2"></i>
+                    <p class="text-sm text-gray-600">上传复制样图</p>
+                `;
+                // 重新绑定事件
+                function bindCopyUploadEvent() {
+                    // 移除之前的点击事件
+                    box.removeEventListener('click', bindCopyUploadEvent);
+                    
+                    // 触发文件选择
+                    const fileInput = box.querySelector('.copy-upload');
+                    fileInput.click();
+                    
+                    // 绑定文件选择事件
+                    fileInput.addEventListener('change', async (e) => {
+                        const file = e.target.files[0];
+                        if (file) {
+                            try {
+                                // 上传图片到图床
+                                const imageUrl = await uploadImageToImgBB(file, 0, 1, true);
+                                if (imageUrl) {
+                                    // 更新上传区域显示
+                                    updateUploadBox(box, imageUrl);
+                                    // 将图片信息添加到描述词框内
+                                    addImageToPrompt();
+                                }
+                            } catch (error) {
+                                console.error('上传失败:', error);
+                                showToast('上传失败，请重试', 'danger');
+                                // 上传失败后重新绑定点击事件
+                                box.addEventListener('click', bindCopyUploadEvent);
+                            }
+                        } else {
+                            // 用户取消选择后重新绑定点击事件
+                            box.addEventListener('click', bindCopyUploadEvent);
+                        }
+                    });
+                }
+                box.addEventListener('click', bindCopyUploadEvent);
+            });
+            // 清空效果选择
+            document.querySelectorAll('#copyModal input[type="radio"]').forEach(radio => {
+                radio.checked = false;
+            });
+            // 清空目标尺寸输入
+            document.getElementById('copyWidth').value = '';
+            document.getElementById('copyHeight').value = '';
+            // 清空排版内容输入
+            document.getElementById('layoutContent').value = '';
+            // 清空详细描述词
+            document.getElementById('copyPrompt').value = '';
+            // 清空主页面上传的参考图片
+            appState.uploadedImageUrls = [];
+            // 更新主页面上传区域显示
+            const uploadedUrlsList = document.getElementById('uploadedUrlsList');
+            const uploadedUrlsContainer = document.getElementById('uploadedUrlsContainer');
+            if (uploadedUrlsList) {
+                uploadedUrlsList.innerHTML = '';
+            }
+            if (uploadedUrlsContainer) {
+                uploadedUrlsContainer.classList.add('hidden');
+            }
+        });
+        
+        // 一键设计稿模态框清空重置按钮点击事件
+        document.getElementById('clearDesignBtn').addEventListener('click', () => {
+            // 清空上传区域
+            document.querySelectorAll('#designModal .upload-box').forEach(box => {
+                box.innerHTML = `
+                    <input type="file" class="design-upload hidden" accept="image/*">
+                    <i class="fa fa-plus text-4xl text-gray-400 mb-2"></i>
+                    <p class="text-sm text-gray-600">上传手写菜单样图</p>
+                `;
+                // 重新绑定事件
+                function bindDesignUploadEvent() {
+                    // 移除之前的点击事件
+                    box.removeEventListener('click', bindDesignUploadEvent);
+                    
+                    // 触发文件选择
+                    const fileInput = box.querySelector('.design-upload');
+                    fileInput.click();
+                    
+                    // 绑定文件选择事件
+                    fileInput.addEventListener('change', async (e) => {
+                        const file = e.target.files[0];
+                        if (file) {
+                            try {
+                                // 上传图片到图床
+                                const imageUrl = await uploadImageToImgBB(file, 0, 1, true);
+                                if (imageUrl) {
+                                    // 更新上传区域显示
+                                    updateUploadBox(box, imageUrl);
+                                    // 将图片信息添加到描述词框内
+                                    addImageToPrompt();
+                                }
+                            } catch (error) {
+                                console.error('上传失败:', error);
+                                showToast('上传失败，请重试', 'danger');
+                                // 上传失败后重新绑定点击事件
+                                box.addEventListener('click', bindDesignUploadEvent);
+                            }
+                        } else {
+                            // 用户取消选择后重新绑定点击事件
+                            box.addEventListener('click', bindDesignUploadEvent);
+                        }
+                    });
+                }
+                box.addEventListener('click', bindDesignUploadEvent);
+            });
+            // 清空效果选择
+            document.querySelectorAll('#designModal input[type="radio"]').forEach(radio => {
+                radio.checked = false;
+            });
+            // 清空目标尺寸输入
+            document.getElementById('designWidth').value = '';
+            document.getElementById('designHeight').value = '';
+            // 清空排版内容输入
+            document.getElementById('designLayoutContent').value = '';
+            // 清空详细描述词
+            document.getElementById('designPrompt').value = '';
             // 清空主页面上传的参考图片
             appState.uploadedImageUrls = [];
             // 更新主页面上传区域显示
@@ -1155,6 +2021,132 @@
             document.getElementById('detailedPrompt').value = '';
             showToast('所有参考图已删除', 'success');
         });
+        
+        // 一键复制模态框删除所有参考图按钮点击事件
+        document.getElementById('clearCopyReferenceBtn').addEventListener('click', () => {
+            // 清空主页面上传的参考图片
+            appState.uploadedImageUrls = [];
+            // 更新主页面上传区域显示
+            const uploadedUrlsList = document.getElementById('uploadedUrlsList');
+            const uploadedUrlsContainer = document.getElementById('uploadedUrlsContainer');
+            if (uploadedUrlsList) {
+                uploadedUrlsList.innerHTML = '';
+            }
+            if (uploadedUrlsContainer) {
+                uploadedUrlsContainer.classList.add('hidden');
+            }
+            // 清空一键复制模态框中的上传区域
+            document.querySelectorAll('#copyModal .upload-box').forEach(box => {
+                box.innerHTML = `
+                    <input type="file" class="copy-upload hidden" accept="image/*">
+                    <i class="fa fa-plus text-4xl text-gray-400 mb-2"></i>
+                    <p class="text-sm text-gray-600">上传复制样图</p>
+                `;
+                // 重新绑定事件
+                function bindCopyUploadEvent() {
+                    // 移除之前的点击事件
+                    box.removeEventListener('click', bindCopyUploadEvent);
+                    
+                    // 触发文件选择
+                    const fileInput = box.querySelector('.copy-upload');
+                    fileInput.click();
+                    
+                    // 绑定文件选择事件
+                    fileInput.addEventListener('change', async (e) => {
+                        const file = e.target.files[0];
+                        if (file) {
+                            try {
+                                // 上传图片到图床
+                                const imageUrl = await uploadImageToImgBB(file, 0, 1, true);
+                                if (imageUrl) {
+                                    // 更新上传区域显示
+                                    updateUploadBox(box, imageUrl);
+                                    // 将图片信息添加到描述词框内
+                                    addImageToPrompt();
+                                }
+                            } catch (error) {
+                                console.error('上传失败:', error);
+                                showToast('上传失败，请重试', 'danger');
+                                // 上传失败后重新绑定点击事件
+                                box.addEventListener('click', bindCopyUploadEvent);
+                            }
+                        } else {
+                            // 用户取消选择后重新绑定点击事件
+                            box.addEventListener('click', bindCopyUploadEvent);
+                        }
+                    });
+                }
+                box.addEventListener('click', bindCopyUploadEvent);
+            });
+            // 清空排版内容输入
+            document.getElementById('layoutContent').value = '';
+            // 清空详细描述词
+            document.getElementById('copyPrompt').value = '';
+            showToast('所有参考图已删除', 'success');
+        });
+        
+        // 一键设计稿模态框删除所有参考图按钮点击事件
+        document.getElementById('clearDesignReferenceBtn').addEventListener('click', () => {
+            // 清空主页面上传的参考图片
+            appState.uploadedImageUrls = [];
+            // 更新主页面上传区域显示
+            const uploadedUrlsList = document.getElementById('uploadedUrlsList');
+            const uploadedUrlsContainer = document.getElementById('uploadedUrlsContainer');
+            if (uploadedUrlsList) {
+                uploadedUrlsList.innerHTML = '';
+            }
+            if (uploadedUrlsContainer) {
+                uploadedUrlsContainer.classList.add('hidden');
+            }
+            // 清空一键设计稿模态框中的上传区域
+            document.querySelectorAll('#designModal .upload-box').forEach(box => {
+                box.innerHTML = `
+                    <input type="file" class="design-upload hidden" accept="image/*">
+                    <i class="fa fa-plus text-4xl text-gray-400 mb-2"></i>
+                    <p class="text-sm text-gray-600">上传手写菜单样图</p>
+                `;
+                // 重新绑定事件
+                function bindDesignUploadEvent() {
+                    // 移除之前的点击事件
+                    box.removeEventListener('click', bindDesignUploadEvent);
+                    
+                    // 触发文件选择
+                    const fileInput = box.querySelector('.design-upload');
+                    fileInput.click();
+                    
+                    // 绑定文件选择事件
+                    fileInput.addEventListener('change', async (e) => {
+                        const file = e.target.files[0];
+                        if (file) {
+                            try {
+                                // 上传图片到图床
+                                const imageUrl = await uploadImageToImgBB(file, 0, 1, true);
+                                if (imageUrl) {
+                                    // 更新上传区域显示
+                                    updateUploadBox(box, imageUrl);
+                                    // 将图片信息添加到描述词框内
+                                    addImageToPrompt();
+                                }
+                            } catch (error) {
+                                console.error('上传失败:', error);
+                                showToast('上传失败，请重试', 'danger');
+                                // 上传失败后重新绑定点击事件
+                                box.addEventListener('click', bindDesignUploadEvent);
+                            }
+                        } else {
+                            // 用户取消选择后重新绑定点击事件
+                            box.addEventListener('click', bindDesignUploadEvent);
+                        }
+                    });
+                }
+                box.addEventListener('click', bindDesignUploadEvent);
+            });
+            // 清空排版内容输入
+            document.getElementById('designLayoutContent').value = '';
+            // 清空详细描述词
+            document.getElementById('designPrompt').value = '';
+            showToast('所有参考图已删除', 'success');
+        });
 
         // 关闭图片预览模态框
         document.getElementById('closePreviewModal').addEventListener('click', () => {
@@ -1214,6 +2206,11 @@
         // 清空历史记录按钮
         document.getElementById('clearHistoryBtn').addEventListener('click', () => {
             clearHistory();
+        });
+        
+        // 下载全部历史记录按钮
+        document.getElementById('downloadAllHistoryBtn').addEventListener('click', () => {
+            downloadAllHistory();
         });
 
         // 上传图片区域点击事件
@@ -2604,14 +3601,33 @@
         
         history.forEach(item => {
             const historyItem = document.createElement('div');
-            historyItem.className = 'rounded-lg overflow-hidden border border-gray-200 cursor-pointer';
+            historyItem.className = 'rounded-lg overflow-hidden border border-gray-200';
             historyItem.innerHTML = `
-                <img src="${item.imageUrl}" alt="历史图片" class="w-full h-24 object-cover">
+                <img src="${item.imageUrl}" alt="历史图片" class="w-full h-20 object-cover cursor-pointer">
+                <div class="p-2 flex justify-center">
+                    <button class="download-history-btn text-primary hover:text-primary/80 text-sm flex items-center gap-1" data-url="${item.imageUrl}">
+                        <i class="fa fa-download"></i>
+                        <span>下载</span>
+                    </button>
+                </div>
             `;
-            historyItem.addEventListener('click', () => {
-                document.getElementById('previewModalImg').src = item.imageUrl;
-                document.getElementById('imagePreviewModal').classList.remove('hidden');
-            });
+            // 添加点击放大功能
+            const imgElement = historyItem.querySelector('img');
+            if (imgElement) {
+                imgElement.addEventListener('click', () => {
+                    document.getElementById('previewModalImg').src = item.imageUrl;
+                    document.getElementById('imagePreviewModal').classList.remove('hidden');
+                });
+            }
+            // 添加下载按钮点击事件
+            const downloadBtn = historyItem.querySelector('.download-history-btn');
+            if (downloadBtn) {
+                downloadBtn.addEventListener('click', (e) => {
+                    e.stopPropagation(); // 防止触发图片点击事件
+                    const imageUrl = e.currentTarget.dataset.url;
+                    downloadImage(imageUrl);
+                });
+            }
             historyContainer.appendChild(historyItem);
         });
     }
@@ -2623,6 +3639,27 @@
             updateHistoryDisplay();
             showToast('历史记录已清空', 'success');
         }
+    }
+    
+    // 下载所有历史记录图片
+    function downloadAllHistory() {
+        const history = JSON.parse(localStorage.getItem('aiGenerationHistory') || '[]');
+        
+        if (history.length === 0) {
+            showToast('暂无历史记录可下载', 'warning');
+            return;
+        }
+        
+        showToast(`开始下载 ${history.length} 张历史图片`, 'info');
+        
+        // 逐个下载图片
+        history.forEach((item, index) => {
+            setTimeout(() => {
+                downloadImage(item.imageUrl);
+            }, index * 1000); // 延迟1秒下载下一张，避免浏览器限制
+        });
+        
+        showToast(`已开始下载所有历史图片，共 ${history.length} 张`, 'success');
     }
 
     // 切换标签选中状态
@@ -2677,27 +3714,22 @@
         const runningTasks = appState.tasks.filter(task => task.status === 'running').length;
         runningTaskCount.textContent = runningTasks;
         
-        // 重置所有预览区域
-        for (let i = 0; i < 6; i++) {
-            const previewId = `preview${i + 1}`;
+        // 重置所有进度条
+        for (let i = 0; i < 12; i++) {
             const progressId = `progress${i + 1}`;
             const progressTextId = `progressText${i + 1}`;
             
-            const previewElement = document.getElementById(previewId);
             const progressElement = document.getElementById(progressId);
             const progressTextElement = document.getElementById(progressTextId);
             
-            if (previewElement && progressElement && progressTextElement) {
+            if (progressElement && progressTextElement) {
                 // 默认重置为初始状态
-                previewElement.innerHTML = `
-                    <i class="fa fa-image text-2xl text-gray-300 mb-1"></i>
-                `;
                 progressElement.style.strokeDashoffset = 100;
                 progressTextElement.textContent = '0%';
             }
         }
         
-        // 更新预览区域
+        // 更新进度条
         appState.tasks.forEach((task, index) => {
             updatePreviewArea(task, index);
         });
@@ -2705,49 +3737,22 @@
 
     // 更新预览区域
     function updatePreviewArea(task, index) {
-        // 只处理前6个任务
-        if (index >= 6) return;
+        // 只处理前12个任务
+        if (index >= 12) return;
         
-        const previewId = `preview${index + 1}`;
         const progressId = `progress${index + 1}`;
         const progressTextId = `progressText${index + 1}`;
         
-        const previewElement = document.getElementById(previewId);
         const progressElement = document.getElementById(progressId);
         const progressTextElement = document.getElementById(progressTextId);
         
-        if (!previewElement || !progressElement || !progressTextElement) return;
+        if (!progressElement || !progressTextElement) return;
         
         // 更新进度
         const progress = task.progress || 0;
         const offset = 100 - progress;
         progressElement.style.strokeDashoffset = offset;
         progressTextElement.textContent = `${progress}%`;
-        
-        // 更新预览图
-        if (task.status === 'succeeded' && task.imageUrl) {
-            previewElement.innerHTML = `
-                <img src="${task.imageUrl}" alt="生成的图片" class="max-w-full max-h-[80px] object-contain rounded cursor-pointer zoomable-image" data-url="${task.imageUrl}">
-            `;
-            // 添加点击放大功能
-            const imgElement = previewElement.querySelector('img');
-            if (imgElement) {
-                imgElement.addEventListener('click', () => {
-                    document.getElementById('previewModalImg').src = task.imageUrl;
-                    document.getElementById('imagePreviewModal').classList.remove('hidden');
-                });
-            }
-        } else if (task.status === 'failed') {
-            previewElement.innerHTML = `
-                <i class="fa fa-times-circle text-2xl text-red-300 mb-1"></i>
-                <p class="text-xs text-red-500">生成失败</p>
-            `;
-        } else if (task.status === 'running') {
-            previewElement.innerHTML = `
-                <i class="fa fa-spinner fa-spin text-2xl text-primary mb-1"></i>
-                <p class="text-xs text-gray-500">生成中...</p>
-            `;
-        }
     }
 
     // 显示提示信息
