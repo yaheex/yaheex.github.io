@@ -125,7 +125,7 @@
                                             <h4 class="font-medium">
                                                 GPT Image
                                             </h4>
-                                            <p class="text-xs text-gray-500 mt-1">处理简单元素（标志 线稿  插图）</p>
+                                            <p class="text-xs text-gray-500 mt-1">解决中文乱码，海报好，速度快</p>
                                         </div>
                                         <i class="fa fa-check-circle text-primary hidden"></i>
                                     </div>
@@ -145,20 +145,19 @@
                         </div>
 
                         <div id="gptConfig" class="border-l-4 border-primary pl-4 py-2 hidden">
-                            <div class="mb-3">
-                                <label for="gptVariants" class="block text-sm font-medium text-gray-600 mb-2">选择模型：</label>
-                                <select id="gptVariants" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary">
-                                    <option value="gpt-image-1.5">gpt-image-1.5 - 400积分/次</option>
-                                    <option value="sora-image">sora-image - 400积分/次</option>
-                                </select>
-                            </div>
-                        </div>
+            <div class="mb-3">
+                <label for="gptVariants" class="block text-sm font-medium text-gray-600 mb-2">选择模型：</label>
+                <select id="gptVariants" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary">
+                    <option value="gpt-image-2">gpt-image-2 - 600积分/次</option>
+                </select>
+            </div>
+        </div>
 
                         <div id="bananaConfig" class="border-l-4 border-primary pl-4 py-2">
                             <div>
                                 <label for="bananaSubModel" class="block text-sm font-medium text-gray-600 mb-2">选择模型：</label>
                                 <select id="bananaSubModel" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary">
-                                    <option value="nano-banana-2">nano-banana-2 - 1300积分/次</option>
+                                    <option value="nano-banana-2">nano-banana-2 - 1200积分/次</option>
                                     <option value="nano-banana-pro">nano-banana-pro - 1800积分/次</option>
                                 </select>
                             </div>
@@ -176,16 +175,6 @@
                             <label for="imageSize" class="block text-sm font-medium text-gray-600 mb-2">图片比例：</label>
                             <select id="imageSize" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary">
                                 <option value="auto">自动</option>
-                                <option value="1:1">1:1（正方形）</option>
-                                <option value="3:2">3:2（横屏）</option>
-                                <option value="2:3">2:3（竖屏）</option>
-                                <option value="16:9">16:9（宽屏）</option>
-                                <option value="9:16">9:16（竖屏视频）</option>
-                                <option value="4:3">4:3（传统电视）</option>
-                                <option value="3:4">3:4（竖屏照片）</option>
-                                <option value="5:4">5:4（打印照片）</option>
-                                <option value="4:5">4:5（竖屏照片）</option>
-                                <option value="21:9">21:9（电影宽屏）</option>
                             </select>
                         </div>
 
@@ -748,24 +737,16 @@
                 <textarea id="detailedPrompt" rows="3" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary"></textarea>
             </div>
             
-            <!-- 模型选择和分辨率选择 -->
+            <!-- 模型选择 -->
             <div class="mb-6">
                 <div class="flex gap-4">
                     <label class="flex items-center gap-1">
-                        <input type="radio" name="bananaModel" value="nano-banana-2" class="text-primary" checked>
-                        <span class="text-sm">nano-banana-2</span>
+                        <input type="radio" name="model" value="nano-banana-2" class="text-primary" checked>
+                        <span class="text-sm">nano-banana-2，4K</span>
                     </label>
                     <label class="flex items-center gap-1">
-                        <input type="radio" name="bananaModel" value="nano-banana-pro" class="text-primary">
-                        <span class="text-sm">nano-banana-pro</span>
-                    </label>
-                    <label class="flex items-center gap-1">
-                        <input type="radio" name="resolution" value="2K" class="text-primary" checked>
-                        <span class="text-sm">2K</span>
-                    </label>
-                    <label class="flex items-center gap-1">
-                        <input type="radio" name="resolution" value="4K" class="text-primary">
-                        <span class="text-sm">4K</span>
+                        <input type="radio" name="model" value="gpt-image-2" class="text-primary">
+                        <span class="text-sm">gpt-image-2</span>
                     </label>
                 </div>
             </div>
@@ -886,24 +867,16 @@
                 <textarea id="copyPrompt" rows="3" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary"></textarea>
             </div>
             
-            <!-- 模型选择和分辨率选择 -->
+            <!-- 模型选择 -->
             <div class="mb-6">
                 <div class="flex gap-4">
                     <label class="flex items-center gap-1">
-                        <input type="radio" name="copyBananaModel" value="nano-banana-2" class="text-primary" checked>
-                        <span class="text-sm">nano-banana-2</span>
+                        <input type="radio" name="copyModel" value="nano-banana-2" class="text-primary" checked>
+                        <span class="text-sm">nano-banana-2，4K</span>
                     </label>
                     <label class="flex items-center gap-1">
-                        <input type="radio" name="copyBananaModel" value="nano-banana-pro" class="text-primary">
-                        <span class="text-sm">nano-banana-pro</span>
-                    </label>
-                    <label class="flex items-center gap-1">
-                        <input type="radio" name="copyResolution" value="2K" class="text-primary" checked>
-                        <span class="text-sm">2K</span>
-                    </label>
-                    <label class="flex items-center gap-1">
-                        <input type="radio" name="copyResolution" value="4K" class="text-primary">
-                        <span class="text-sm">4K</span>
+                        <input type="radio" name="copyModel" value="gpt-image-2" class="text-primary">
+                        <span class="text-sm">gpt-image-2</span>
                     </label>
                 </div>
             </div>
@@ -1024,24 +997,16 @@
                 <textarea id="designPrompt" rows="3" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary"></textarea>
             </div>
             
-            <!-- 模型选择和分辨率选择 -->
+            <!-- 模型选择 -->
             <div class="mb-6">
                 <div class="flex gap-4">
                     <label class="flex items-center gap-1">
-                        <input type="radio" name="designBananaModel" value="nano-banana-2" class="text-primary" checked>
-                        <span class="text-sm">nano-banana-2</span>
+                        <input type="radio" name="designModel" value="nano-banana-2" class="text-primary" checked>
+                        <span class="text-sm">nano-banana-2，4K</span>
                     </label>
                     <label class="flex items-center gap-1">
-                        <input type="radio" name="designBananaModel" value="nano-banana-pro" class="text-primary">
-                        <span class="text-sm">nano-banana-pro</span>
-                    </label>
-                    <label class="flex items-center gap-1">
-                        <input type="radio" name="designResolution" value="2K" class="text-primary" checked>
-                        <span class="text-sm">2K</span>
-                    </label>
-                    <label class="flex items-center gap-1">
-                        <input type="radio" name="designResolution" value="4K" class="text-primary">
-                        <span class="text-sm">4K</span>
+                        <input type="radio" name="designModel" value="gpt-image-2" class="text-primary">
+                        <span class="text-sm">gpt-image-2</span>
                     </label>
                 </div>
             </div>
@@ -1684,6 +1649,31 @@
             if (detailedPrompt) {
                 document.getElementById('customPrompt').value = detailedPrompt;
             }
+            
+            // 获取选择的模型
+            const selectedModel = document.querySelector('input[name="model"]:checked').value;
+            
+            // 设置主页面的模型选择
+            if (selectedModel === 'gpt-image-2') {
+                // 选择GPT模型
+                document.querySelectorAll('.model-card').forEach(card => {
+                    if (card.dataset.model === 'gpt') {
+                        card.click();
+                    }
+                });
+            } else {
+                // 选择Banana模型
+                document.querySelectorAll('.model-card').forEach(card => {
+                    if (card.dataset.model === 'banana') {
+                        card.click();
+                    }
+                });
+                // 设置Banana子模型为nano-banana-2
+                document.getElementById('bananaSubModel').value = 'nano-banana-2';
+                // 设置分辨率为4K
+                document.getElementById('bananaImageSize').value = '4K';
+            }
+            
             // 关闭模态框
             document.getElementById('effectModal').classList.add('hidden');
             // 触发开始生成按钮
@@ -1729,6 +1719,31 @@
             if (prompt) {
                 document.getElementById('customPrompt').value = prompt;
             }
+            
+            // 获取选择的模型
+            const selectedModel = document.querySelector('input[name="copyModel"]:checked').value;
+            
+            // 设置主页面的模型选择
+            if (selectedModel === 'gpt-image-2') {
+                // 选择GPT模型
+                document.querySelectorAll('.model-card').forEach(card => {
+                    if (card.dataset.model === 'gpt') {
+                        card.click();
+                    }
+                });
+            } else {
+                // 选择Banana模型
+                document.querySelectorAll('.model-card').forEach(card => {
+                    if (card.dataset.model === 'banana') {
+                        card.click();
+                    }
+                });
+                // 设置Banana子模型为nano-banana-2
+                document.getElementById('bananaSubModel').value = 'nano-banana-2';
+                // 设置分辨率为4K
+                document.getElementById('bananaImageSize').value = '4K';
+            }
+            
             // 关闭模态框
             document.getElementById('copyModal').classList.add('hidden');
             // 触发开始生成按钮
@@ -1756,6 +1771,31 @@
             if (prompt) {
                 document.getElementById('customPrompt').value = prompt;
             }
+            
+            // 获取选择的模型
+            const selectedModel = document.querySelector('input[name="designModel"]:checked').value;
+            
+            // 设置主页面的模型选择
+            if (selectedModel === 'gpt-image-2') {
+                // 选择GPT模型
+                document.querySelectorAll('.model-card').forEach(card => {
+                    if (card.dataset.model === 'gpt') {
+                        card.click();
+                    }
+                });
+            } else {
+                // 选择Banana模型
+                document.querySelectorAll('.model-card').forEach(card => {
+                    if (card.dataset.model === 'banana') {
+                        card.click();
+                    }
+                });
+                // 设置Banana子模型为nano-banana-2
+                document.getElementById('bananaSubModel').value = 'nano-banana-2';
+                // 设置分辨率为4K
+                document.getElementById('bananaImageSize').value = '4K';
+            }
+            
             // 关闭模态框
             document.getElementById('designModal').classList.add('hidden');
             // 触发开始生成按钮
@@ -2949,9 +2989,9 @@
         const creditStatus = document.getElementById('creditStatus');
         
         // 计算不同模型所需的最小积分
-        const minBanana = 1300;
+        const minBanana = 1200;
         const minBananaPro = 1800;
-        const minGpt = 400;
+        const minGpt = 600;
         
         const minRequired = Math.min(minBanana, minBananaPro, minGpt);
         
@@ -3119,13 +3159,13 @@
         let requiredCredit;
         if (mainModel === 'banana') {
             if (subModel === 'nano-banana-2') {
-                requiredCredit = 1300;
+                requiredCredit = 1200;
             } else if (subModel === 'nano-banana-pro') {
                 requiredCredit = 1800;
             }
         } else {
-            // GPT模型：固定400积分
-            requiredCredit = 400;
+            // GPT模型：固定600积分
+            requiredCredit = 600;
         }
         
         // 检查当前API Key积分，如果不足则自动切换
@@ -3183,10 +3223,9 @@
         } else {
             // GPT模型请求（根据API文档）
             requestData = {
-                model: subModel,
+                model: "gpt-image-2",
                 prompt: prompt,
                 size: aspectRatio,
-                variants: variants,
                 webHook: "-1",
                 shutProgress: false
             };
