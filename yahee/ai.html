@@ -1278,10 +1278,18 @@
             document.getElementById('aspectRatioContainer').classList.add('hidden');
         }
         
+        // 初始化尺寸选项内容
+        updateImageSizeOptionsForGPT(gptSubModel);
+        
         // 绑定尺寸选择按钮点击事件
         document.getElementById('imageSizeButton').addEventListener('click', (e) => {
             e.stopPropagation();
-            openImageSizeDropdown();
+            const button = document.getElementById('imageSizeButton');
+            if (button.getAttribute('data-state') === 'open') {
+                closeImageSizeDropdown();
+            } else {
+                openImageSizeDropdown();
+            }
         });
     }
 
