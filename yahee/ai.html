@@ -110,10 +110,17 @@
             <div class="lg:col-span-1 space-y-6">
                 <!-- 生成配置 -->
                 <div class="bg-white rounded-xl p-5 shadow-sm card-shadow">
-                    <h2 class="text-lg font-semibold mb-4 flex items-center gap-2">
-                        <i class="fa fa-sliders text-primary"></i>
-                        生成配置
-                    </h2>
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-lg font-semibold flex items-center gap-2">
+                            <i class="fa fa-sliders text-primary"></i>
+                            生成配置
+                        </h2>
+                        <button id="generateLogBtn" class="text-sm text-primary hover:text-primary/80 flex items-center gap-1" title="查看生成日志">
+                            <i class="fa fa-history"></i>
+                            <span>生成日志</span>
+                            <span id="generateCountBadge" class="bg-primary text-white text-xs px-1.5 py-0.5 rounded-full">0</span>
+                        </button>
+                    </div>
                     <div class="space-y-4">
 
 
@@ -681,6 +688,33 @@
         <img id="previewModalImg" src="" alt="放大预览" class="max-w-[90%] max-h-[90vh] object-contain">
     </div>
 
+    <!-- 生成日志模态框 -->
+    <div id="generateLogModal" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center hidden">
+        <div class="bg-white rounded-xl p-6 w-full max-w-2xl mx-4 shadow-xl max-h-[80vh] flex flex-col">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-semibold flex items-center gap-2">
+                    <i class="fa fa-history text-primary"></i>
+                    生成日志
+                </h3>
+                <div class="flex gap-2">
+                    <button id="clearGenerateLogBtn" class="text-sm text-gray-500 hover:text-danger flex items-center gap-1">
+                        <i class="fa fa-trash"></i>
+                        <span>清空日志</span>
+                    </button>
+                    <button id="closeGenerateLogModal" class="text-gray-400 hover:text-gray-600">
+                        <i class="fa fa-times text-lg"></i>
+                    </button>
+                </div>
+            </div>
+            <div id="generateLogContainer" class="flex-grow overflow-y-auto space-y-3">
+                <div class="text-center py-8 text-gray-400">
+                    <i class="fa fa-inbox text-3xl mb-3"></i>
+                    <p>暂无生成记录</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- 错误日志模态框 -->
     <div id="errorLogModal" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center hidden">
         <div class="bg-white rounded-xl p-6 w-full max-w-2xl mx-4 shadow-xl max-h-[80vh] flex flex-col">
@@ -1182,7 +1216,8 @@
         maxConcurrentTasks: 12, // 最大并发任务数
         uploadedImageUrls: [], // 存储上传到图床的图片URL
         currentImageUrl: null, // 当前生成的图片URL
-        errorLogs: [] // 错误日志记录
+        errorLogs: [], // 错误日志记录
+        generateLogs: [] // 生成日志记录
     };
 
     // ImgBB API 配置
@@ -1239,7 +1274,13 @@
         closeErrorLogModal: document.getElementById('closeErrorLogModal'),
         clearErrorLogBtn: document.getElementById('clearErrorLogBtn'),
         errorLogContainer: document.getElementById('errorLogContainer'),
-        errorCountBadge: document.getElementById('errorCountBadge')
+        errorCountBadge: document.getElementById('errorCountBadge'),
+        generateLogBtn: document.getElementById('generateLogBtn'),
+        generateLogModal: document.getElementById('generateLogModal'),
+        closeGenerateLogModal: document.getElementById('closeGenerateLogModal'),
+        clearGenerateLogBtn: document.getElementById('clearGenerateLogBtn'),
+        generateLogContainer: document.getElementById('generateLogContainer'),
+        generateCountBadge: document.getElementById('generateCountBadge')
     };
 
     // 初始化函数
@@ -2427,6 +2468,28 @@
         // 清空错误日志按钮
         elements.clearErrorLogBtn.addEventListener('click', () => {
             clearErrorLog();
+        });
+
+        // 生成日志按钮点击事件
+        elements.generateLogBtn.addEventListener('click', () => {
+            showGenerateLogModal();
+        });
+
+        // 关闭生成日志模态框
+        elements.closeGenerateLogModal.addEventListener('click', () => {
+            hideGenerateLogModal();
+        });
+
+        // 点击生成日志模态框背景关闭
+        elements.generateLogModal.addEventListener('click', (e) => {
+            if (e.target === elements.generateLogModal) {
+                hideGenerateLogModal();
+            }
+        });
+
+        // 清空生成日志按钮
+        elements.clearGenerateLogBtn.addEventListener('click', () => {
+            clearGenerateLog();
         });
 
         // API 设置模态框内按钮事件
@@ -3685,6 +3748,16 @@
                 error: error.message,
                 type: 'generate'
             });
+            
+            // 添加生成日志（失败）
+            addGenerateLog({
+                timestamp: new Date(),
+                taskId: task.id,
+                model: task.mainModel + '/' + task.subModel,
+                prompt: task.prompt,
+                status: 'failed',
+                error: error.message
+            });
             updateTaskManagerUI();
         }
     }
@@ -3746,6 +3819,16 @@
                     
                     showToast('图片生成成功，已自动保存到历史记录', 'success');
                     
+                    // 添加生成日志
+                    addGenerateLog({
+                        timestamp: new Date(),
+                        taskId: task.id,
+                        model: task.mainModel + '/' + task.subModel,
+                        prompt: task.prompt,
+                        status: 'success',
+                        imageUrl: imageUrl
+                    });
+                    
                     // 扣除积分
                     appState.credits[task.apiKey] -= task.requiredCredit;
                     // 刷新积分显示
@@ -3781,6 +3864,16 @@
                         type: 'poll'
                     });
                     
+                    // 添加生成日志（失败）
+                    addGenerateLog({
+                        timestamp: new Date(),
+                        taskId: task.id,
+                        model: task.mainModel + '/' + task.subModel,
+                        prompt: task.prompt,
+                        status: 'failed',
+                        error: errorMessage
+                    });
+                    
                     // 从任务列表中移除失败的任务
                     setTimeout(() => {
                         const taskIndex = appState.tasks.findIndex(t => t.id === task.id);
@@ -3811,6 +3904,16 @@
                     type: 'poll'
                 });
                 
+                // 添加生成日志（失败）
+                addGenerateLog({
+                    timestamp: new Date(),
+                    taskId: task.id,
+                    model: task.mainModel + '/' + task.subModel,
+                    prompt: task.prompt,
+                    status: 'failed',
+                    error: '任务不存在或已过期'
+                });
+                
                 // 从任务列表中移除失败的任务
                 setTimeout(() => {
                     const taskIndex = appState.tasks.findIndex(t => t.id === task.id);
@@ -3834,6 +3937,16 @@
                     prompt: task.prompt.substring(0, 50) + (task.prompt.length > 50 ? '...' : ''),
                     error: result.msg || '获取结果失败',
                     type: 'poll'
+                });
+                
+                // 添加生成日志（失败）
+                addGenerateLog({
+                    timestamp: new Date(),
+                    taskId: task.id,
+                    model: task.mainModel + '/' + task.subModel,
+                    prompt: task.prompt,
+                    status: 'failed',
+                    error: result.msg || '获取结果失败'
                 });
                 
                 // 从任务列表中移除失败的任务
@@ -4397,6 +4510,123 @@
             updateErrorLogDisplay();
             updateErrorCountBadge();
             showToast('错误日志已清空', 'success');
+        }
+    }
+
+    // 添加生成日志
+    function addGenerateLog(logData) {
+        appState.generateLogs.unshift({
+            id: Date.now(),
+            ...logData
+        });
+        
+        // 限制日志数量
+        if (appState.generateLogs.length > 100) {
+            appState.generateLogs = appState.generateLogs.slice(0, 100);
+        }
+        
+        // 更新生成计数显示
+        updateGenerateCountBadge();
+    }
+    
+    // 更新生成计数徽章
+    function updateGenerateCountBadge() {
+        if (elements.generateCountBadge) {
+            elements.generateCountBadge.textContent = appState.generateLogs.length;
+            if (appState.generateLogs.length > 0) {
+                elements.generateCountBadge.classList.remove('hidden');
+            } else {
+                elements.generateCountBadge.classList.add('hidden');
+            }
+        }
+    }
+    
+    // 显示生成日志模态框
+    function showGenerateLogModal() {
+        elements.generateLogModal.classList.remove('hidden');
+        updateGenerateLogDisplay();
+    }
+    
+    // 隐藏生成日志模态框
+    function hideGenerateLogModal() {
+        elements.generateLogModal.classList.add('hidden');
+    }
+    
+    // 更新生成日志显示
+    function updateGenerateLogDisplay() {
+        const container = elements.generateLogContainer;
+        
+        if (!container) return;
+        
+        if (appState.generateLogs.length === 0) {
+            container.innerHTML = `
+                <div class="text-center py-8 text-gray-400">
+                    <i class="fa fa-inbox text-3xl mb-3"></i>
+                    <p>暂无生成记录</p>
+                </div>
+            `;
+            return;
+        }
+        
+        container.innerHTML = '';
+        
+        appState.generateLogs.forEach((log) => {
+            const logItem = document.createElement('div');
+            logItem.className = 'p-4 bg-gray-50 rounded-lg border border-gray-200';
+            
+            const statusIcon = log.status === 'success' ? 'fa-check-circle text-success' : 'fa-times-circle text-danger';
+            const statusBadge = log.status === 'success' ? 
+                '<span class="text-xs bg-success/10 text-success px-2 py-0.5 rounded">成功</span>' : 
+                '<span class="text-xs bg-danger/10 text-danger px-2 py-0.5 rounded">失败</span>';
+            
+            logItem.innerHTML = `
+                <div class="flex items-start justify-between gap-4">
+                    <div class="flex-1">
+                        <div class="flex items-center gap-2 mb-2">
+                            ${statusBadge}
+                            <span class="text-xs text-gray-500">${formatDateTime(log.timestamp)}</span>
+                        </div>
+                        <div class="text-sm text-gray-700 font-medium mb-1">${log.prompt || '无描述词'}</div>
+                        <div class="text-xs text-gray-500 space-y-1">
+                            <div><span class="font-medium">模型:</span> ${log.model || '未知'}</div>
+                            <div><span class="font-medium">任务ID:</span> ${log.taskId || '无'}</div>
+                            ${log.status === 'success' && log.imageUrl ? `<div><span class="font-medium">图片:</span> <a href="${log.imageUrl}" target="_blank" class="text-primary hover:underline">查看图片</a></div>` : ''}
+                        </div>
+                    </div>
+                    <button class="text-gray-400 hover:text-danger self-start" title="删除此日志" data-log-id="${log.id}">
+                        <i class="fa fa-times"></i>
+                    </button>
+                </div>
+            `;
+            
+            // 添加删除按钮事件
+            const deleteBtn = logItem.querySelector('button');
+            deleteBtn.addEventListener('click', () => {
+                deleteGenerateLog(log.id);
+            });
+            
+            container.appendChild(logItem);
+        });
+    }
+    
+    // 删除单条生成日志
+    function deleteGenerateLog(logId) {
+        const index = appState.generateLogs.findIndex(log => log.id === logId);
+        if (index !== -1) {
+            appState.generateLogs.splice(index, 1);
+            updateGenerateLogDisplay();
+            updateGenerateCountBadge();
+            showToast('日志已删除', 'success');
+        }
+    }
+    
+    // 清空生成日志
+    function clearGenerateLog() {
+        if (confirm('确定要清空所有生成日志吗？')) {
+            appState.generateLogs = [];
+            updateGenerateLogDisplay();
+            updateGenerateCountBadge();
+            showToast('生成日志已清空', 'success');
         }
     }
 
