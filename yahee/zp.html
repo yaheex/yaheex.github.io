@@ -227,7 +227,7 @@
         }
         
         .aspect-ratios button {
-            padding: 0 15px;
+            padding: 0 10px;
             border: 1px solid #e0e6ed;
             background-color: #fff;
             border-radius: 8px;
@@ -546,6 +546,9 @@
                                 <button data-pixels="120x160" class="ratio-btn">
                                     120*160
                                 </button>
+                                <button data-pixels="413x626" class="ratio-btn">
+                                    413*626
+                                </button>
                             </div>
                             <div class="custom-ratio" style="display: flex; align-items: center; gap: 10px;">
                                 <input type="number" id="customWidth" placeholder="宽度" min="1" style="max-width: 100px;">
@@ -570,6 +573,7 @@
                                     <option value="480x640">480*640 - (  20~40kb  )</option>
                                     <option value="300x400">300*400 - (  20~50kb  )</option>
                                     <option value="120x160">120*160 - (  0~60kb  )</option>
+                                    <option value="413x626">413*626 - (  40~100kb  )</option>
                                 </select>
                                 <button id="applyPreset">
                                     <i class="fas fa-check-circle" style="margin-right: 8px;"></i> 应用
@@ -705,6 +709,13 @@
                     height: 160,
                     resolution: 300,
                     size: 55
+                },
+                '413x626': {
+                    name: '413*626',
+                    width: 413,
+                    height: 626,
+                    resolution: 300,
+                    size: 90
                 }
             };
             
