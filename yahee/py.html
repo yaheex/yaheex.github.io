@@ -297,6 +297,9 @@
 							<span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="修复文字的模糊、不清晰区域，将文字优化为高清、清晰易读的印刷体样式；精准识别推理图片中所有文字，确保文字100% 无错乱、无遗漏；pixel-perfect，legible，high-resolution">文本还原</span>
 							<span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="产品精修，产品置于纯净的纯白背景上。正视图，平时视角，3D渲染，精准还原产品颜色与包装材质(如玻璃的通透、塑料的哑光、金屈的光泽)。清除所有指纹、灰尘与瑕疵，让产品看起来崭新、瓶身光影立体感强，提升整体质感和高级及感。瓶身标签/文字需清晰锐利。光线柔和均匀，突出产品精致感，符合电商主图标准。">产品精修</span>
 							<span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="菜品，菜品容器（如盘子、碗、盆等一切装菜的容器）都必须补齐并完整显示。摄影级商业菜品拍摄照片。">菜品补齐（图片预留空间）</span>
+							<span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="保持人物五官与脸部特征一致性的前提情况下进行以下要求的人像精修，专业人像摄影，低饱和度，专业影棚精修，柔和影棚光，自然高级磨皮、肤色提亮，保留皮肤质感不假白、五官微调立体、瘦脸自然、均匀肤色、去除痘印斑点黑眼圈、头发边缘顺滑处理，哑光但有光泽，高清细节，精致立体的裸妆，增强头发质感纹理，整个人看起来非常有气色，亚洲人，清晰可见的发丝，超高清的服装。调整为正面证件照构图，人物居中、双肩端正。保留原发型（不要改变原发型），减少毛躁碎发。纯白背景，标准证件照白，均匀无渐变。头肩比例标准，居中对齐。">精修证件照（白）- 小香蕉2K</span>
+							<span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="保持人物五官与脸部特征一致性的前提情况下进行以下要求的人像精修，专业人像摄影，低饱和度，专业影棚精修，柔和影棚光，自然高级磨皮、肤色提亮，保留皮肤质感不假白、五官微调立体、瘦脸自然、均匀肤色、去除痘印斑点黑眼圈、头发边缘顺滑处理，哑光但有光泽，高清细节，精致立体的裸妆，增强头发质感纹理，整个人看起来非常有气色，亚洲人，清晰可见的发丝，超高清的服装。调整为正面证件照构图，人物居中、双肩端正。保留原发型（不要改变原发型），减少毛躁碎发。纯红背景，标准证件照红，均匀无渐变。头肩比例标准，居中对齐。">精修证件照（红）- 小香蕉2K</span>
+							<span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="保持人物五官与脸部特征一致性的前提情况下进行以下要求的人像精修，专业人像摄影，低饱和度，专业影棚精修，柔和影棚光，自然高级磨皮、肤色提亮，保留皮肤质感不假白、五官微调立体、瘦脸自然、均匀肤色、去除痘印斑点黑眼圈、头发边缘顺滑处理，哑光但有光泽，高清细节，精致立体的裸妆，增强头发质感纹理，整个人看起来非常有气色，亚洲人，清晰可见的发丝，超高清的服装。调整为正面证件照构图，人物居中、双肩端正。保留原发型（不要改变原发型），减少毛躁碎发。纯蓝背景，标准证件照蓝，均匀无渐变。头肩比例标准，居中对齐。">精修证件照（蓝）- 小香蕉2K</span>
                     </div>
                     <div class="mb-4">
                         <label for="customPrompt" class="block text-sm font-medium text-gray-600 mb-2">自定义描述词：</label>
@@ -2615,8 +2618,9 @@
                         // 直接是 base64
                         imageUrl = content;
                     } else if (content.startsWith('http')) {
-                        // 直接是 URL
-                        imageUrl = content;
+                        // 直接是 URL - 提取第一个URL（处理可能有多个URL的情况）
+                        const urlMatch = content.match(/https?:\/\/[^\s,]+/);
+                        imageUrl = urlMatch ? urlMatch[0] : content;
                     }
                 }
                 
@@ -3292,8 +3296,11 @@
             appState.selectedTags.forEach(tag => {
                 const tagElement = document.createElement('span');
                 tagElement.className = 'bg-primary/10 text-primary px-3 py-1 rounded-full text-sm flex items-center gap-1';
+                // 查找预设标签元素，获取其显示文本（简短标签）
+                const presetTagElement = document.querySelector(`#presetTags span[data-tag="${tag}"]`);
+                const displayText = presetTagElement ? presetTagElement.textContent : tag.substring(0, 20) + '...';
                 tagElement.innerHTML = `
-                    ${tag}
+                    ${displayText}
                     <button class="ml-1 text-primary/70 hover:text-primary" data-tag="${tag}">
                         <i class="fa fa-times-circle"></i>
                     </button>
