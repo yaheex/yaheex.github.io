@@ -302,7 +302,13 @@
 							<span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="保持人物五官与脸部特征一致性的前提情况下进行以下要求的人像精修，专业人像摄影，低饱和度，专业影棚精修，柔和影棚光，自然高级磨皮、肤色提亮，保留皮肤质感不假白、五官微调立体、瘦脸自然、均匀肤色、去除痘印斑点黑眼圈、头发边缘顺滑处理，哑光但有光泽，高清细节，精致立体的裸妆，增强头发质感纹理，整个人看起来非常有气色，亚洲人，清晰可见的发丝，超高清的服装。调整为正面证件照构图，人物居中、双肩端正。保留原发型（不要改变原发型），减少毛躁碎发。纯蓝背景，标准证件照蓝，均匀无渐变。头肩比例标准，居中对齐。">精修证件照（蓝）- 小香蕉2K</span>
                     </div>
                     <div class="mb-4">
-                        <label for="customPrompt" class="block text-sm font-medium text-gray-600 mb-2">自定义描述词：</label>
+                        <div class="flex justify-between items-center mb-2">
+                            <label for="customPrompt" class="block text-sm font-medium text-gray-600">自定义描述词：</label>
+                            <button id="aiPolishBtn" class="text-xs text-primary hover:text-primary/80 flex items-center gap-1 transition-colors">
+                                <i class="fa fa-magic"></i>
+                                AI润词
+                            </button>
+                        </div>
                         <textarea id="customPrompt" rows="4" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary" placeholder="A4/A3—3:4.4，40x60—2:3，60x90—2:3，60x160—3:8，80x180—4:9，120x200—1:1.67，80x200—1:2.5"></textarea>
                     </div>
                     <div id="selectedTagsContainer" class="mb-2 hidden">
@@ -594,6 +600,85 @@
 				
     </main>
 
+
+    <!-- AI润词模态框 -->
+    <div id="aiPolishModal" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center hidden">
+        <div class="bg-white rounded-xl p-6 w-full max-w-2xl mx-4 shadow-xl max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-semibold flex items-center gap-2">
+                    <i class="fa fa-magic text-primary"></i>
+                    AI润词
+                </h3>
+                <button id="closeAiPolishModal" class="text-gray-400 hover:text-gray-600">
+                    <i class="fa fa-times text-lg"></i>
+                </button>
+            </div>
+            
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-600 mb-2">选择润词风格：</label>
+                <div class="grid grid-cols-3 gap-2">
+                    <button class="polish-style-btn border border-gray-300 rounded-lg py-2 px-3 text-sm hover:border-primary hover:text-primary transition-colors text-left" data-style="professional">
+                        <i class="fa fa-camera mr-2"></i>专业摄影
+                    </button>
+                    <button class="polish-style-btn border border-gray-300 rounded-lg py-2 px-3 text-sm hover:border-primary hover:text-primary transition-colors text-left" data-style="cinematic">
+                        <i class="fa fa-film mr-2"></i>电影质感
+                    </button>
+                    <button class="polish-style-btn border border-gray-300 rounded-lg py-2 px-3 text-sm hover:border-primary hover:text-primary transition-colors text-left" data-style="anime">
+                        <i class="fa fa-paint-brush mr-2"></i>动漫风格
+                    </button>
+                    <button class="polish-style-btn border border-gray-300 rounded-lg py-2 px-3 text-sm hover:border-primary hover:text-primary transition-colors text-left" data-style="realistic">
+                        <i class="fa fa-image mr-2"></i>写实高清
+                    </button>
+                    <button class="polish-style-btn border border-gray-300 rounded-lg py-2 px-3 text-sm hover:border-primary hover:text-primary transition-colors text-left" data-style="portrait">
+                        <i class="fa fa-user mr-2"></i>人像精修
+                    </button>
+                    <button class="polish-style-btn border border-gray-300 rounded-lg py-2 px-3 text-sm hover:border-primary hover:text-primary transition-colors text-left" data-style="product">
+                        <i class="fa fa-gift mr-2"></i>产品摄影
+                    </button>
+                    <button class="polish-style-btn border border-gray-300 rounded-lg py-2 px-3 text-sm hover:border-primary hover:text-primary transition-colors text-left" data-style="restoration">
+                        <i class="fa fa-magic mr-2"></i>图像修复
+                    </button>
+                    <button class="polish-style-btn border border-gray-300 rounded-lg py-2 px-3 text-sm hover:border-primary hover:text-primary transition-colors text-left" data-style="vector">
+                        <i class="fa fa-pencil-square mr-2"></i>矢量设计
+                    </button>
+                    <button class="polish-style-btn border border-gray-300 rounded-lg py-2 px-3 text-sm hover:border-primary hover:text-primary transition-colors text-left" data-style="poster">
+                        <i class="fa fa-newspaper-o mr-2"></i>海报设计
+                    </button>
+                    <button class="polish-style-btn border border-gray-300 rounded-lg py-2 px-3 text-sm hover:border-primary hover:text-primary transition-colors text-left" data-style="certificate">
+                        <i class="fa fa-id-card mr-2"></i>证件照
+                    </button>
+                    <button class="polish-style-btn border border-gray-300 rounded-lg py-2 px-3 text-sm hover:border-primary hover:text-primary transition-colors text-left" data-style="cad">
+                        <i class="fa fa-cog mr-2"></i>CAD图纸
+                    </button>
+                    <button class="polish-style-btn border border-gray-300 rounded-lg py-2 px-3 text-sm hover:border-primary hover:text-primary transition-colors text-left" data-style="food">
+                        <i class="fa fa-cutlery mr-2"></i>美食摄影
+                    </button>
+                    <button class="polish-style-btn border border-gray-300 rounded-lg py-2 px-3 text-sm hover:border-primary hover:text-primary transition-colors text-left" data-style="electronic">
+                        <i class="fa fa-desktop mr-2"></i>电子版转换
+                    </button>
+                </div>
+            </div>
+            
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-600 mb-2">润词强度：</label>
+                <div class="flex gap-2">
+                    <button class="polish-intensity-btn flex-1 border border-gray-300 rounded-lg py-2 text-sm hover:border-primary hover:text-primary transition-colors" data-intensity="light">轻度</button>
+                    <button class="polish-intensity-btn flex-1 border border-primary bg-primary/10 text-primary rounded-lg py-2 text-sm transition-colors" data-intensity="medium">中度</button>
+                    <button class="polish-intensity-btn flex-1 border border-gray-300 rounded-lg py-2 text-sm hover:border-primary hover:text-primary transition-colors" data-intensity="heavy">深度</button>
+                </div>
+            </div>
+            
+            <div class="flex gap-3">
+                <button id="cancelPolishBtn" class="flex-1 border border-gray-300 text-gray-600 py-2 rounded-lg hover:bg-gray-50 transition-colors">
+                    取消
+                </button>
+                <button id="confirmPolishBtn" class="flex-1 bg-primary text-white py-2 rounded-lg btn-hover flex items-center justify-center gap-2">
+                    <i class="fa fa-magic"></i>
+                    开始润词
+                </button>
+            </div>
+        </div>
+    </div>
 
     <!-- 图片预览模态框 -->
     <div id="imagePreviewModal" class="fixed inset-0 bg-black/80 z-50 flex items-center justify-center hidden">
@@ -1326,6 +1411,48 @@
                     showToast('该任务没有可下载的图片', 'warning');
                 }
             }
+        });
+
+        // AI润词按钮点击事件
+        document.getElementById('aiPolishBtn').addEventListener('click', () => {
+            openAiPolishModal();
+        });
+
+        // 关闭AI润词模态框
+        document.getElementById('closeAiPolishModal').addEventListener('click', () => {
+            closeAiPolishModal();
+        });
+
+        // 取消润词
+        document.getElementById('cancelPolishBtn').addEventListener('click', () => {
+            closeAiPolishModal();
+        });
+
+        // 确认润词
+        document.getElementById('confirmPolishBtn').addEventListener('click', () => {
+            executePolish();
+        });
+
+        // 润词风格选择
+        document.querySelectorAll('.polish-style-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                currentPolishStyle = btn.dataset.style;
+                document.querySelectorAll('.polish-style-btn').forEach(b => {
+                    b.classList.remove('border-primary', 'bg-primary/10', 'text-primary');
+                });
+                btn.classList.add('border-primary', 'bg-primary/10', 'text-primary');
+            });
+        });
+
+        // 润词强度选择
+        document.querySelectorAll('.polish-intensity-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                currentPolishIntensity = btn.dataset.intensity;
+                document.querySelectorAll('.polish-intensity-btn').forEach(b => {
+                    b.classList.remove('border-primary', 'bg-primary/10', 'text-primary');
+                });
+                btn.classList.add('border-primary', 'bg-primary/10', 'text-primary');
+            });
         });
 
         // 添加键盘事件监听
@@ -2750,6 +2877,44 @@
                     const imageUrl = data.results[0].url;
                     const imageContent = data.results[0].content || '生成完成';
                     
+                    // 检查图片URL是否有效
+                    if (!imageUrl || imageUrl.trim() === '' || imageUrl.toLowerCase() === '上传失败') {
+                        task.status = 'failed';
+                        task.error = '图片生成失败：上传失败';
+                        task.endTime = new Date();
+                        
+                        // 记录错误日志
+                        addErrorLog({
+                            timestamp: new Date(),
+                            taskId: task.id,
+                            model: task.mainModel + '/' + task.subModel,
+                            prompt: task.prompt.substring(0, 50) + (task.prompt.length > 50 ? '...' : ''),
+                            error: '图片上传失败',
+                            type: 'result'
+                        });
+                        
+                        addGenerateLog({
+                            timestamp: new Date(),
+                            taskId: task.id,
+                            model: task.mainModel + '/' + task.subModel,
+                            prompt: task.prompt,
+                            status: 'failed',
+                            error: '图片上传失败'
+                        });
+                        
+                        updateTaskManagerUI();
+                        showToast('图片生成失败：上传失败', 'error');
+                        
+                        setTimeout(() => {
+                            const taskIndex = appState.tasks.findIndex(t => t.id === task.id);
+                            if (taskIndex !== -1) {
+                                appState.tasks.splice(taskIndex, 1);
+                                updateTaskManagerUI();
+                            }
+                        }, 2000);
+                        return;
+                    }
+                    
                     // 更新任务信息
                     task.imageUrl = imageUrl;
                     task.content = imageContent;
@@ -3748,6 +3913,196 @@
     
 
     
+    // AI润词配置
+    const polishStyles = {
+        professional: {
+            name: '专业摄影',
+            keywords: ['专业摄影', '8K超高清', '精细细节', '专业灯光', '影棚布光', '高对比度', '锐利清晰', '专业调色', 'RAW格式直出', '商业摄影级别'],
+            light: ['专业摄影风格', '高清细节'],
+            medium: ['专业摄影', '8K超高清', '精细细节', '专业灯光', '影棚布光'],
+            heavy: ['专业摄影', '8K超高清', '精细细节', '专业灯光', '影棚布光', '高对比度', '锐利清晰', '专业调色', 'RAW格式直出', '商业摄影级别']
+        },
+        cinematic: {
+            name: '电影质感',
+            keywords: ['电影级画面', '电影色调', '景深效果', '散景背景', '胶片质感', '戏剧性光影', '宽屏构图', '好莱坞质感', '柔和光晕', '暗角效果'],
+            light: ['电影质感', '景深效果'],
+            medium: ['电影级画面', '电影色调', '景深效果', '散景背景', '胶片质感'],
+            heavy: ['电影级画面', '电影色调', '景深效果', '散景背景', '胶片质感', '戏剧性光影', '宽屏构图', '好莱坞质感', '柔和光晕', '暗角效果']
+        },
+        anime: {
+            name: '动漫风格',
+            keywords: ['二次元风格', '动漫插画', '日系画风', '赛璐璐上色', '精美线条', '梦幻色彩', '萌系风格', '精美背景', '光影效果', '细腻笔触'],
+            light: ['动漫风格', '精美线条'],
+            medium: ['二次元风格', '动漫插画', '日系画风', '赛璐璐上色', '精美线条'],
+            heavy: ['二次元风格', '动漫插画', '日系画风', '赛璐璐上色', '精美线条', '梦幻色彩', '萌系风格', '精美背景', '光影效果', '细腻笔触']
+        },
+        realistic: {
+            name: '写实高清',
+            keywords: ['超写实', '照片级真实', '细节丰富', '自然光影', '真实材质', '高动态范围', '景深自然', '色彩还原', '真实纹理', '物理渲染'],
+            light: ['写实风格', '高清细节'],
+            medium: ['超写实', '照片级真实', '细节丰富', '自然光影', '真实材质'],
+            heavy: ['超写实', '照片级真实', '细节丰富', '自然光影', '真实材质', '高动态范围', '景深自然', '色彩还原', '真实纹理', '物理渲染']
+        },
+        portrait: {
+            name: '人像精修',
+            keywords: ['人像摄影', '皮肤质感', '自然磨皮', '五官精致', '眼神光', '发丝清晰', '肤色均匀', '轮廓立体', '柔和光影', '高级感'],
+            light: ['人像精修', '自然磨皮'],
+            medium: ['人像摄影', '皮肤质感', '自然磨皮', '五官精致', '眼神光'],
+            heavy: ['人像摄影', '皮肤质感', '自然磨皮', '五官精致', '眼神光', '发丝清晰', '肤色均匀', '轮廓立体', '柔和光影', '高级感']
+        },
+        product: {
+            name: '产品摄影',
+            keywords: ['产品摄影', '白底背景', '干净简洁', '产品细节', '材质质感', '均匀布光', '无阴影', '高反光', '立体感', '商业级'],
+            light: ['产品摄影', '干净简洁'],
+            medium: ['产品摄影', '白底背景', '产品细节', '材质质感', '均匀布光'],
+            heavy: ['产品摄影', '白底背景', '干净简洁', '产品细节', '材质质感', '均匀布光', '无阴影', '高反光', '立体感', '商业级']
+        },
+        // 新增：图像修复增强类
+        restoration: {
+            name: '图像修复',
+            keywords: ['图像修复', '去除划痕', '去除灰尘', '去除锈迹', '去除凹痕', '画质提升', '材质纹理', '原始光影', '原始构图', '细节增强'],
+            light: ['画质提升', '细节增强'],
+            medium: ['图像修复', '去除划痕', '画质提升', '材质纹理', '细节增强'],
+            heavy: ['图像修复', '去除划痕', '去除灰尘', '去除锈迹', '去除凹痕', '画质提升', '材质纹理', '原始光影', '原始构图', '细节增强']
+        },
+        // 新增：矢量图/平面设计类
+        vector: {
+            name: '矢量设计',
+            keywords: ['矢量图风格', '平面设计', '清除透视', '垂直对齐', '正面视角', '轮廓平滑', '纯色填充', '减少过渡', '矢量追踪', '印刷级'],
+            light: ['矢量风格', '平面设计'],
+            medium: ['矢量图风格', '清除透视', '轮廓平滑', '纯色填充', '减少过渡'],
+            heavy: ['矢量图风格', '平面设计', '清除透视', '垂直对齐', '正面视角', '轮廓平滑', '纯色填充', '减少过渡', '矢量追踪', '印刷级']
+        },
+        // 新增：海报设计类
+        poster: {
+            name: '海报设计',
+            keywords: ['海报设计', '商业海报', '分层排列', '文字排版', '视觉冲击', '创意构图', '品牌元素', '色彩搭配', '版式设计', '印刷规范'],
+            light: ['海报设计', '版式设计'],
+            medium: ['海报设计', '商业海报', '分层排列', '视觉冲击', '色彩搭配'],
+            heavy: ['海报设计', '商业海报', '分层排列', '文字排版', '视觉冲击', '创意构图', '品牌元素', '色彩搭配', '版式设计', '印刷规范']
+        },
+        // 新增：证件照类
+        certificate: {
+            name: '证件照',
+            keywords: ['证件照', '标准证件照', '纯白背景', '均匀无渐变', '头肩比例', '居中对齐', '自然磨皮', '肤色均匀', '五官清晰', '高清服装'],
+            light: ['证件照', '标准规格'],
+            medium: ['证件照', '纯白背景', '头肩比例', '居中对齐', '肤色均匀'],
+            heavy: ['证件照', '标准证件照', '纯白背景', '均匀无渐变', '头肩比例', '居中对齐', '自然磨皮', '肤色均匀', '五官清晰', '高清服装']
+        },
+        // 新增：CAD图纸类
+        cad: {
+            name: 'CAD图纸',
+            keywords: ['CAD图纸', '黑白线稿', '工程制图', '精确尺寸', '线条清晰', '无填充', '高对比', '规范线宽', '技术图纸', '可编辑'],
+            light: ['CAD图纸', '线条清晰'],
+            medium: ['CAD图纸', '黑白线稿', '线条清晰', '高对比', '规范线宽'],
+            heavy: ['CAD图纸', '黑白线稿', '工程制图', '精确尺寸', '线条清晰', '无填充', '高对比', '规范线宽', '技术图纸', '可编辑']
+        },
+        // 新增：美食摄影类
+        food: {
+            name: '美食摄影',
+            keywords: ['美食摄影', '商业菜品', '食欲感', '新鲜食材', '精致摆盘', '暖色调', '蒸汽效果', '细节清晰', '米其林级别', '食物质感'],
+            light: ['美食摄影', '食欲感'],
+            medium: ['美食摄影', '商业菜品', '新鲜食材', '精致摆盘', '细节清晰'],
+            heavy: ['美食摄影', '商业菜品', '食欲感', '新鲜食材', '精致摆盘', '暖色调', '蒸汽效果', '细节清晰', '米其林级别', '食物质感']
+        },
+        // 新增：电子版转换类
+        electronic: {
+            name: '电子版转换',
+            keywords: ['电子版', '清除透视', '垂直视角', '移除划痕', '移除噪点', '提升画质', '高清还原', '印刷级', '无破损', '无瑕疵'],
+            light: ['电子版', '高清还原'],
+            medium: ['电子版', '清除透视', '移除噪点', '提升画质', '高清还原'],
+            heavy: ['电子版', '清除透视', '垂直视角', '移除划痕', '移除噪点', '提升画质', '高清还原', '印刷级', '无破损', '无瑕疵']
+        }
+    };
+
+    // 当前选中的润词风格和强度
+    let currentPolishStyle = 'professional';
+    let currentPolishIntensity = 'medium';
+
+    // AI润词函数
+    function aiPolishPrompt(prompt, style, intensity) {
+        if (!prompt || prompt.trim() === '') {
+            return '';
+        }
+
+        const styleConfig = polishStyles[style];
+        if (!styleConfig) {
+            return prompt;
+        }
+
+        // 获取对应强度的关键词
+        let keywords = [];
+        if (intensity === 'light') {
+            keywords = styleConfig.light || styleConfig.keywords.slice(0, 3);
+        } else if (intensity === 'medium') {
+            keywords = styleConfig.medium || styleConfig.keywords.slice(0, 5);
+        } else {
+            keywords = styleConfig.heavy || styleConfig.keywords;
+        }
+
+        // 将关键词添加到原始描述词前面
+        const polishedPrompt = keywords.join('，') + '，' + prompt;
+
+        return polishedPrompt;
+    }
+
+    // 打开AI润词模态框
+    function openAiPolishModal() {
+        const modal = document.getElementById('aiPolishModal');
+        const prompt = document.getElementById('customPrompt').value;
+
+        if (!prompt || prompt.trim() === '') {
+            showToast('请先输入描述词', 'warning');
+            return;
+        }
+
+        modal.classList.remove('hidden');
+
+        // 重置选中状态
+        currentPolishStyle = 'professional';
+        currentPolishIntensity = 'medium';
+
+        // 更新UI
+        document.querySelectorAll('.polish-style-btn').forEach(btn => {
+            btn.classList.remove('border-primary', 'bg-primary/10', 'text-primary');
+            if (btn.dataset.style === currentPolishStyle) {
+                btn.classList.add('border-primary', 'bg-primary/10', 'text-primary');
+            }
+        });
+
+        document.querySelectorAll('.polish-intensity-btn').forEach(btn => {
+            btn.classList.remove('border-primary', 'bg-primary/10', 'text-primary');
+            if (btn.dataset.intensity === currentPolishIntensity) {
+                btn.classList.add('border-primary', 'bg-primary/10', 'text-primary');
+            }
+        });
+    }
+
+    // 关闭AI润词模态框
+    function closeAiPolishModal() {
+        document.getElementById('aiPolishModal').classList.add('hidden');
+    }
+
+    // 执行润词
+    function executePolish() {
+        const promptEl = document.getElementById('customPrompt');
+        const originalPrompt = promptEl.value;
+
+        if (!originalPrompt || originalPrompt.trim() === '') {
+            showToast('请先输入描述词', 'warning');
+            return;
+        }
+
+        const polishedPrompt = aiPolishPrompt(originalPrompt, currentPolishStyle, currentPolishIntensity);
+
+        if (polishedPrompt) {
+            promptEl.value = polishedPrompt;
+            showToast('润词完成', 'success');
+        }
+
+        closeAiPolishModal();
+    }
+
     // 更新效果描述词
     function updateEffectPrompt() {
         const customPrompt = document.getElementById('detailedPrompt');
