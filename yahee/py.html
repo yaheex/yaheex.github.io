@@ -118,14 +118,14 @@
 
 
                         <div>
-                            <div class="grid grid-cols-3 gap-2" id="modelSelector">
+                            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2" id="modelSelector">
                                 <div class="model-card active" data-model="gpt">
                                     <div class="flex justify-between items-start">
                                         <div>
                                             <h4 class="font-medium">
-                                                订阅套餐
+                                                天期月
                                             </h4>
-                                            <p class="text-xs text-gray-500 mt-1">只支持GPT-1K</p>
+                                            <p class="text-xs text-gray-500 mt-1">GPT-1K</p>
                                         </div>
                                         <i class="fa fa-check-circle text-primary"></i>
                                     </div>
@@ -134,9 +134,9 @@
                                     <div class="flex justify-between items-start">
                                         <div>
                                             <h4 class="font-medium">
-                                                模型广场
+                                                模型
                                             </h4>
-                                            <p class="text-xs text-gray-500 mt-1">获取模型广场</p>
+                                            <p class="text-xs text-gray-500 mt-1">获取模型</p>
                                         </div>
                                         <i class="fa fa-check-circle text-primary hidden"></i>
                                     </div>
@@ -145,9 +145,20 @@
                                     <div class="flex justify-between items-start">
                                         <div>
                                             <h4 class="font-medium">
-                                                转矢量图
+                                                转矢量
                                             </h4>
-                                            <p class="text-xs text-gray-500 mt-1">图片转矢量图</p>
+                                            <p class="text-xs text-gray-500 mt-1">图片转矢量</p>
+                                        </div>
+                                        <i class="fa fa-check-circle text-primary hidden"></i>
+                                    </div>
+                                </div>
+                                <div class="model-card" data-model="agnes">
+                                    <div class="flex justify-between items-start">
+                                        <div>
+                                            <h4 class="font-medium">
+                                                Agnes
+                                            </h4>
+                                            <p class="text-xs text-gray-500 mt-1">Image 2</p>
                                         </div>
                                         <i class="fa fa-check-circle text-primary hidden"></i>
                                     </div>
@@ -201,6 +212,57 @@
                                 <label class="block text-sm font-medium text-gray-600 mb-1">到期时间：</label>
                                 <div id="vectorExpireTime" class="text-sm text-gray-700 bg-gray-50 px-3 py-2 rounded-lg border border-gray-200">
                                     <span class="text-gray-400">请先输入 Key 和 Auth</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="agnesConfig" class="border-l-4 border-primary pl-4 py-2 hidden">
+                            <div class="mb-2">
+                                <label for="agnesApiKey" class="block text-sm font-medium text-gray-600 mb-1">API Key：</label>
+                                <input type="text" id="agnesApiKey" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary" placeholder="输入 Agnes API Key">
+                            </div>
+                            <div class="mb-2">
+                                <label for="agnesModelVersion" class="block text-sm font-medium text-gray-600 mb-2">模型版本：</label>
+                                <select id="agnesModelVersion" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary">
+                                    <option value="agnes-image-2.1-flash">2.1（高信息密度图像、复杂构图细节丰富视觉场景）</option>
+                                    <option value="agnes-image-2.0-flash">2.0（适合创意设计、营销视觉、电商产品图）</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-600 mb-2">图片比例：（生成的图片只能另存为保存下来）</label>
+                                <div class="flex flex-wrap gap-2" id="agnesAspectRatioButtons">
+                                    <button type="button" data-ratio="1:1" class="flex items-center gap-2 px-3 py-2 rounded-lg border border-gray-300 hover:border-primary hover:bg-primary/5 transition-colors">
+                                        <div class="w-6 h-6 rounded-sm bg-gray-200 border border-gray-300"></div>
+                                        <span class="text-sm">1:1</span>
+                                    </button>
+                                    <button type="button" data-ratio="3:4" class="flex items-center gap-2 px-3 py-2 rounded-lg border border-gray-300 hover:border-primary hover:bg-primary/5 transition-colors">
+                                        <div class="w-4 h-5 rounded-sm bg-gray-200 border border-gray-300"></div>
+                                        <span class="text-sm">3:4</span>
+                                    </button>
+                                    <button type="button" data-ratio="4:3" class="flex items-center gap-2 px-3 py-2 rounded-lg border border-gray-300 hover:border-primary hover:bg-primary/5 transition-colors">
+                                        <div class="w-5 h-4 rounded-sm bg-gray-200 border border-gray-300"></div>
+                                        <span class="text-sm">4:3</span>
+                                    </button>
+                                    <button type="button" data-ratio="16:9" class="flex items-center gap-2 px-3 py-2 rounded-lg border border-gray-300 hover:border-primary hover:bg-primary/5 transition-colors">
+                                        <div class="w-8 h-4 rounded-sm bg-gray-200 border border-gray-300"></div>
+                                        <span class="text-sm">16:9</span>
+                                    </button>
+                                    <button type="button" data-ratio="9:16" class="flex items-center gap-2 px-3 py-2 rounded-lg border border-gray-300 hover:border-primary hover:bg-primary/5 transition-colors">
+                                        <div class="w-4 h-8 rounded-sm bg-gray-200 border border-gray-300"></div>
+                                        <span class="text-sm">9:16</span>
+                                    </button>
+                                    <button type="button" data-ratio="2:3" class="flex items-center gap-2 px-3 py-2 rounded-lg border border-gray-300 hover:border-primary hover:bg-primary/5 transition-colors">
+                                        <div class="w-4 h-6 rounded-sm bg-gray-200 border border-gray-300"></div>
+                                        <span class="text-sm">2:3</span>
+                                    </button>
+                                    <button type="button" data-ratio="3:2" class="flex items-center gap-2 px-3 py-2 rounded-lg border border-gray-300 hover:border-primary hover:bg-primary/5 transition-colors">
+                                        <div class="w-6 h-4 rounded-sm bg-gray-200 border border-gray-300"></div>
+                                        <span class="text-sm">3:2</span>
+                                    </button>
+                                    <button type="button" data-ratio="21:9" class="flex items-center gap-2 px-3 py-2 rounded-lg border border-gray-300 hover:border-primary hover:bg-primary/5 transition-colors">
+                                        <div class="w-10 h-4 rounded-sm bg-gray-200 border border-gray-300"></div>
+                                        <span class="text-sm">21:9</span>
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -302,13 +364,7 @@
 							<span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="保持人物五官与脸部特征一致性的前提情况下进行以下要求的人像精修，专业人像摄影，低饱和度，专业影棚精修，柔和影棚光，自然高级磨皮、肤色提亮，保留皮肤质感不假白、五官微调立体、瘦脸自然、均匀肤色、去除痘印斑点黑眼圈、头发边缘顺滑处理，哑光但有光泽，高清细节，精致立体的裸妆，增强头发质感纹理，整个人看起来非常有气色，亚洲人，清晰可见的发丝，超高清的服装。调整为正面证件照构图，人物居中、双肩端正。保留原发型（不要改变原发型），减少毛躁碎发。纯蓝背景，标准证件照蓝，均匀无渐变。头肩比例标准，居中对齐。">精修证件照（蓝）- 小香蕉2K</span>
                     </div>
                     <div class="mb-4">
-                        <div class="flex justify-between items-center mb-2">
-                            <label for="customPrompt" class="block text-sm font-medium text-gray-600">自定义描述词：</label>
-                            <button id="aiPolishBtn" class="text-xs text-primary hover:text-primary/80 flex items-center gap-1 transition-colors">
-                                <i class="fa fa-magic"></i>
-                                AI润词
-                            </button>
-                        </div>
+                        <label for="customPrompt" class="block text-sm font-medium text-gray-600 mb-2">自定义描述词：</label>
                         <textarea id="customPrompt" rows="4" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary" placeholder="A4/A3—3:4.4，40x60—2:3，60x90—2:3，60x160—3:8，80x180—4:9，120x200—1:1.67，80x200—1:2.5"></textarea>
                     </div>
                     <div id="selectedTagsContainer" class="mb-2 hidden">
@@ -599,87 +655,6 @@
                 </div>
 				
     </main>
-
-
-    <!-- AI润词模态框 -->
-    <div id="aiPolishModal" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center hidden">
-        <div class="bg-white rounded-xl p-6 w-full max-w-2xl mx-4 shadow-xl max-h-[90vh] overflow-y-auto">
-            <div class="flex justify-between items-center mb-4">
-                <h3 class="text-xl font-semibold flex items-center gap-2">
-                    <i class="fa fa-magic text-primary"></i>
-                    AI润词
-                </h3>
-                <button id="closeAiPolishModal" class="text-gray-400 hover:text-gray-600">
-                    <i class="fa fa-times text-lg"></i>
-                </button>
-            </div>
-            
-            <div class="mb-4">
-                <label class="block text-sm font-medium text-gray-600 mb-2">选择润词风格：</label>
-                <div class="grid grid-cols-3 gap-2">
-                    <button class="polish-style-btn border border-gray-300 rounded-lg py-2 px-3 text-sm hover:border-primary hover:text-primary transition-colors text-left" data-style="professional">
-                        <i class="fa fa-camera mr-2"></i>专业摄影
-                    </button>
-                    <button class="polish-style-btn border border-gray-300 rounded-lg py-2 px-3 text-sm hover:border-primary hover:text-primary transition-colors text-left" data-style="cinematic">
-                        <i class="fa fa-film mr-2"></i>电影质感
-                    </button>
-                    <button class="polish-style-btn border border-gray-300 rounded-lg py-2 px-3 text-sm hover:border-primary hover:text-primary transition-colors text-left" data-style="anime">
-                        <i class="fa fa-paint-brush mr-2"></i>动漫风格
-                    </button>
-                    <button class="polish-style-btn border border-gray-300 rounded-lg py-2 px-3 text-sm hover:border-primary hover:text-primary transition-colors text-left" data-style="realistic">
-                        <i class="fa fa-image mr-2"></i>写实高清
-                    </button>
-                    <button class="polish-style-btn border border-gray-300 rounded-lg py-2 px-3 text-sm hover:border-primary hover:text-primary transition-colors text-left" data-style="portrait">
-                        <i class="fa fa-user mr-2"></i>人像精修
-                    </button>
-                    <button class="polish-style-btn border border-gray-300 rounded-lg py-2 px-3 text-sm hover:border-primary hover:text-primary transition-colors text-left" data-style="product">
-                        <i class="fa fa-gift mr-2"></i>产品摄影
-                    </button>
-                    <button class="polish-style-btn border border-gray-300 rounded-lg py-2 px-3 text-sm hover:border-primary hover:text-primary transition-colors text-left" data-style="restoration">
-                        <i class="fa fa-magic mr-2"></i>图像修复
-                    </button>
-                    <button class="polish-style-btn border border-gray-300 rounded-lg py-2 px-3 text-sm hover:border-primary hover:text-primary transition-colors text-left" data-style="vector">
-                        <i class="fa fa-pencil-square mr-2"></i>矢量设计
-                    </button>
-                    <button class="polish-style-btn border border-gray-300 rounded-lg py-2 px-3 text-sm hover:border-primary hover:text-primary transition-colors text-left" data-style="poster">
-                        <i class="fa fa-newspaper-o mr-2"></i>海报设计
-                    </button>
-                    <button class="polish-style-btn border border-gray-300 rounded-lg py-2 px-3 text-sm hover:border-primary hover:text-primary transition-colors text-left" data-style="certificate">
-                        <i class="fa fa-id-card mr-2"></i>证件照
-                    </button>
-                    <button class="polish-style-btn border border-gray-300 rounded-lg py-2 px-3 text-sm hover:border-primary hover:text-primary transition-colors text-left" data-style="cad">
-                        <i class="fa fa-cog mr-2"></i>CAD图纸
-                    </button>
-                    <button class="polish-style-btn border border-gray-300 rounded-lg py-2 px-3 text-sm hover:border-primary hover:text-primary transition-colors text-left" data-style="food">
-                        <i class="fa fa-cutlery mr-2"></i>美食摄影
-                    </button>
-                    <button class="polish-style-btn border border-gray-300 rounded-lg py-2 px-3 text-sm hover:border-primary hover:text-primary transition-colors text-left" data-style="electronic">
-                        <i class="fa fa-desktop mr-2"></i>电子版转换
-                    </button>
-                </div>
-            </div>
-            
-            <div class="mb-4">
-                <label class="block text-sm font-medium text-gray-600 mb-2">润词强度：</label>
-                <div class="flex gap-2">
-                    <button class="polish-intensity-btn flex-1 border border-gray-300 rounded-lg py-2 text-sm hover:border-primary hover:text-primary transition-colors" data-intensity="light">轻度</button>
-                    <button class="polish-intensity-btn flex-1 border border-primary bg-primary/10 text-primary rounded-lg py-2 text-sm transition-colors" data-intensity="medium">中度</button>
-                    <button class="polish-intensity-btn flex-1 border border-gray-300 rounded-lg py-2 text-sm hover:border-primary hover:text-primary transition-colors" data-intensity="heavy">深度</button>
-                </div>
-            </div>
-            
-            <div class="flex gap-3">
-                <button id="cancelPolishBtn" class="flex-1 border border-gray-300 text-gray-600 py-2 rounded-lg hover:bg-gray-50 transition-colors">
-                    取消
-                </button>
-                <button id="confirmPolishBtn" class="flex-1 bg-primary text-white py-2 rounded-lg btn-hover flex items-center justify-center gap-2">
-                    <i class="fa fa-magic"></i>
-                    开始润词
-                </button>
-            </div>
-        </div>
-    </div>
-
     <!-- 图片预览模态框 -->
     <div id="imagePreviewModal" class="fixed inset-0 bg-black/80 z-50 flex items-center justify-center hidden">
         <button id="closePreviewModal" class="absolute top-4 right-4 text-white text-3xl hover:text-gray-300">
@@ -1172,10 +1147,10 @@
     const IMGBB_API_KEY = 'e8bf0d415745ca4f4ceee30dd5745e16';
     const IMGBB_UPLOAD_URL = 'https://api.imgbb.com/1/upload';
 
-    // 模型广场 API 配置
+    // 模型 API 配置
     const NANO_BANANA_API = 'https://api.pangyu.asia';
 
-    // 订阅套餐 API 配置
+    // 天期月 API 配置
     const GPT_IMAGE_API = 'https://api.pangyu.asia';
 
     // DOM 元素
@@ -1229,7 +1204,7 @@
             document.getElementById('gptApiKey').value = savedGptApiKey;
         }
 
-        // 加载 转矢量图 Key 和 Auth
+        // 加载 转矢量 Key 和 Auth
         const savedVectorApiKey = localStorage.getItem('vectorApiKey');
         if (savedVectorApiKey) {
             document.getElementById('vectorApiKey').value = savedVectorApiKey;
@@ -1238,9 +1213,29 @@
         if (savedVectorApiAuth) {
             document.getElementById('vectorApiAuth').value = savedVectorApiAuth;
         }
-        // 如果都已保存，自动获取到期时间
         if (savedVectorApiKey && savedVectorApiAuth) {
             fetchVectorExpireTime(savedVectorApiKey, savedVectorApiAuth);
+        }
+
+        // 加载 Agnes API Key
+        const savedAgnesApiKey = localStorage.getItem('agnesApiKey');
+        if (savedAgnesApiKey) {
+            document.getElementById('agnesApiKey').value = savedAgnesApiKey;
+        }
+
+        // 加载 Agnes 模型版本
+        const savedAgnesModelVersion = localStorage.getItem('agnesModelVersion');
+        if (savedAgnesModelVersion) {
+            document.getElementById('agnesModelVersion').value = savedAgnesModelVersion;
+        }
+
+        // 加载 Agnes 图片比例
+        const savedAgnesAspectRatio = localStorage.getItem('agnesAspectRatio') || '1:1';
+        const ratioBtn = document.querySelector(`#agnesAspectRatioButtons button[data-ratio="${savedAgnesAspectRatio}"]`);
+        if (ratioBtn) {
+            ratioBtn.classList.remove('border-gray-300');
+            ratioBtn.classList.add('bg-primary/10', 'border-primary');
+            ratioBtn.setAttribute('data-selected', 'true');
         }
 
         // 监听Banana子模型变化
@@ -1258,7 +1253,32 @@
             localStorage.setItem('gptApiKey', e.target.value);
         });
 
-        // 监听 转矢量图 Key 和 Auth 输入（自动保存）
+        // 监听 Agnes API Key 输入（自动保存）
+        document.getElementById('agnesApiKey').addEventListener('change', (e) => {
+            localStorage.setItem('agnesApiKey', e.target.value);
+        });
+
+        // 监听 Agnes 模型版本变化（自动保存）
+        document.getElementById('agnesModelVersion').addEventListener('change', (e) => {
+            localStorage.setItem('agnesModelVersion', e.target.value);
+        });
+
+        // 监听 Agnes 图片比例按钮点击
+        document.querySelectorAll('#agnesAspectRatioButtons button').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('#agnesAspectRatioButtons button').forEach(b => {
+                    b.classList.remove('bg-primary/10', 'border-primary');
+                    b.classList.add('border-gray-300');
+                    b.removeAttribute('data-selected');
+                });
+                btn.classList.remove('border-gray-300');
+                btn.classList.add('bg-primary/10', 'border-primary');
+                btn.setAttribute('data-selected', 'true');
+                localStorage.setItem('agnesAspectRatio', btn.dataset.ratio);
+            });
+        });
+
+        // 监听 转矢量 Key 和 Auth 输入（自动保存）
         const vectorKeyInput = document.getElementById('vectorApiKey');
         const vectorAuthInput = document.getElementById('vectorApiAuth');
         const expireTimeElement = document.getElementById('vectorExpireTime');
@@ -1413,47 +1433,7 @@
             }
         });
 
-        // AI润词按钮点击事件
-        document.getElementById('aiPolishBtn').addEventListener('click', () => {
-            openAiPolishModal();
-        });
 
-        // 关闭AI润词模态框
-        document.getElementById('closeAiPolishModal').addEventListener('click', () => {
-            closeAiPolishModal();
-        });
-
-        // 取消润词
-        document.getElementById('cancelPolishBtn').addEventListener('click', () => {
-            closeAiPolishModal();
-        });
-
-        // 确认润词
-        document.getElementById('confirmPolishBtn').addEventListener('click', () => {
-            executePolish();
-        });
-
-        // 润词风格选择
-        document.querySelectorAll('.polish-style-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                currentPolishStyle = btn.dataset.style;
-                document.querySelectorAll('.polish-style-btn').forEach(b => {
-                    b.classList.remove('border-primary', 'bg-primary/10', 'text-primary');
-                });
-                btn.classList.add('border-primary', 'bg-primary/10', 'text-primary');
-            });
-        });
-
-        // 润词强度选择
-        document.querySelectorAll('.polish-intensity-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                currentPolishIntensity = btn.dataset.intensity;
-                document.querySelectorAll('.polish-intensity-btn').forEach(b => {
-                    b.classList.remove('border-primary', 'bg-primary/10', 'text-primary');
-                });
-                btn.classList.add('border-primary', 'bg-primary/10', 'text-primary');
-            });
-        });
 
         // 添加键盘事件监听
         document.addEventListener('keydown', (e) => {
@@ -1479,14 +1459,22 @@
                     document.getElementById('gptConfig').classList.remove('hidden');
                     document.getElementById('bananaConfig').classList.add('hidden');
                     document.getElementById('vectorConfig').classList.add('hidden');
+                    document.getElementById('agnesConfig').classList.add('hidden');
                 } else if (model === 'banana') {
                     document.getElementById('gptConfig').classList.add('hidden');
                     document.getElementById('bananaConfig').classList.remove('hidden');
                     document.getElementById('vectorConfig').classList.add('hidden');
+                    document.getElementById('agnesConfig').classList.add('hidden');
                 } else if (model === 'vector') {
                     document.getElementById('gptConfig').classList.add('hidden');
                     document.getElementById('bananaConfig').classList.add('hidden');
                     document.getElementById('vectorConfig').classList.remove('hidden');
+                    document.getElementById('agnesConfig').classList.add('hidden');
+                } else if (model === 'agnes') {
+                    document.getElementById('gptConfig').classList.add('hidden');
+                    document.getElementById('bananaConfig').classList.add('hidden');
+                    document.getElementById('vectorConfig').classList.add('hidden');
+                    document.getElementById('agnesConfig').classList.remove('hidden');
                 }
             });
         });
@@ -2297,7 +2285,7 @@
             downloadAllHistory();
         });
 
-        // 刷新 模型广场 模型列表按钮
+        // 刷新 模型 模型列表按钮
         document.getElementById('refreshBananaModels').addEventListener('click', () => {
             fetchBananaModels();
         });
@@ -2311,7 +2299,7 @@
         });
     }
 
-    // 获取转矢量图到期时间
+    // 获取转矢量到期时间
     async function fetchVectorExpireTime(key, auth) {
         const expireTimeElement = document.getElementById('vectorExpireTime');
         
@@ -2325,7 +2313,7 @@
         try {
             // 构建请求URL
             const url = `https://yp.pangyu.asia/check?key=${encodeURIComponent(key)}&auth=${encodeURIComponent(auth)}`;
-            console.log('转矢量图到期时间请求URL:', url);
+            console.log('转矢量到期时间请求URL:', url);
             
             const response = await fetch(url, {
                 method: 'GET',
@@ -2339,7 +2327,7 @@
             }
 
             const result = await response.json();
-            console.log('转矢量图完整响应:', result);
+            console.log('转矢量完整响应:', result);
 
             // 检查是否成功
             if (result.success === true && result.data && result.data.结果 && result.data.结果.length > 0) {
@@ -2387,7 +2375,7 @@
         }
     }
 
-    // 获取 模型广场 模型列表
+    // 获取 模型 模型列表
     async function fetchBananaModels() {
         const select = document.getElementById('bananaSubModel');
         const status = document.getElementById('bananaModelStatus');
@@ -2503,7 +2491,9 @@
         if (mainModel === 'banana') {
             subModel = document.getElementById('bananaSubModel').value;
         } else if (mainModel === 'vector') {
-            subModel = 'vector'; // 转矢量图使用固定模型名
+            subModel = 'vector';
+        } else if (mainModel === 'agnes') {
+            subModel = document.getElementById('agnesModelVersion').value;
         } else {
             subModel = document.getElementById('gptSubModel').value;
         }
@@ -2529,7 +2519,7 @@
         let requestData, url, apiKey;
         
         if (mainModel === 'banana') {
-            // 使用 模型广场 API (OpenAI Vision 格式)
+            // 使用 模型 API (OpenAI Vision 格式)
             apiKey = document.getElementById('nanoBananaApiKey').value;
             requestData = {
                 model: subModel,
@@ -2555,22 +2545,49 @@
             
             url = `${NANO_BANANA_API}/v1/chat/completions`;
             
+        } else if (mainModel === 'agnes') {
+            apiKey = document.getElementById('agnesApiKey').value;
+            const selectedRatioBtn = document.querySelector('#agnesAspectRatioButtons button[data-selected]');
+            const aspectRatio = selectedRatioBtn ? selectedRatioBtn.dataset.ratio : '1:1';
+            const sizeMap = {
+                '1:1': '2048x2048',
+                '3:4': '1536x2048',
+                '4:3': '2048x1536',
+                '16:9': '2048x1152',
+                '9:16': '1152x2048',
+                '2:3': '1365x2048',
+                '3:2': '2048x1365',
+                '21:9': '2048x878'
+            };
+            requestData = {
+                model: subModel,
+                prompt: prompt,
+                size: sizeMap[aspectRatio] || '2048x2048'
+            };
+            
+            if (appState.uploadedImageUrls && appState.uploadedImageUrls.length > 0) {
+                requestData.extra_body = {
+                    image: appState.uploadedImageUrls,
+                    response_format: 'url'
+                };
+            } else {
+                requestData.return_base64 = true;
+            }
+            
+            url = 'https://apihub.agnes-ai.com/v1/images/generations';
+            
         } else if (mainModel === 'vector') {
-            // 转矢量图 API - 使用base64直接上传
             apiKey = document.getElementById('vectorApiKey').value;
             const authVal = document.getElementById('vectorApiAuth').value.trim();
             
-            // 检查是否有上传的图片文件（原始文件，不是URL）
             if (!appState.uploadedFiles || appState.uploadedFiles.length === 0) {
                 showToast('请先上传要转换的图片', 'warning');
                 return;
             }
             
-            // 转矢量图不需要prompt，使用固定服务器地址
             url = 'https://yp.pangyu.asia/';
             
         } else {
-            // GPT模型请求 (OpenAI Vision 格式)
             apiKey = document.getElementById('gptApiKey').value;
             requestData = {
                 model: subModel,
@@ -2584,7 +2601,6 @@
                 ]
             };
             
-            // 如果有上传的图片，添加到 content 中
             if (appState.uploadedImageUrls && appState.uploadedImageUrls.length > 0) {
                 appState.uploadedImageUrls.forEach(imageUrl => {
                     requestData.messages[0].content.push({
@@ -2733,19 +2749,20 @@
                 if (result.data && result.data.length > 0) {
                     imageUrl = result.data[0].url || result.data[0].b64_json;
                 }
-                // 方式2: 检查 choices[0].message.content (Vision/Markdown 格式)
+                // 方式2: Agnes API 响应格式
+                else if (result.url) {
+                    imageUrl = result.url;
+                }
+                // 方式3: 检查 choices[0].message.content (Vision/Markdown 格式)
                 else if (result.choices && result.choices.length > 0) {
                     const content = result.choices[0].message?.content || '';
                     console.log('choices content:', content);
-                    // 尝试从 Markdown 格式提取图片: ![image](url)
                     const markdownMatch = content.match(/!\[.*?\]\((.*?)\)/);
                     if (markdownMatch) {
                         imageUrl = markdownMatch[1];
                     } else if (content.startsWith('data:image')) {
-                        // 直接是 base64
                         imageUrl = content;
                     } else if (content.startsWith('http')) {
-                        // 直接是 URL - 提取第一个URL（处理可能有多个URL的情况）
                         const urlMatch = content.match(/https?:\/\/[^\s,]+/);
                         imageUrl = urlMatch ? urlMatch[0] : content;
                     }
@@ -3099,7 +3116,6 @@
 
     // 下载图片 - 支持SVG和普通图片
     async function downloadImage(imageUrl = appState.currentImageUrl) {
-        // 优先检查是否有SVG数据
         if (appState.currentSvgData) {
             downloadSvg(appState.currentSvgData);
             return;
@@ -3111,7 +3127,6 @@
         }
         
         try {
-            // 获取图片数据
             const response = await fetch(imageUrl);
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
@@ -3119,13 +3134,11 @@
             
             const blob = await response.blob();
             
-            // 创建下载链接
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.style.display = 'none';
             a.href = url;
             
-            // 从URL提取文件名，如果没有则使用默认名称
             const urlParts = imageUrl.split('/');
             let filename = 'generated-image.jpg';
             if (urlParts.length > 0) {
@@ -3135,14 +3148,12 @@
                 }
             }
             
-            // 添加前缀 "YaHee_"
             filename = `YaHee_${filename}`;
             
             a.download = filename;
             document.body.appendChild(a);
             a.click();
             
-            // 清理
             window.URL.revokeObjectURL(url);
             document.body.removeChild(a);
             
@@ -3150,10 +3161,8 @@
         } catch (error) {
             console.error('下载图片失败:', error);
             
-            // 如果下载失败，尝试使用原始方法
             showToast('直接下载失败，尝试备用方法...', 'warning');
             
-            // 备用方法：直接打开图片链接
             const a = document.createElement('a');
             a.href = imageUrl;
             a.target = '_blank';
@@ -3911,197 +3920,6 @@
         updateEffectPrompt();
     }
     
-
-    
-    // AI润词配置
-    const polishStyles = {
-        professional: {
-            name: '专业摄影',
-            keywords: ['专业摄影', '8K超高清', '精细细节', '专业灯光', '影棚布光', '高对比度', '锐利清晰', '专业调色', 'RAW格式直出', '商业摄影级别'],
-            light: ['专业摄影风格', '高清细节'],
-            medium: ['专业摄影', '8K超高清', '精细细节', '专业灯光', '影棚布光'],
-            heavy: ['专业摄影', '8K超高清', '精细细节', '专业灯光', '影棚布光', '高对比度', '锐利清晰', '专业调色', 'RAW格式直出', '商业摄影级别']
-        },
-        cinematic: {
-            name: '电影质感',
-            keywords: ['电影级画面', '电影色调', '景深效果', '散景背景', '胶片质感', '戏剧性光影', '宽屏构图', '好莱坞质感', '柔和光晕', '暗角效果'],
-            light: ['电影质感', '景深效果'],
-            medium: ['电影级画面', '电影色调', '景深效果', '散景背景', '胶片质感'],
-            heavy: ['电影级画面', '电影色调', '景深效果', '散景背景', '胶片质感', '戏剧性光影', '宽屏构图', '好莱坞质感', '柔和光晕', '暗角效果']
-        },
-        anime: {
-            name: '动漫风格',
-            keywords: ['二次元风格', '动漫插画', '日系画风', '赛璐璐上色', '精美线条', '梦幻色彩', '萌系风格', '精美背景', '光影效果', '细腻笔触'],
-            light: ['动漫风格', '精美线条'],
-            medium: ['二次元风格', '动漫插画', '日系画风', '赛璐璐上色', '精美线条'],
-            heavy: ['二次元风格', '动漫插画', '日系画风', '赛璐璐上色', '精美线条', '梦幻色彩', '萌系风格', '精美背景', '光影效果', '细腻笔触']
-        },
-        realistic: {
-            name: '写实高清',
-            keywords: ['超写实', '照片级真实', '细节丰富', '自然光影', '真实材质', '高动态范围', '景深自然', '色彩还原', '真实纹理', '物理渲染'],
-            light: ['写实风格', '高清细节'],
-            medium: ['超写实', '照片级真实', '细节丰富', '自然光影', '真实材质'],
-            heavy: ['超写实', '照片级真实', '细节丰富', '自然光影', '真实材质', '高动态范围', '景深自然', '色彩还原', '真实纹理', '物理渲染']
-        },
-        portrait: {
-            name: '人像精修',
-            keywords: ['人像摄影', '皮肤质感', '自然磨皮', '五官精致', '眼神光', '发丝清晰', '肤色均匀', '轮廓立体', '柔和光影', '高级感'],
-            light: ['人像精修', '自然磨皮'],
-            medium: ['人像摄影', '皮肤质感', '自然磨皮', '五官精致', '眼神光'],
-            heavy: ['人像摄影', '皮肤质感', '自然磨皮', '五官精致', '眼神光', '发丝清晰', '肤色均匀', '轮廓立体', '柔和光影', '高级感']
-        },
-        product: {
-            name: '产品摄影',
-            keywords: ['产品摄影', '白底背景', '干净简洁', '产品细节', '材质质感', '均匀布光', '无阴影', '高反光', '立体感', '商业级'],
-            light: ['产品摄影', '干净简洁'],
-            medium: ['产品摄影', '白底背景', '产品细节', '材质质感', '均匀布光'],
-            heavy: ['产品摄影', '白底背景', '干净简洁', '产品细节', '材质质感', '均匀布光', '无阴影', '高反光', '立体感', '商业级']
-        },
-        // 新增：图像修复增强类
-        restoration: {
-            name: '图像修复',
-            keywords: ['图像修复', '去除划痕', '去除灰尘', '去除锈迹', '去除凹痕', '画质提升', '材质纹理', '原始光影', '原始构图', '细节增强'],
-            light: ['画质提升', '细节增强'],
-            medium: ['图像修复', '去除划痕', '画质提升', '材质纹理', '细节增强'],
-            heavy: ['图像修复', '去除划痕', '去除灰尘', '去除锈迹', '去除凹痕', '画质提升', '材质纹理', '原始光影', '原始构图', '细节增强']
-        },
-        // 新增：矢量图/平面设计类
-        vector: {
-            name: '矢量设计',
-            keywords: ['矢量图风格', '平面设计', '清除透视', '垂直对齐', '正面视角', '轮廓平滑', '纯色填充', '减少过渡', '矢量追踪', '印刷级'],
-            light: ['矢量风格', '平面设计'],
-            medium: ['矢量图风格', '清除透视', '轮廓平滑', '纯色填充', '减少过渡'],
-            heavy: ['矢量图风格', '平面设计', '清除透视', '垂直对齐', '正面视角', '轮廓平滑', '纯色填充', '减少过渡', '矢量追踪', '印刷级']
-        },
-        // 新增：海报设计类
-        poster: {
-            name: '海报设计',
-            keywords: ['海报设计', '商业海报', '分层排列', '文字排版', '视觉冲击', '创意构图', '品牌元素', '色彩搭配', '版式设计', '印刷规范'],
-            light: ['海报设计', '版式设计'],
-            medium: ['海报设计', '商业海报', '分层排列', '视觉冲击', '色彩搭配'],
-            heavy: ['海报设计', '商业海报', '分层排列', '文字排版', '视觉冲击', '创意构图', '品牌元素', '色彩搭配', '版式设计', '印刷规范']
-        },
-        // 新增：证件照类
-        certificate: {
-            name: '证件照',
-            keywords: ['证件照', '标准证件照', '纯白背景', '均匀无渐变', '头肩比例', '居中对齐', '自然磨皮', '肤色均匀', '五官清晰', '高清服装'],
-            light: ['证件照', '标准规格'],
-            medium: ['证件照', '纯白背景', '头肩比例', '居中对齐', '肤色均匀'],
-            heavy: ['证件照', '标准证件照', '纯白背景', '均匀无渐变', '头肩比例', '居中对齐', '自然磨皮', '肤色均匀', '五官清晰', '高清服装']
-        },
-        // 新增：CAD图纸类
-        cad: {
-            name: 'CAD图纸',
-            keywords: ['CAD图纸', '黑白线稿', '工程制图', '精确尺寸', '线条清晰', '无填充', '高对比', '规范线宽', '技术图纸', '可编辑'],
-            light: ['CAD图纸', '线条清晰'],
-            medium: ['CAD图纸', '黑白线稿', '线条清晰', '高对比', '规范线宽'],
-            heavy: ['CAD图纸', '黑白线稿', '工程制图', '精确尺寸', '线条清晰', '无填充', '高对比', '规范线宽', '技术图纸', '可编辑']
-        },
-        // 新增：美食摄影类
-        food: {
-            name: '美食摄影',
-            keywords: ['美食摄影', '商业菜品', '食欲感', '新鲜食材', '精致摆盘', '暖色调', '蒸汽效果', '细节清晰', '米其林级别', '食物质感'],
-            light: ['美食摄影', '食欲感'],
-            medium: ['美食摄影', '商业菜品', '新鲜食材', '精致摆盘', '细节清晰'],
-            heavy: ['美食摄影', '商业菜品', '食欲感', '新鲜食材', '精致摆盘', '暖色调', '蒸汽效果', '细节清晰', '米其林级别', '食物质感']
-        },
-        // 新增：电子版转换类
-        electronic: {
-            name: '电子版转换',
-            keywords: ['电子版', '清除透视', '垂直视角', '移除划痕', '移除噪点', '提升画质', '高清还原', '印刷级', '无破损', '无瑕疵'],
-            light: ['电子版', '高清还原'],
-            medium: ['电子版', '清除透视', '移除噪点', '提升画质', '高清还原'],
-            heavy: ['电子版', '清除透视', '垂直视角', '移除划痕', '移除噪点', '提升画质', '高清还原', '印刷级', '无破损', '无瑕疵']
-        }
-    };
-
-    // 当前选中的润词风格和强度
-    let currentPolishStyle = 'professional';
-    let currentPolishIntensity = 'medium';
-
-    // AI润词函数
-    function aiPolishPrompt(prompt, style, intensity) {
-        if (!prompt || prompt.trim() === '') {
-            return '';
-        }
-
-        const styleConfig = polishStyles[style];
-        if (!styleConfig) {
-            return prompt;
-        }
-
-        // 获取对应强度的关键词
-        let keywords = [];
-        if (intensity === 'light') {
-            keywords = styleConfig.light || styleConfig.keywords.slice(0, 3);
-        } else if (intensity === 'medium') {
-            keywords = styleConfig.medium || styleConfig.keywords.slice(0, 5);
-        } else {
-            keywords = styleConfig.heavy || styleConfig.keywords;
-        }
-
-        // 将关键词添加到原始描述词前面
-        const polishedPrompt = keywords.join('，') + '，' + prompt;
-
-        return polishedPrompt;
-    }
-
-    // 打开AI润词模态框
-    function openAiPolishModal() {
-        const modal = document.getElementById('aiPolishModal');
-        const prompt = document.getElementById('customPrompt').value;
-
-        if (!prompt || prompt.trim() === '') {
-            showToast('请先输入描述词', 'warning');
-            return;
-        }
-
-        modal.classList.remove('hidden');
-
-        // 重置选中状态
-        currentPolishStyle = 'professional';
-        currentPolishIntensity = 'medium';
-
-        // 更新UI
-        document.querySelectorAll('.polish-style-btn').forEach(btn => {
-            btn.classList.remove('border-primary', 'bg-primary/10', 'text-primary');
-            if (btn.dataset.style === currentPolishStyle) {
-                btn.classList.add('border-primary', 'bg-primary/10', 'text-primary');
-            }
-        });
-
-        document.querySelectorAll('.polish-intensity-btn').forEach(btn => {
-            btn.classList.remove('border-primary', 'bg-primary/10', 'text-primary');
-            if (btn.dataset.intensity === currentPolishIntensity) {
-                btn.classList.add('border-primary', 'bg-primary/10', 'text-primary');
-            }
-        });
-    }
-
-    // 关闭AI润词模态框
-    function closeAiPolishModal() {
-        document.getElementById('aiPolishModal').classList.add('hidden');
-    }
-
-    // 执行润词
-    function executePolish() {
-        const promptEl = document.getElementById('customPrompt');
-        const originalPrompt = promptEl.value;
-
-        if (!originalPrompt || originalPrompt.trim() === '') {
-            showToast('请先输入描述词', 'warning');
-            return;
-        }
-
-        const polishedPrompt = aiPolishPrompt(originalPrompt, currentPolishStyle, currentPolishIntensity);
-
-        if (polishedPrompt) {
-            promptEl.value = polishedPrompt;
-            showToast('润词完成', 'success');
-        }
-
-        closeAiPolishModal();
-    }
 
     // 更新效果描述词
     function updateEffectPrompt() {
