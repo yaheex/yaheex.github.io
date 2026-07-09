@@ -191,7 +191,7 @@
                         </div>
 
                         <div id="aspectRatioContainer">
-                            <label for="imageSize" class="block text-sm font-medium text-gray-600 mb-2">尺寸选项（GPT-2-VIP必须选择尺寸才能生成4K图）</label>
+                            <label for="imageSize" class="block text-sm font-medium text-gray-600 mb-2">尺寸选项</label>
                             <div class="relative">
                                 <button 
                                     type="button" 
@@ -1326,11 +1326,16 @@
         
         // 监听GPT子模型变化
         document.getElementById('gptVariants').addEventListener('change', (e) => {
+            if (e.target.value === 'gpt-image-2-vip') {
+                showToast('由于官方停止了渠道的2k与4k出图，该模型暂时维护', 'warning');
+                e.target.value = 'gpt-image-2';
+                return;
+            }
             updateGptImageSizeVisibility(e.target.value);
             // 更新尺寸选项
             updateImageSizeOptionsForGPT(e.target.value);
             // 根据子模型决定是否显示尺寸选项（两个gpt模型都显示）
-            if (e.target.value === 'gpt-image-2' || e.target.value === 'gpt-image-2-vip') {
+            if (e.target.value === 'gpt-image-2') {
                 document.getElementById('aspectRatioContainer').classList.remove('hidden');
             } else {
                 document.getElementById('aspectRatioContainer').classList.add('hidden');
@@ -1339,10 +1344,16 @@
         
         // 初始化图像大小选择显示状态
         updateBananaImageSizeVisibility(document.getElementById('bananaSubModel').value);
-        updateGptImageSizeVisibility(document.getElementById('gptVariants').value);
+        
+        let gptSubModel = document.getElementById('gptVariants').value;
+        if (gptSubModel === 'gpt-image-2-vip') {
+            gptSubModel = 'gpt-image-2';
+            document.getElementById('gptVariants').value = 'gpt-image-2';
+        }
+        
+        updateGptImageSizeVisibility(gptSubModel);
         // 初始化尺寸选项显示状态（两个gpt模型都显示）
-        const gptSubModel = document.getElementById('gptVariants').value;
-        if (gptSubModel === 'gpt-image-2' || gptSubModel === 'gpt-image-2-vip') {
+        if (gptSubModel === 'gpt-image-2') {
             document.getElementById('aspectRatioContainer').classList.remove('hidden');
         } else {
             document.getElementById('aspectRatioContainer').classList.add('hidden');
@@ -1504,10 +1515,14 @@
                     document.getElementById('gptConfig').classList.remove('hidden');
                     document.getElementById('bananaConfig').classList.add('hidden');
                     // 切换到GPT专用的图片比例选项
-                    const gptSubModel = document.getElementById('gptVariants').value;
+                    let gptSubModel = document.getElementById('gptVariants').value;
+                    if (gptSubModel === 'gpt-image-2-vip') {
+                        gptSubModel = 'gpt-image-2';
+                        document.getElementById('gptVariants').value = 'gpt-image-2';
+                    }
                     updateImageSizeOptionsForGPT(gptSubModel);
-                    // 根据子模型决定是否显示尺寸选项（两个gpt模型都显示）
-                    if (gptSubModel === 'gpt-image-2' || gptSubModel === 'gpt-image-2-vip') {
+                    // 根据子模型决定是否显示尺寸选项
+                    if (gptSubModel === 'gpt-image-2') {
                         document.getElementById('aspectRatioContainer').classList.remove('hidden');
                     } else {
                         document.getElementById('aspectRatioContainer').classList.add('hidden');
