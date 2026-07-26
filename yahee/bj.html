@@ -490,7 +490,7 @@
             <section class="bg-white rounded-xl p-6 card-shadow" data-section="outdoor-ad">
                 <h2 class="text-xl font-semibold mb-6 flex items-center justify-between border-b pb-3">
                     <div class="flex items-center">
-                        <i class="fa fa-outdent text-primary mr-2"></i>软膜灯箱 / 3M灯箱 / 推车灯箱 / 双面户外灯箱 / 铁架铝塑板门头
+                        <i class="fa fa-outdent text-primary mr-2"></i>软膜灯箱 / 3M灯箱 / 推车灯箱 / 双面户外灯箱 / 铁架铝塑板门头 / 桁架搭建
                     </div>
                     <button class="toggle-section-btn text-primary hover:text-primary/80 transition-colors">
                         <i class="fa fa-chevron-down"></i>
@@ -829,13 +829,70 @@
                             </div>
                         </div>
                     </div>
-
+					
+                   <!-- 桁架搭建 -->
+                    <div class="item-row p-3 border border-gray-100 rounded-lg hover:border-primary/30 transition group" data-category="铁架铝塑板门头" data-calc-type="area">
+                        <div class="flex flex-wrap justify-between items-start">
+                            <div class="w-full md:w-1/4 mb-4 md:mb-0 relative">
+                                <div class="flex items-center gap-2">
+                                    <h3 class="text-lg category-name">桁架搭建</h3>
+                                    <button type="button" class="thumbnail-btn" title="查看缩略图">
+                                        <i class="fa fa-picture-o"></i>
+                                    </button>
+                                </div>
+                                <div class="thumbnail-preview">
+                                    <img src="https://aisearch.cdn.bcebos.com/fileManager/lIxzePQKda7YaYD6u5BkKOQhJRugy13dpXhGD9FknTE/1784942508351aYbTWu.jpg" class="thumbnail-img" alt="桁架搭建" />
+                                    <img src="https://aisearch.cdn.bcebos.com/fileManager/lIxzePQKda7YaYD6u5BkKOQhJRugy13dpXhGD9FknTE/17849425083571mQql7.jpg" class="thumbnail-img" alt="桁架搭建" />
+                                </div>
+                                <p class="text-sm text-gray-500 mt-1">室内外桁架搭建、舞台搭建</p>
+                            </div>
+                            <div class="w-full md:w-3/4 grid grid-cols-1 sm:grid-cols-3 gap-3">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-0.5">长度 (cm)</label>
+                                    <input type="number" step="0.01" min="0" class="length w-full px-3 py-1.5 border border-gray-300 rounded-md input-focus" placeholder="输入长度">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-0.5">宽度 (cm)</label>
+                                    <input type="number" step="0.01" min="0" class="width w-full px-3 py-1.5 border border-gray-300 rounded-md input-focus" placeholder="输入宽度">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-0.5">单价 (元/平方米)</label>
+                                    <input type="number" step="0.01" min="0" value="75" class="price w-full px-3 py-1.5 border border-gray-300 rounded-md input-focus" placeholder="输入单价">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-3 pt-3 border-t border-gray-100 flex flex-wrap justify-between">
+                            <div class="w-full md:w-2/3 mb-4 md:mb-0">
+                                <div class="calculation-wrapper">
+                                    <button class="toggle-calc-btn" title="显示计算过程">
+                                        <i class="fa fa-eye-slash"></i>
+                                    </button>
+                                    <div class="text-sm text-gray-500 calculation calculation-hidden">计算过程：请输入尺寸和单价</div>
+                                </div>
+                            </div>
+                            <div class="w-full md:w-1/3 flex justify-between items-center">
+                                <div class="text-right">
+                                    <span class="text-sm text-gray-500">总价：</span>
+                                    <span class="text-xl font-semibold text-primary total-price animate-number">¥0.00</span>
+                                </div>
+                                <div class="flex">
+                                    <button class="delete-row-btn mr-2">
+                                        <i class="fa fa-trash mr-1"></i> 删除
+                                    </button>
+                                    <button class="add-row-btn">
+                                        <i class="fa fa-plus-circle mr-1"></i> 增加一行
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+					
                 </div>
 
                 <!-- 户外广告小计 -->
                 <div class="mt-6 pt-4 border-t border-gray-200">
                     <div class="flex justify-end items-center">
-                        <span class="text-lg font-semibold text-gray-700 mr-3">软膜灯箱 / 3M灯箱 / 推车灯箱 / 双面户外灯箱 / 铁架铝塑板门头小计：</span>
+                        <span class="text-lg font-semibold text-gray-700 mr-3">软膜灯箱 / 3M灯箱 / 推车灯箱 / 双面户外灯箱 / 铁架铝塑板门头 / 桁架搭建小计：</span>
                         <span class="text-xl font-bold text-secondary section-subtotal">¥0.00</span>
                     </div>
                 </div>
@@ -933,8 +990,9 @@
                                 <img src="https://aisearch.cdn.bcebos.com/fileManager/n-JQzIHmOAQdZItDkjSd3Q/1780916505377XMdNek.jpg" class="thumbnail-img" alt="展具展架" />
                                 <img src="https://aisearch.cdn.bcebos.com/fileManager/n-JQzIHmOAQdZItDkjSd3Q/1780916505380IwX3i0.jpg" class="thumbnail-img" alt="展具展架" />
                                 <img src="https://aisearch.cdn.bcebos.com/fileManager/n-JQzIHmOAQdZItDkjSd3Q/1780916505378xR2A40.jpg" class="thumbnail-img" alt="展具展架" />
+								<img src="https://aisearch.cdn.bcebos.com/fileManager/lIxzePQKda7YaYD6u5BkKOQhJRugy13dpXhGD9FknTE/17843357620449INrJ1.jpg" class="thumbnail-img" alt="展具展架" />
                             </div>
-                            <p class="text-sm text-gray-500 mt-1">韩式X展架 / 门型展架 / 易拉宝</p>
+                            <p class="text-sm text-gray-500 mt-1">韩式X展架 / 门型展架 / 易拉宝 / 丽屏展架</p>
                         </div>
                         <div class="w-full md:w-3/4 grid grid-cols-1 sm:grid-cols-3 gap-3">
                             <div>
@@ -948,6 +1006,8 @@
                                     <option value="80x180cm（注水门型展架）" data-price="160">80*180（注水门型展架）</option>
                                     <option value="80x200cm（塑钢易拉宝）" data-price="150">80*200（塑钢易拉宝 / 铝合金架子+40）</option>
                                     <option value="120x200cm（塑钢易拉宝）" data-price="180" selected>120*200（塑钢易拉宝 / 铝合金架子+40）</option>
+									<option value="80x200cm（丽屏展架）" data-price="180" selected>80*180（丽屏展架）</option>
+									<option value="120x200cm（丽屏展架）" data-price="230" selected>120*200（丽屏展架）</option>
                                 </select>
                             </div>
                             <div>
@@ -1191,7 +1251,7 @@
                                 <img src="https://aisearch.cdn.bcebos.com/fileManager/n-JQzIHmOAQdZItDkjSd3Q/1780923554399B0Efoo.jpg" class="thumbnail-img" alt="LED电子灯箱" />
                                 <img src="https://aisearch.cdn.bcebos.com/fileManager/n-JQzIHmOAQdZItDkjSd3Q/1780923561175Z09mgr.jpg" class="thumbnail-img" alt="LED电子灯箱" />
                             </div>
-                            <p class="text-sm text-gray-500 mt-1">LED电子灯箱</p>
+                            <p class="text-sm text-gray-500 mt-1">安装另加+50元      上墙架子+20元     落地架子+50元</p>
                         </div>
                         <div class="w-full md:w-3/4 grid grid-cols-1 sm:grid-cols-3 gap-3">
                             <div>
@@ -1255,7 +1315,7 @@
             <section class="bg-white rounded-xl p-6 card-shadow" data-section="lighted-letters">
             <h2 class="text-xl font-semibold mb-6 flex items-center justify-between border-b pb-3">
             <div class="flex items-center">
-            <i class="fa fa-lightbulb-o text-primary mr-2"></i>不锈钢包边发光字 / 不锈钢双面发光字 / 迷你字 / 水晶字 / PVC字
+            <i class="fa fa-lightbulb-o text-primary mr-2"></i>不锈钢包边发光字 / 不锈钢双面发光字 / 迷你字 / 水晶字 / PVC字 / PVC镂空喷漆字
             </div>
             <button class="toggle-section-btn text-primary hover:text-primary/80 transition-colors">
             <i class="fa fa-chevron-down"></i>
@@ -1544,7 +1604,7 @@
             <div class="flex flex-wrap justify-between items-start">
             <div class="w-full md:w-1/4 mb-4 md:mb-0 relative">
             <div class="flex items-center gap-2">
-            <h3 class="text-lg category-name">PVC雕刻字</h3>
+            <h3 class="text-lg category-name">PVC雕刻字 / 镂空喷漆字</h3>
             <button type="button" class="thumbnail-btn" title="查看缩略图">
             <i class="fa fa-picture-o"></i>
             </button>
@@ -1552,6 +1612,8 @@
             <div class="thumbnail-preview">
             <img src="https://aisearch.cdn.bcebos.com/fileManager/n-JQzIHmOAQdZItDkjSd3Q/178092994229963y7xD.jpg" class="thumbnail-img" alt="PVC雕刻字" />
             <img src="https://aisearch.cdn.bcebos.com/fileManager/n-JQzIHmOAQdZItDkjSd3Q/1780929942300WYNQoF.jpg" class="thumbnail-img" alt="PVC雕刻字" />
+			<img src="https://aisearch.cdn.bcebos.com/fileManager/lIxzePQKda7YaYD6u5BkKOQhJRugy13dpXhGD9FknTE/1784334477136OPIso9.jpg" class="thumbnail-img" alt="PVC雕刻字" />
+		    <img src="https://aisearch.cdn.bcebos.com/fileManager/lIxzePQKda7YaYD6u5BkKOQhJRugy13dpXhGD9FknTE/17843344771310H3BeN.jpg" class="thumbnail-img" alt="PVC雕刻字" />
             </div>
             <p class="text-sm text-gray-500 mt-1">PVC雕刻字厚度10mm</p>
             </div>
@@ -1599,7 +1661,7 @@
             <!-- 发光字小计 -->
             <div class="mt-6 pt-4 border-t border-gray-200">
             <div class="flex justify-end items-center">
-            <span class="text-lg font-semibold text-gray-700 mr-3">不锈钢包边发光字 / 不锈钢双面发光字 / 迷你字 / 水晶字 / PVC字小计：</span>
+            <span class="text-lg font-semibold text-gray-700 mr-3">不锈钢包边发光字 / 不锈钢双面发光字 / 迷你字 / 水晶字 / PVC字 / PVC镂空喷漆字小计：</span>
             <span class="text-xl font-bold text-secondary section-subtotal">¥0.00</span>
             </div>
             </div>
