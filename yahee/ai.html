@@ -160,7 +160,7 @@
                 <label for="gptVariants" class="block text-sm font-medium text-gray-600 mb-2">选 择模型：</label>
                 <select id="gptVariants" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary">
                     <option value="gpt-image-2">gpt-image-2 - 600积分/次</option>
-                    <option value="gpt-image-2-vip">gpt-image-2-vip - 1300积分/次</option>
+                    <option value="gpt-image-2-vip">gpt-image-2-vip - 2000积分/次</option>
                 </select>
             </div>
             <div id="gptImageSizeContainer" class="mt-2">
@@ -300,8 +300,9 @@
                             <span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="转为矢量图风格，严格复刻原图所有元素（人物、文字、产品、背景），不改变风格，无创意变形；去掉所有阴影效果，去掉所有灯光效果。轮廓平滑干净。要尽量减少颜色过渡，临近颜色取中间值填充纯色。">转为二维图</span>
                             <span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="给文字内容搭配一个背景图，去掉所有文字，只要背景图">生成背景图</span>
                             <span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="消除布纹，优化布纹处细节，移除噪点，色块平滑。全程以“还原原始图像+提升画质细节”为核心，确保增强后图像与原图高度一致，仅在分辨率、细节清晰度上实现提升。">去布纹理</span>
-                            <span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="将图像中的所有设计元素完全分离，转换为独立的平面设计素材。每个元素必须：1) 完全独立无连接；2) 元素间保持至少20像素的最小间距；3) 采用严格的网格化布局排列；4) 所有元素正面朝向，无角度倾斜；5) 按元素类型和大小智能分组排列；6) 浅灰色(#f5f5f5)极简背景，无任何装饰元素；7) 元素排列遵循从左到右、从上到下的阅读顺序；8) 如元素过多则自动创建多行多列布局，确保所有元素完整可见；9) 生成前进行重叠检测，如有重叠风险则自动调整元素位置和大小。">拆分元素(大件)</span>
-							<span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="这是个美陈布置画面，将一块一块的美陈元素拆分并转换为二维平面制作文件，清除透视，垂直对齐正面视角。每一块元素绝对忠实于原始图像的结构、比例及特征，无任何偏差;清除装饰气球。所有元素平铺排列在比例9:21的灰色画布上，确保元素绝对分离，不重叠，依次排列。">拆分元素(细小)</span>
+                            <span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="将图像中的所有设计元素完全分离，转换为独立的平面设计素材。每个元素必须：1) 完全独立无连接；2) 元素间保持至少20像素的最小间距；3) 采用严格的网格化布局排列；4) 所有元素正面朝向，无角度倾斜；5) 按元素类型和大小智能分组排列；6) 浅灰色(#f5f5f5)极简背景，无任何装饰元素；7) 元素排列遵循从左到右、从上到下的阅读顺序；8) 如元素过多则自动创建多行多列布局，确保所有元素完整可见；9) 生成前进行重叠检测，如有重叠风险则自动调整元素位置和大小。">拆分元素1</span>
+							<span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="将拆解其中的元素，创作一张整齐排列的所有独立元素孤立在浅灰色背景上，元素不重复且是插画的主要表达内容，9:21比例">拆分元素2</span>
+							<span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="这是个美陈布置画面，将一块一块的美陈元素拆分并转换为二维平面制作文件，清除透视，垂直对齐正面视角。每一块元素绝对忠实于原始图像的结构、比例及特征，无任何偏差;清除装饰气球。所有元素平铺排列在比例9:21的灰色画布上，确保元素绝对分离，不重叠，依次排列。">拆分元素3</span>
 							<span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="这是一张海报，把背景图层，文字图层、主体图层、配图图层分开一起平铺排列在比例21:9的灰色画布上，确保每个图层相互分离，不重叠，依次排列。">拆分海报</span>
 							<span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="增强画质，严格复刻原图所有元素（人物、文字、产品、背景），不改变风格，只做清晰度处理，无创意变形；pixel-perfect，legible，high-resolution">变清晰</span>
 							<span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="这是一张拍摄的海报画面，截取海报部分，清除海报透视，垂直对齐正面视角，移除所有破损划痕和噪点，把他变成电子版海报。全程以“还原原始图像+提升画质细节”为核心，确保增强后图像与原图高度一致，仅在分辨率、细节清晰度上实现提升。">转电子版</span>
@@ -1326,38 +1327,21 @@
         
         // 监听GPT子模型变化
         document.getElementById('gptVariants').addEventListener('change', (e) => {
-            if (e.target.value === 'gpt-image-2-vip') {
-                showToast('由于官方停止了渠道的2k与4k出图，该模型暂时维护', 'warning');
-                e.target.value = 'gpt-image-2';
-                return;
-            }
             updateGptImageSizeVisibility(e.target.value);
             // 更新尺寸选项
             updateImageSizeOptionsForGPT(e.target.value);
             // 根据子模型决定是否显示尺寸选项（两个gpt模型都显示）
-            if (e.target.value === 'gpt-image-2') {
-                document.getElementById('aspectRatioContainer').classList.remove('hidden');
-            } else {
-                document.getElementById('aspectRatioContainer').classList.add('hidden');
-            }
+            document.getElementById('aspectRatioContainer').classList.remove('hidden');
         });
         
         // 初始化图像大小选择显示状态
         updateBananaImageSizeVisibility(document.getElementById('bananaSubModel').value);
         
         let gptSubModel = document.getElementById('gptVariants').value;
-        if (gptSubModel === 'gpt-image-2-vip') {
-            gptSubModel = 'gpt-image-2';
-            document.getElementById('gptVariants').value = 'gpt-image-2';
-        }
-        
+
         updateGptImageSizeVisibility(gptSubModel);
         // 初始化尺寸选项显示状态（两个gpt模型都显示）
-        if (gptSubModel === 'gpt-image-2') {
-            document.getElementById('aspectRatioContainer').classList.remove('hidden');
-        } else {
-            document.getElementById('aspectRatioContainer').classList.add('hidden');
-        }
+        document.getElementById('aspectRatioContainer').classList.remove('hidden');
         
         // 初始化尺寸选项内容
         updateImageSizeOptionsForGPT(gptSubModel);
@@ -1516,17 +1500,9 @@
                     document.getElementById('bananaConfig').classList.add('hidden');
                     // 切换到GPT专用的图片比例选项
                     let gptSubModel = document.getElementById('gptVariants').value;
-                    if (gptSubModel === 'gpt-image-2-vip') {
-                        gptSubModel = 'gpt-image-2';
-                        document.getElementById('gptVariants').value = 'gpt-image-2';
-                    }
                     updateImageSizeOptionsForGPT(gptSubModel);
                     // 根据子模型决定是否显示尺寸选项
-                    if (gptSubModel === 'gpt-image-2') {
-                        document.getElementById('aspectRatioContainer').classList.remove('hidden');
-                    } else {
-                        document.getElementById('aspectRatioContainer').classList.add('hidden');
-                    }
+                    document.getElementById('aspectRatioContainer').classList.remove('hidden');
                 } else if (model === 'banana') {
                     document.getElementById('gptConfig').classList.add('hidden');
                     document.getElementById('bananaConfig').classList.remove('hidden');
@@ -3656,7 +3632,7 @@
         } else {
             // GPT模型
             if (subModel === 'gpt-image-2-vip') {
-                requiredCredit = 1300;
+                requiredCredit = 2000;
             } else {
                 requiredCredit = 600;
             }
