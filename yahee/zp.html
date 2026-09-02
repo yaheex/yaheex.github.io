@@ -549,6 +549,9 @@
                                 <button data-pixels="413x626" class="ratio-btn">
                                     413*626
                                 </button>
+                                <button data-pixels="295x413" class="ratio-btn">
+                                    295*413
+                                </button>
                             </div>
                             <div class="custom-ratio" style="display: flex; align-items: center; gap: 10px;">
                                 <input type="number" id="customWidth" placeholder="宽度" min="1" style="max-width: 100px;">
@@ -574,6 +577,7 @@
                                     <option value="300x400">300*400 - (  20~50kb  )</option>
                                     <option value="120x160">120*160 - (  0~60kb  )</option>
                                     <option value="413x626">413*626 - (  40~100kb  )</option>
+                                    <option value="295x413">295*413 - (  50~200kb  )</option>
                                 </select>
                                 <button id="applyPreset">
                                     <i class="fas fa-check-circle" style="margin-right: 8px;"></i> 应用
@@ -716,6 +720,13 @@
                     height: 626,
                     resolution: 300,
                     size: 90
+                },
+                '295x413': {
+                    name: '295*413',
+                    width: 295,
+                    height: 413,
+                    resolution: 300,
+                    size: 100
                 }
             };
             
