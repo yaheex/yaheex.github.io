@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
@@ -75,8 +75,8 @@
         }
     </style>
 </head>
-<body class="font-inter bg-light text-dark min-h-screen flex flex-col">
-    <header class="bg-white shadow-sm sticky top-0 z-50">
+<body class="font-inter text-dark min-h-screen flex flex-col" style="background-color: #f0f8ff;">
+    <header class="bg-white shadow-sm sticky top-0 z-50 shrink-0">
         <div class="container mx-auto px-4 py-3 flex justify-between items-center">
             <div class="flex items-center gap-2">
                 <i class="fa fa-paint-brush text-primary text-2xl"></i>
@@ -109,141 +109,24 @@
         </div>
     </header>
 
-    <main class="flex-grow container mx-auto px-4 py-6">
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div class="lg:col-span-1 space-y-6">
-                <!-- 生成配置 -->
-                <div class="bg-white rounded-xl p-5 shadow-sm card-shadow">
-                    <div class="flex justify-between items-center mb-4">
-                        <h2 class="text-lg font-semibold flex items-center gap-2">
-                            <i class="fa fa-sliders text-primary"></i>
-                            生成配置
-                        </h2>
-                        <button id="generateLogBtn" class="text-sm text-primary hover:text-primary/80 flex items-center gap-1" title="查看生成日志">
-                            <i class="fa fa-history"></i>
-                            <span>生成日志</span>
-                            <span id="generateCountBadge" class="bg-primary text-white text-xs px-1.5 py-0.5 rounded-full">0</span>
-                        </button>
+    <main class="flex-1 w-full px-0 py-0">
+        <div id="panelSplit" class="flex flex-col md:flex-row gap-2 md:gap-3 md:p-3 items-stretch min-h-full" style="--left-pct: 45%;">
+            <!-- 右面板：工作区（配置+上传+描述词） -->
+            <div id="rightPanel" class="md:w-auto min-h-full" style="width: var(--left-pct); min-width: 0;">
+                <div class="bg-white rounded-xl p-5 shadow-sm card-shadow space-y-4 min-h-full">
+
+                    <!-- 已上传图片预览（显示在上传区上方） -->
+                    <div id="uploadedPreviewContainer" class="hidden">
+                        <div id="uploadedPreviewGrid" class="flex flex-wrap gap-3"></div>
                     </div>
-                    <div class="space-y-4">
 
-
-                        <div>
-                            <div class="grid grid-cols-2 gap-2" id="modelSelector">
-                                <div class="model-card active" data-model="gpt">
-                                    <div class="flex justify-between items-start">
-                                        <div>
-                                            <h4 class="font-medium">
-                                                GPT Image
-                                            </h4>
-                                            <p class="text-xs text-gray-500 mt-1">解决中文乱码，海报好，速度快</p>
-                                        </div>
-                                        <i class="fa fa-check-circle text-primary"></i>
-                                    </div>
-                                </div>
-                                <div class="model-card" data-model="banana">
-                                    <div class="flex justify-between items-start">
-                                        <div>
-                                            <h4 class="font-medium">
-                                                Nano Banana
-                                            </h4>
-                                            <p class="text-xs text-gray-500 mt-1">Banana排第二没有人敢排第一</p>
-                                        </div>
-                                        <i class="fa fa-check-circle text-primary hidden"></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div id="gptConfig" class="border-l-4 border-primary pl-4 py-2">
-            <div class="mb-3">
-                <label for="gptVariants" class="block text-sm font-medium text-gray-600 mb-2">选 择模型：</label>
-                <select id="gptVariants" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary">
-                    <option value="gpt-image-2.5">gpt-image-2.5 - 600积分/次</option>
-                    <option value="gpt-image-2-vip">gpt-image-2-vip - 2000积分/次</option>
-                    <option value="gpt-image-2.5-sunburst">gpt-image-2.5-sunburst - 2400积分/次</option>
-                    <option value="gpt-image-2.5-flare">gpt-image-2.5-flare - 2000积分/次</option>
-                </select>
-            </div>
-            <div id="gptImageSizeContainer" class="mt-2">
-                <label for="gptImageSize" class="block text-sm font-medium text-gray-600 mb-2">分辨率：</label>
-                <select id="gptImageSize" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary">
-                    <option value="2K">2K</option>
-                    <option value="4K" selected>4K</option>
-                </select>
-            </div>
-        </div>
-
-                        <div id="bananaConfig" class="border-l-4 border-primary pl-4 py-2 hidden">
-                            <div>
-                                <label for="bananaSubModel" class="block text-sm font-medium text-gray-600 mb-2">选择模型：</label>
-                                <select id="bananaSubModel" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary">
-                                    <option value="nano-banana-2">nano-banana-2 - 1200积分/次</option>
-                                    <option value="nano-banana-pro">nano-banana-pro - 1800积分/次</option>
-                                </select>
-                            </div>
-                            <!-- 图像大小选择，仅对pro模型显示 -->
-                            <div id="bananaImageSizeContainer" class="mt-2 hidden">
-                                <label for="bananaImageSize" class="block text-sm font-medium text-gray-600 mb-2">分辨率：</label>
-                                <select id="bananaImageSize" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary">
-                                    <option value="2K">2K</option>
-                                    <option value="4K" selected>4K</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div id="aspectRatioContainer">
-                            <label for="imageSize" class="block text-sm font-medium text-gray-600 mb-2">尺寸选项</label>
-                            <div class="relative">
-                                <button 
-                                    type="button" 
-                                    id="imageSizeButton"
-                                    role="combobox" 
-                                    aria-expanded="false" 
-                                    aria-autocomplete="none" 
-                                    dir="ltr" 
-                                    data-state="closed" 
-                                    class="flex items-center justify-between gap-2 rounded-lg border border-gray-300 px-3 py-2 text-sm whitespace-nowrap shadow-xs transition-[color,box-shadow] outline-none focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary w-full cursor-pointer"
-                                >
-                                    <span id="imageSizeValue" class="flex items-center gap-2">
-                                        <div id="aspectPreview" class="border border-solid border-gray-400 bg-gray-100" style="width: 18px; height: 18px; min-width: 18px; min-height: 18px;"></div>
-                                        <span id="sizeText">auto</span>
-                                    </span>
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down size-4 opacity-50" aria-hidden="true">
-                                        <path d="m6 9 6 6 6-6"></path>
-                                    </svg>
-                                </button>
-                                <div id="imageSizeDropdown" class="hidden absolute z-50 w-full mt-1 overflow-hidden rounded-md border bg-white shadow-lg animate-in fade-in slide-in-from-top-2 duration-200 border-gray-200">
-                                    <div id="imageSizeOptions" class="py-1">
-                                    </div>
-                                </div>
-                            </div>
-                            <input type="hidden" id="imageSize" name="imageSize" value="auto">
-                        </div>
-
-                        <button id="generateBtn" class="w-full gradient-bg text-white font-medium py-2.5 px-4 rounded-lg btn-hover flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
-                            <i class="fa fa-magic"></i>
-                            <span>开始生成</span>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- 上传参考图片 -->
-                <div class="bg-white rounded-xl p-5 shadow-sm card-shadow">
-                    <h2 class="text-lg font-semibold mb-4 flex items-center gap-2">
-                        <i class="fa fa-upload text-primary"></i>
-                        上传参考图
-                    </h2>
-                    
-
-                    
-                    <!-- 图床上传区域 -->
-                    <div class="mb-4">
+                    <!-- 上传区域 -->
+                    <div>
                         <div id="uploadArea" class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-primary transition-colors cursor-pointer bg-gray-50">
                             <input type="file" id="imageUpload" accept="image/*" multiple class="hidden">
                             <i class="fa fa-cloud-upload text-4xl text-gray-400 mb-3"></i>
-                            <p class="text-secondary mb-2">点击或拖拽图片至此处上传</p>
-                            <p class="text-xs text-gray-500">支持JPG、PNG格式</p>
+                            <p class="text-secondary mb-2">点击添加更多图像</p>
+                            <p class="text-xs text-gray-500">提示：可以从左侧任务区拖动图片素材到这里</p>
                         </div>
                         <div id="uploadProgress" class="mt-2 hidden">
                             <div class="flex justify-between text-xs text-gray-600 mb-1">
@@ -255,364 +138,263 @@
                             </div>
                         </div>
                     </div>
-                    
-                    <!-- 上传后的图片URL显示 -->
-                    <div id="uploadedUrlsContainer" class="hidden mt-4">
-                        <label class="block text-sm font-medium text-gray-600 mb-2">已上传图片URL：</label>
-                        <div id="uploadedUrlsList" class="space-y-2 max-h-40 overflow-y-auto p-2 bg-gray-50 rounded-lg"></div>
-                        <button id="copyAllUrlsBtn" class="w-full mt-2 bg-primary/10 text-primary px-3 py-1.5 rounded-lg btn-hover flex items-center justify-center gap-1 text-sm">
-                            <i class="fa fa-copy"></i>
-                            <span>复制所有URL</span>
-                        </button>
-                    </div>
-                </div>
-            </div>
 
-            <div class="lg:col-span-2 space-y-6">
-                <!-- 描述词配置 -->
-                <div class="bg-white rounded-xl p-5 shadow-sm card-shadow">
-                    <h2 class="text-lg font-semibold mb-4 flex items-center gap-2">
-                        <i class="fa fa-comment text-primary"></i>
-                        描述词配置
-                    </h2>
-                    <div class="mb-4 flex gap-4">
-                        <button id="effectBtn" class="bg-primary text-white font-medium py-1.5 px-4 rounded-lg btn-hover flex items-center gap-2">
-                            <i class="fa fa-magic"></i>
-                            <span>一键效果图</span>
-                        </button>
-                        <button id="copyBtn" class="bg-primary text-white font-medium py-1.5 px-4 rounded-lg btn-hover flex items-center gap-2">
-                            <i class="fa fa-copy"></i>
-                            <span>一键复制</span>
-                        </button>
-                        <button id="designBtn" class="bg-primary text-white font-medium py-1.5 px-4 rounded-lg btn-hover flex items-center gap-2">
-                            <i class="fa fa-paint-brush"></i>
-                            <span>一键设计稿</span>
-                        </button>
-                    </div>
-                    <div class="mb-4">
-                        <div class="flex flex-wrap gap-2 max-h-40 overflow-y-auto pr-1" id="presetTags">
-							<span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="去除所有黑色文字，保持图章文字的完整性，保留图章字体细节不要改变字体，白色背景，图片变清晰">提取图章</span>
-							<span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="移除所有文字，保留无字底图">提取背景</span>
-							<span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="清除图片中所有语言产生的文字信息、数字、符号，保留无字底图">删除文字</span>
-                            <span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="白底黑内容">白底黑内容</span>
-                            <span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="对照片中的物品进行高品质修复，去除划痕、灰尘、锈迹与凹痕，提升画面清晰度与材质纹理表现，同时保持原始光影、拍摄角度与图像构图不变。">物品材质修复</span>
-                            <span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="我要求提取出来的图案一模一样，细节一模一样，平整图案，拉平褶皱，不能改变图案，我要求把褶皱的地方展开，补全褶皱缺失的图案，我要求图案不能少，图案要完整，不能缺失，要求把图案补充完整，我要求位置不能变，不要改变印花图案的排布，按照原有的图案排布输出，底色不变，颜色不变 要求图案清晰，要一模一样 要求卡位置 把图片补全 不要少内容 ，图案对比度拉高，图案优化清晰，提取出来的图案要与上传的图案一致。图案噪点要磨平.如果图案不全要补齐，上下左右颜色要扩充出去。要求返回图是透明底。">提取印花</span>
-                            <span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="基于提供的参考图像，执行严格的超高分辨率画质增强核心要求:绝对忠实于原始图像的面部结构、五官比例及人物身份特征，无任何偏差;表情神态、视线方向、人物姿势、相机拍摄角度、画面整体构图及透视关系保持100%一致，不做任何微调。服装款式、头发造型及发丝分布、皮肤状态、背景元素的结构、位置、色彩及设计细节完全保留，不得添加、删减或修改任何元素。精准恢复图像细微层级细节，呈现极致自然写实效果，拒绝任何风格化、滤镜化、艺术化处理。重点增分强细节维度:皮肤毛孔纹理、面部细微细纹、发丝根部分辨率及质感、睫毛的纤长细节与层次、服装织物纹理、衣物缝线质感、各类材质的边缘轮廓，增强过程中不引入任何额外细节或改变原有细节形态。色彩参数严格对齐原图:颜色科学、白平衡参数、整体色调关系、色彩饱和度及明暗倾向与原始图像完全一致，无任何色彩偏移;光线参数精准匹配原图:光线照射方向、光线强度、画面对比度、阴影的明暗层次及分布范围，与原始图像完全吻合，仅允许提升画面清晰度、扩展动态范围严禁重新布光、调整光影逻辑。严禁改变人物形体、面部轮廓，五官位置;严禁调整画面构图、透视关系;严禁添加任何风格化元素、额外细节或修饰效果;全程以“还原原始图像+提升画质细节”为核心，确保增强后图像与原图高度一致，仅在分辨率、细节清晰度上实现提升。照片是黑白的请上色为彩色照片">修老照片</span>
-                            <span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="消除图中内容的透视角度，改为正面图，转换为矢量图风格，适合于矢量追踪">转为平面图</span>
-                            <span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="转为矢量图风格，严格复刻原图所有元素（人物、文字、产品、背景），不改变风格，无创意变形；去掉所有阴影效果，去掉所有灯光效果。轮廓平滑干净。要尽量减少颜色过渡，临近颜色取中间值填充纯色。">转为二维图</span>
-                            <span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="给文字内容搭配一个背景图，去掉所有文字，只要背景图">生成背景图</span>
-                            <span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="消除布纹，优化布纹处细节，移除噪点，色块平滑。全程以“还原原始图像+提升画质细节”为核心，确保增强后图像与原图高度一致，仅在分辨率、细节清晰度上实现提升。">去布纹理</span>
-                            <span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="将图像中的所有设计元素完全分离，转换为独立的平面设计素材。每个元素必须：1) 完全独立无连接；2) 元素间保持至少20像素的最小间距；3) 采用严格的网格化布局排列；4) 所有元素正面朝向，无角度倾斜；5) 按元素类型和大小智能分组排列；6) 浅灰色(#f5f5f5)极简背景，无任何装饰元素；7) 元素排列遵循从左到右、从上到下的阅读顺序；8) 如元素过多则自动创建多行多列布局，确保所有元素完整可见；9) 生成前进行重叠检测，如有重叠风险则自动调整元素位置和大小。">拆分元素1</span>
-							<span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="将拆解其中的元素，创作一张整齐排列的所有独立元素孤立在浅灰色背景上，元素不重复且是插画的主要表达内容，9:21比例">拆分元素2</span>
-							<span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="这是个美陈布置画面，将一块一块的美陈元素拆分并转换为二维平面制作文件，清除透视，垂直对齐正面视角。每一块元素绝对忠实于原始图像的结构、比例及特征，无任何偏差;清除装饰气球。所有元素平铺排列在比例9:21的灰色画布上，确保元素绝对分离，不重叠，依次排列。">拆分元素3</span>
-							<span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="这是一张海报，把背景图层，文字图层、主体图层、配图图层分开一起平铺排列在比例21:9的灰色画布上，确保每个图层相互分离，不重叠，依次排列。">拆分海报</span>
-							<span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="增强画质，严格复刻原图所有元素（人物、文字、产品、背景），不改变风格，只做清晰度处理，无创意变形；pixel-perfect，legible，high-resolution">变清晰</span>
-							<span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="这是一张拍摄的海报画面，截取海报部分，清除海报透视，垂直对齐正面视角，移除所有破损划痕和噪点，把他变成电子版海报。全程以“还原原始图像+提升画质细节”为核心，确保增强后图像与原图高度一致，仅在分辨率、细节清晰度上实现提升。">转电子版</span>
-							<span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="消除图中内容的透视角度，改为正面图，复原为可以印刷的平面设计稿件，修补所有划痕破损瑕疵">复原设计稿</span>
-							<span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="消除图中内容的透视角度，改为正面图，复原为可以印刷的平面设计稿件，严格按照手绘稿的设计复原，按3x3的正方形生成多种风格。">复原logo手绘稿</span>
-							<span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="消除图中手绘稿的透视偏斜，改为正面图，并转换为CAD黑白图纸">手绘稿转CAD平面图</span>
-							<span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="修复文字的模糊、不清晰区域，将文字优化为高清、清晰易读的印刷体样式；精准识别推理图片中所有文字，确保文字100% 无错乱、无遗漏；pixel-perfect，legible，high-resolution">文本还原</span>
-							<span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="产品精修，产品置于纯净的纯白背景上。正视图，平时视角，3D渲染，精准还原产品颜色与包装材质(如玻璃的通透、塑料的哑光、金屈的光泽)。清除所有指纹、灰尘与瑕疵，让产品看起来崭新、瓶身光影立体感强，提升整体质感和高级及感。瓶身标签/文字需清晰锐利。光线柔和均匀，突出产品精致感，符合电商主图标准。">产品精修</span>
-							<span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="菜品，菜品容器（如盘子、碗、盆等一切装菜的容器）都必须补齐并完整显示。摄影级商业菜品拍摄照片。">菜品补齐（图片预留空间）</span>
-							<span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="保持人物五官与脸部特征一致性的前提情况下进行以下要求的人像精修，专业人像摄影，低饱和度，专业影棚精修，柔和影棚光，自然高级磨皮、肤色提亮，保留皮肤质感不假白、五官微调立体、瘦脸自然、均匀肤色、去除痘印斑点黑眼圈、头发边缘顺滑处理，哑光但有光泽，高清细节，精致立体的裸妆，增强头发质感纹理，整个人看起来非常有气色，亚洲人，清晰可见的发丝，超高清的服装。调整为正面证件照构图，人物居中、双肩端正。保留原发型（不要改变原发型），减少毛躁碎发。纯白背景，标准证件照白，均匀无渐变。头肩比例标准，居中对齐。">精修证件照（白）- 小香蕉2K</span>
-							<span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="保持人物五官与脸部特征一致性的前提情况下进行以下要求的人像精修，专业人像摄影，低饱和度，专业影棚精修，柔和影棚光，自然高级磨皮、肤色提亮，保留皮肤质感不假白、五官微调立体、瘦脸自然、均匀肤色、去除痘印斑点黑眼圈、头发边缘顺滑处理，哑光但有光泽，高清细节，精致立体的裸妆，增强头发质感纹理，整个人看起来非常有气色，亚洲人，清晰可见的发丝，超高清的服装。调整为正面证件照构图，人物居中、双肩端正。保留原发型（不要改变原发型），减少毛躁碎发。纯红背景，标准证件照红，均匀无渐变。头肩比例标准，居中对齐。">精修证件照（红）- 小香蕉2K</span>
-							<span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200" data-tag="保持人物五官与脸部特征一致性的前提情况下进行以下要求的人像精修，专业人像摄影，低饱和度，专业影棚精修，柔和影棚光，自然高级磨皮、肤色提亮，保留皮肤质感不假白、五官微调立体、瘦脸自然、均匀肤色、去除痘印斑点黑眼圈、头发边缘顺滑处理，哑光但有光泽，高清细节，精致立体的裸妆，增强头发质感纹理，整个人看起来非常有气色，亚洲人，清晰可见的发丝，超高清的服装。调整为正面证件照构图，人物居中、双肩端正。保留原发型（不要改变原发型），减少毛躁碎发。纯蓝背景，标准证件照蓝，均匀无渐变。头肩比例标准，居中对齐。">精修证件照（蓝）- 小香蕉2K</span>
-                    </div>
-                    <div class="mb-4">
-                        <label for="customPrompt" class="block text-sm font-medium text-gray-600 mb-2">自定义描述词：</label>
-                        <textarea id="customPrompt" rows="4" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary" placeholder="A4/A3—3:4.4，40x60—2:3，60x90—2:3，60x160—3:8，80x180—4:9，120x200—1:1.67，80x200—1:2.5"></textarea>
-                    </div>
-                    <div id="selectedTagsContainer" class="mb-2 hidden">
-                        <h3 class="text-sm font-medium text-gray-600 mb-2">已选描述词：</h3>
-                        <div id="selectedTags" class="flex flex-wrap gap-2"></div>
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    <!-- 左边：任务管理和预览 -->
-                    <div class="lg:col-span-2">
-                        <div class="bg-white rounded-xl p-5 shadow-sm card-shadow">
-                            <div class="flex justify-between items-center mb-4">
-                                <h2 class="text-lg font-semibold flex items-center gap-2">
-                                    <i class="fa fa-tasks text-primary"></i>
-                                    任务管理
-                                </h2>
-                                <div class="flex items-center gap-4">
-                                    <span id="taskCount" class="text-sm text-secondary">
-                                        运行中: <span id="runningTaskCount">0</span>/12
-                                    </span>
-                                    <button id="errorLogBtn" class="text-sm text-danger hover:text-danger/80 flex items-center gap-1" title="查看错误日志">
-                                        <i class="fa fa-exclamation-circle"></i>
-                                        <span>错误日志</span>
-                                        <span id="errorCountBadge" class="bg-danger text-white text-xs px-1.5 py-0.5 rounded-full">0</span>
-                                    </button>
-                                </div>
-                            </div>
-                            <!-- 预览区域 -->
-                            <div class="p-4">
-                                <div class="grid grid-cols-6 gap-3">
-                                    <!-- 任务1 -->
-                                    <div class="text-center task-item" data-task-index="0">
-                                        <div class="flex flex-col items-center mb-2">
-                                            <div class="relative w-8 h-8 mb-2">
-                                                <svg class="w-full h-full" viewBox="0 0 36 36">
-                                                    <circle class="text-gray-200" stroke-width="2" stroke="currentColor" fill="transparent" r="16" cx="18" cy="18"/>
-                                                    <circle id="progress1" class="text-primary" stroke-width="2" stroke="currentColor" fill="transparent" r="16" cx="18" cy="18" stroke-dasharray="100" stroke-dashoffset="100" stroke-linecap="round"/>
-                                                </svg>
-                                                <div id="progressText1" class="absolute inset-0 flex items-center justify-center text-xs font-medium">0%</div>
-                                                <div id="errorIcon1" class="absolute inset-0 flex items-center justify-center hidden">
-                                                    <i class="fa fa-times-circle text-danger text-lg"></i>
-                                                </div>
-                                            </div>
-                                            <div class="text-sm text-primary">①</div>
-                                            <div id="errorTooltip1" class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-50 hidden">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- 任务2 -->
-                                    <div class="text-center task-item" data-task-index="1">
-                                        <div class="flex flex-col items-center mb-2">
-                                            <div class="relative w-8 h-8 mb-2">
-                                                <svg class="w-full h-full" viewBox="0 0 36 36">
-                                                    <circle class="text-gray-200" stroke-width="2" stroke="currentColor" fill="transparent" r="16" cx="18" cy="18"/>
-                                                    <circle id="progress2" class="text-primary" stroke-width="2" stroke="currentColor" fill="transparent" r="16" cx="18" cy="18" stroke-dasharray="100" stroke-dashoffset="100" stroke-linecap="round"/>
-                                                </svg>
-                                                <div id="progressText2" class="absolute inset-0 flex items-center justify-center text-xs font-medium">0%</div>
-                                                <div id="errorIcon2" class="absolute inset-0 flex items-center justify-center hidden">
-                                                    <i class="fa fa-times-circle text-danger text-lg"></i>
-                                                </div>
-                                            </div>
-                                            <div class="text-sm text-primary">②</div>
-                                            <div id="errorTooltip2" class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-50 hidden">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- 任务3 -->
-                                    <div class="text-center task-item" data-task-index="2">
-                                        <div class="flex flex-col items-center mb-2">
-                                            <div class="relative w-8 h-8 mb-2">
-                                                <svg class="w-full h-full" viewBox="0 0 36 36">
-                                                    <circle class="text-gray-200" stroke-width="2" stroke="currentColor" fill="transparent" r="16" cx="18" cy="18"/>
-                                                    <circle id="progress3" class="text-primary" stroke-width="2" stroke="currentColor" fill="transparent" r="16" cx="18" cy="18" stroke-dasharray="100" stroke-dashoffset="100" stroke-linecap="round"/>
-                                                </svg>
-                                                <div id="progressText3" class="absolute inset-0 flex items-center justify-center text-xs font-medium">0%</div>
-                                                <div id="errorIcon3" class="absolute inset-0 flex items-center justify-center hidden">
-                                                    <i class="fa fa-times-circle text-danger text-lg"></i>
-                                                </div>
-                                            </div>
-                                            <div class="text-sm text-primary">③</div>
-                                            <div id="errorTooltip3" class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-50 hidden">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- 任务4 -->
-                                    <div class="text-center task-item" data-task-index="3">
-                                        <div class="flex flex-col items-center mb-2">
-                                            <div class="relative w-8 h-8 mb-2">
-                                                <svg class="w-full h-full" viewBox="0 0 36 36">
-                                                    <circle class="text-gray-200" stroke-width="2" stroke="currentColor" fill="transparent" r="16" cx="18" cy="18"/>
-                                                    <circle id="progress4" class="text-primary" stroke-width="2" stroke="currentColor" fill="transparent" r="16" cx="18" cy="18" stroke-dasharray="100" stroke-dashoffset="100" stroke-linecap="round"/>
-                                                </svg>
-                                                <div id="progressText4" class="absolute inset-0 flex items-center justify-center text-xs font-medium">0%</div>
-                                                <div id="errorIcon4" class="absolute inset-0 flex items-center justify-center hidden">
-                                                    <i class="fa fa-times-circle text-danger text-lg"></i>
-                                                </div>
-                                            </div>
-                                            <div class="text-sm text-primary">④</div>
-                                            <div id="errorTooltip4" class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-50 hidden">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- 任务5 -->
-                                    <div class="text-center task-item" data-task-index="4">
-                                        <div class="flex flex-col items-center mb-2">
-                                            <div class="relative w-8 h-8 mb-2">
-                                                <svg class="w-full h-full" viewBox="0 0 36 36">
-                                                    <circle class="text-gray-200" stroke-width="2" stroke="currentColor" fill="transparent" r="16" cx="18" cy="18"/>
-                                                    <circle id="progress5" class="text-primary" stroke-width="2" stroke="currentColor" fill="transparent" r="16" cx="18" cy="18" stroke-dasharray="100" stroke-dashoffset="100" stroke-linecap="round"/>
-                                                </svg>
-                                                <div id="progressText5" class="absolute inset-0 flex items-center justify-center text-xs font-medium">0%</div>
-                                                <div id="errorIcon5" class="absolute inset-0 flex items-center justify-center hidden">
-                                                    <i class="fa fa-times-circle text-danger text-lg"></i>
-                                                </div>
-                                            </div>
-                                            <div class="text-sm text-primary">⑤</div>
-                                            <div id="errorTooltip5" class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-50 hidden">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- 任务6 -->
-                                    <div class="text-center task-item" data-task-index="5">
-                                        <div class="flex flex-col items-center mb-2">
-                                            <div class="relative w-8 h-8 mb-2">
-                                                <svg class="w-full h-full" viewBox="0 0 36 36">
-                                                    <circle class="text-gray-200" stroke-width="2" stroke="currentColor" fill="transparent" r="16" cx="18" cy="18"/>
-                                                    <circle id="progress6" class="text-primary" stroke-width="2" stroke="currentColor" fill="transparent" r="16" cx="18" cy="18" stroke-dasharray="100" stroke-dashoffset="100" stroke-linecap="round"/>
-                                                </svg>
-                                                <div id="progressText6" class="absolute inset-0 flex items-center justify-center text-xs font-medium">0%</div>
-                                                <div id="errorIcon6" class="absolute inset-0 flex items-center justify-center hidden">
-                                                    <i class="fa fa-times-circle text-danger text-lg"></i>
-                                                </div>
-                                            </div>
-                                            <div class="text-sm text-primary">⑥</div>
-                                            <div id="errorTooltip6" class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-50 hidden">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- 任务7 -->
-                                    <div class="text-center task-item" data-task-index="6">
-                                        <div class="flex flex-col items-center mb-2">
-                                            <div class="relative w-8 h-8 mb-2">
-                                                <svg class="w-full h-full" viewBox="0 0 36 36">
-                                                    <circle class="text-gray-200" stroke-width="2" stroke="currentColor" fill="transparent" r="16" cx="18" cy="18"/>
-                                                    <circle id="progress7" class="text-primary" stroke-width="2" stroke="currentColor" fill="transparent" r="16" cx="18" cy="18" stroke-dasharray="100" stroke-dashoffset="100" stroke-linecap="round"/>
-                                                </svg>
-                                                <div id="progressText7" class="absolute inset-0 flex items-center justify-center text-xs font-medium">0%</div>
-                                                <div id="errorIcon7" class="absolute inset-0 flex items-center justify-center hidden">
-                                                    <i class="fa fa-times-circle text-danger text-lg"></i>
-                                                </div>
-                                            </div>
-                                            <div class="text-sm text-primary">⑦</div>
-                                            <div id="errorTooltip7" class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-50 hidden">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- 任务8 -->
-                                    <div class="text-center task-item" data-task-index="7">
-                                        <div class="flex flex-col items-center mb-2">
-                                            <div class="relative w-8 h-8 mb-2">
-                                                <svg class="w-full h-full" viewBox="0 0 36 36">
-                                                    <circle class="text-gray-200" stroke-width="2" stroke="currentColor" fill="transparent" r="16" cx="18" cy="18"/>
-                                                    <circle id="progress8" class="text-primary" stroke-width="2" stroke="currentColor" fill="transparent" r="16" cx="18" cy="18" stroke-dasharray="100" stroke-dashoffset="100" stroke-linecap="round"/>
-                                                </svg>
-                                                <div id="progressText8" class="absolute inset-0 flex items-center justify-center text-xs font-medium">0%</div>
-                                                <div id="errorIcon8" class="absolute inset-0 flex items-center justify-center hidden">
-                                                    <i class="fa fa-times-circle text-danger text-lg"></i>
-                                                </div>
-                                            </div>
-                                            <div class="text-sm text-primary">⑧</div>
-                                            <div id="errorTooltip8" class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-50 hidden">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- 任务9 -->
-                                    <div class="text-center task-item" data-task-index="8">
-                                        <div class="flex flex-col items-center mb-2">
-                                            <div class="relative w-8 h-8 mb-2">
-                                                <svg class="w-full h-full" viewBox="0 0 36 36">
-                                                    <circle class="text-gray-200" stroke-width="2" stroke="currentColor" fill="transparent" r="16" cx="18" cy="18"/>
-                                                    <circle id="progress9" class="text-primary" stroke-width="2" stroke="currentColor" fill="transparent" r="16" cx="18" cy="18" stroke-dasharray="100" stroke-dashoffset="100" stroke-linecap="round"/>
-                                                </svg>
-                                                <div id="progressText9" class="absolute inset-0 flex items-center justify-center text-xs font-medium">0%</div>
-                                                <div id="errorIcon9" class="absolute inset-0 flex items-center justify-center hidden">
-                                                    <i class="fa fa-times-circle text-danger text-lg"></i>
-                                                </div>
-                                            </div>
-                                            <div class="text-sm text-primary">⑨</div>
-                                            <div id="errorTooltip9" class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-50 hidden">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- 任务10 -->
-                                    <div class="text-center task-item" data-task-index="9">
-                                        <div class="flex flex-col items-center mb-2">
-                                            <div class="relative w-8 h-8 mb-2">
-                                                <svg class="w-full h-full" viewBox="0 0 36 36">
-                                                    <circle class="text-gray-200" stroke-width="2" stroke="currentColor" fill="transparent" r="16" cx="18" cy="18"/>
-                                                    <circle id="progress10" class="text-primary" stroke-width="2" stroke="currentColor" fill="transparent" r="16" cx="18" cy="18" stroke-dasharray="100" stroke-dashoffset="100" stroke-linecap="round"/>
-                                                </svg>
-                                                <div id="progressText10" class="absolute inset-0 flex items-center justify-center text-xs font-medium">0%</div>
-                                                <div id="errorIcon10" class="absolute inset-0 flex items-center justify-center hidden">
-                                                    <i class="fa fa-times-circle text-danger text-lg"></i>
-                                                </div>
-                                            </div>
-                                            <div class="text-sm text-primary">⑩</div>
-                                            <div id="errorTooltip10" class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-50 hidden">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- 任务11 -->
-                                    <div class="text-center task-item" data-task-index="10">
-                                        <div class="flex flex-col items-center mb-2">
-                                            <div class="relative w-8 h-8 mb-2">
-                                                <svg class="w-full h-full" viewBox="0 0 36 36">
-                                                    <circle class="text-gray-200" stroke-width="2" stroke="currentColor" fill="transparent" r="16" cx="18" cy="18"/>
-                                                    <circle id="progress11" class="text-primary" stroke-width="2" stroke="currentColor" fill="transparent" r="16" cx="18" cy="18" stroke-dasharray="100" stroke-dashoffset="100" stroke-linecap="round"/>
-                                                </svg>
-                                                <div id="progressText11" class="absolute inset-0 flex items-center justify-center text-xs font-medium">0%</div>
-                                                <div id="errorIcon11" class="absolute inset-0 flex items-center justify-center hidden">
-                                                    <i class="fa fa-times-circle text-danger text-lg"></i>
-                                                </div>
-                                            </div>
-                                            <div class="text-sm text-primary">⑪</div>
-                                            <div id="errorTooltip11" class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-50 hidden">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- 任务12 -->
-                                    <div class="text-center task-item" data-task-index="11">
-                                        <div class="flex flex-col items-center mb-2">
-                                            <div class="relative w-8 h-8 mb-2">
-                                                <svg class="w-full h-full" viewBox="0 0 36 36">
-                                                    <circle class="text-gray-200" stroke-width="2" stroke="currentColor" fill="transparent" r="16" cx="18" cy="18"/>
-                                                    <circle id="progress12" class="text-primary" stroke-width="2" stroke="currentColor" fill="transparent" r="16" cx="18" cy="18" stroke-dasharray="100" stroke-dashoffset="100" stroke-linecap="round"/>
-                                                </svg>
-                                                <div id="progressText12" class="absolute inset-0 flex items-center justify-center text-xs font-medium">0%</div>
-                                                <div id="errorIcon12" class="absolute inset-0 flex items-center justify-center hidden">
-                                                    <i class="fa fa-times-circle text-danger text-lg"></i>
-                                                </div>
-                                            </div>
-                                            <div class="text-sm text-primary">⑫</div>
-                                            <div id="errorTooltip12" class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-50 hidden">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div id="resultActions" class="mt-4 flex justify-center gap-3 hidden">
-                                    <button id="downloadBtn" class="bg-primary text-white px-4 py-2 rounded-lg btn-hover flex items-center gap-1">
-                                        <i class="fa fa-download"></i>
-                                        <span>下载图片</span>
-                                    </button>
-                                    <button id="saveHistoryBtn" class="bg-primary text-white px-4 py-2 rounded-lg btn-hover flex items-center gap-1">
-                                        <i class="fa fa-save"></i>
-                                        <span>保存到历史</span>
-                                    </button>
-                                    <button id="regenerateBtn" class="bg-secondary text-white px-4 py-2 rounded-lg btn-hover flex items-center gap-1">
-                                        <i class="fa fa-refresh"></i>
-                                        <span>重新生成</span>
-                                    </button>
-                                </div>
-
-                            </div>
+                    <!-- URL列表 + 图床选择（同一行） -->
+                    <div class="flex items-center justify-between gap-2 text-xs">
+                        <details id="uploadedUrlsContainer" class="flex-1 relative">
+                            <summary class="cursor-pointer text-gray-500 hover:text-primary flex items-center gap-1 select-none list-none">
+                                <i class="fa fa-link"></i>
+                                <span class="underline">URL列表（<span id="uploadedUrlsCount">0</span>）</span>
+                            </summary>
+                            <div id="uploadedUrlsList" class="mt-2 max-h-32 overflow-y-auto p-2 bg-gray-50 rounded-lg border border-gray-200 space-y-1"></div>
+                            <button id="copyAllUrlsBtn" class="mt-2 inline-flex items-center gap-1 bg-primary/10 text-primary px-2.5 py-1 rounded hover:bg-primary/20 text-xs">
+                                <i class="fa fa-copy"></i>
+                                <span>复制所有</span>
+                            </button>
+                        </details>
+                        <div class="flex items-center gap-2">
+                            <label class="text-gray-500 whitespace-nowrap">图床：</label>
+                            <select id="imageHostSelect" class="border border-gray-300 rounded px-2 py-1 bg-white focus:outline-none focus:border-primary">
+                                <option value="imgbb">Imgbb - ①</option>
+                                <option value="cloudinary">Cloudinary - ②</option>
+                            </select>
                         </div>
                     </div>
 
-                    <!-- 右边：历史生成记录 -->
-                    <div class="lg:col-span-1">
-                        <div class="bg-white rounded-xl p-5 shadow-sm card-shadow h-full">
-                            <div class="flex justify-between items-center mb-4">
-                <h2 class="text-lg font-semibold flex items-center gap-2">
-                    <i class="fa fa-history text-primary"></i>
-                    历史记录
-                </h2>
-                <div class="flex gap-3">
-                    <button id="downloadAllHistoryBtn" class="text-sm text-primary hover:underline flex items-center gap-1">
-                        <i class="fa fa-download"></i>
-                        <span>下载全部</span>
+                    <!-- 模型选项（统一下拉） -->
+                    <div>
+                        <label class="block text-xs text-gray-500 mb-1">模型选项</label>
+                        <select id="modelVariantUnified" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary">
+                            <!-- GPT 系列 -->
+                            <optgroup label="GPT Image">
+                                <option value="gpt-image-2.5">gpt-image-2.5 - 600积分/次</option>
+                                <option value="gpt-image-2-vip">gpt-image-2-vip - 2000积分/次</option>
+                                <option value="gpt-image-2.5-sunburst">gpt-image-2.5-sunburst - 2400积分/次</option>
+                                <option value="gpt-image-2.5-flare">gpt-image-2.5-flare - 2000积分/次</option>
+                            </optgroup>
+                            <!-- Banana 系列 -->
+                            <optgroup label="Nano Banana">
+                                <option value="nano-banana-2">nano-banana-2 - 1200积分/次</option>
+                                <option value="nano-banana-pro">nano-banana-pro - 1800积分/次</option>
+                            </optgroup>
+                        </select>
+                    </div>
+
+                    <!-- 隐藏的子模型下拉（JS 兼容用，不可见） -->
+                    <div id="hiddenModelSelects" class="hidden">
+                        <select id="gptVariants">
+                            <option value="gpt-image-2.5">gpt-image-2.5</option>
+                            <option value="gpt-image-2-vip">gpt-image-2-vip</option>
+                            <option value="gpt-image-2.5-sunburst">gpt-image-2.5-sunburst</option>
+                            <option value="gpt-image-2.5-flare">gpt-image-2.5-flare</option>
+                        </select>
+                        <select id="bananaSubModel">
+                            <option value="nano-banana-2">nano-banana-2</option>
+                            <option value="nano-banana-pro">nano-banana-pro</option>
+                        </select>
+                    </div>
+
+                    <!-- GPT 分辨率选择（JS 控制显示） -->
+                    <div id="gptConfig">
+                        <div id="gptImageSizeContainer" class="hidden">
+                            <label for="gptImageSize" class="block text-xs text-gray-500 mb-1">分辨率：</label>
+                            <select id="gptImageSize" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary">
+                                <option value="2K">2K</option>
+                                <option value="4K" selected>4K</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Banana 分辨率选择（JS 控制显示） -->
+                    <div id="bananaConfig">
+                        <div id="bananaImageSizeContainer" class="hidden">
+                            <label for="bananaImageSize" class="block text-xs text-gray-500 mb-1">分辨率：</label>
+                            <select id="bananaImageSize" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary">
+                                <option value="2K">2K</option>
+                                <option value="4K" selected>4K</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- 尺寸选项 -->
+                    <div id="aspectRatioContainer">
+                        <label for="imageSize" class="block text-xs text-gray-500 mb-1">尺寸选项</label>
+                        <div class="relative">
+                            <button
+                                type="button"
+                                id="imageSizeButton"
+                                role="combobox"
+                                aria-expanded="false"
+                                aria-autocomplete="none"
+                                dir="ltr"
+                                data-state="closed"
+                                class="flex items-center justify-between gap-2 rounded-lg border border-gray-300 px-3 py-2 text-sm whitespace-nowrap shadow-xs transition-[color,box-shadow] outline-none focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary w-full cursor-pointer"
+                            >
+                                <span id="imageSizeValue" class="flex items-center gap-2">
+                                    <div id="aspectPreview" class="border border-solid border-gray-400 bg-gray-100" style="width: 18px; height: 18px; min-width: 18px; min-height: 18px;"></div>
+                                    <span id="sizeText">auto</span>
+                                </span>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down size-4 opacity-50" aria-hidden="true">
+                                    <path d="m6 9 6 6 6-6"></path>
+                                </svg>
+                            </button>
+                            <div id="imageSizeDropdown" class="hidden absolute z-50 w-full mt-1 overflow-hidden rounded-md border bg-white shadow-lg animate-in fade-in slide-in-from-top-2 duration-200 border-gray-200">
+                                <div id="imageSizeOptions" class="grid grid-cols-3 gap-1.5 p-2 text-sm">
+                                </div>
+                            </div>
+                        </div>
+                        <input type="hidden" id="imageSize" name="imageSize" value="auto">
+                    </div>
+
+                    <!-- 生成按钮 -->
+                    <button id="generateBtn" class="w-full gradient-bg text-white font-medium py-2.5 px-4 rounded-lg btn-hover flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
+                        <i class="fa fa-magic"></i>
+                        <span>生成图像</span>
                     </button>
-                    <button id="clearHistoryBtn" class="text-sm text-danger hover:underline">清空</button>
+
                 </div>
             </div>
-                            <div id="historyContainer" class="grid grid-cols-3 gap-3 max-h-[650px] overflow-y-auto">
-                                <div class="col-span-full text-center py-8 text-secondary">
-                                    <i class="fa fa-folder-open-o text-3xl mb-3"></i>
-                                    <p class="text-sm">暂无历史记录</p>
+
+            <!-- 可拖拽分隔拉杆 -->
+            <div id="panelResizer" class="hidden md:block w-1.5 cursor-col-resize bg-transparent shrink-0 self-stretch hover:bg-primary/20 active:bg-primary/40 transition-colors relative group flex items-center justify-center" title="拖动调整左右比例 · 双击重置为 45/55">
+                <div class="w-1 h-12 rounded-full bg-gray-300 group-hover:bg-primary group-active:bg-primary shadow-sm transition-colors pointer-events-none"></div>
+            </div>
+
+            <!-- 左面板：任务历史区 -->
+            <div id="leftPanel" class="md:w-auto flex flex-col min-h-full" style="width: calc(100% - var(--left-pct) - 6px); min-width: 0;">
+                <!-- 任务/历史 + 描述词控制区（始终可见） -->
+                <div id="leftTaskState" class="min-h-full">
+                        <!-- 合并卡片（所有内容放里面） -->
+                        <div class="bg-white rounded-xl p-5 shadow-sm card-shadow space-y-4 min-h-full">
+                            <!-- 卡片顶部：操作按钮行 + 绿色提示条 -->
+                            <div>
+                                <div class="flex items-center justify-between gap-3 mb-3">
+                                    <div class="flex items-center gap-4 min-w-0">
+                                        <div class="flex gap-2 shrink-0">
+                                            <button id="downloadAllHistoryBtn" class="text-sm text-primary hover:text-primary/70 flex items-center gap-1 px-3 py-1.5 rounded-lg hover:bg-primary/5">
+                                                <i class="fa fa-download"></i>
+                                                <span>下载全部</span>
+                                            </button>
+                                            <button id="clearHistoryBtn" class="text-sm text-danger hover:text-danger/70 px-3 py-1.5 rounded-lg hover:bg-danger/5">清空历史</button>
+                                        </div>
+                                    </div>
+                                    <!-- 常驻 badge + 日志按钮 -->
+                                    <div class="inline-flex items-center gap-2 shrink-0">
+                                        <span id="runningBadgeWrap" class="inline-flex items-center gap-1.5 text-xs">
+                                            <span class="inline-flex items-center gap-1 bg-green-50 text-green-700 border border-green-200 px-2 py-0.5 rounded-full">
+                                                <span id="runningDot" class="w-1.5 h-1.5 rounded-full bg-gray-300"></span>
+                                                运行中 <span id="runningTaskCountRight" class="font-semibold tabular-nums">0</span>
+                                            </span>
+                                        </span>
+                                        <button id="generateLogBtn" class="inline-flex items-center gap-1 text-xs bg-blue-50 text-blue-700 border border-blue-200 px-2 py-0.5 rounded-full hover:bg-blue-100 transition-colors" title="查看生成日志">
+                                            <i class="fa fa-list-alt"></i>
+                                            日志 <span id="generateLogCount" class="font-semibold tabular-nums">0</span>
+                                        </button>
+                                        <button id="errorLogBtn" class="inline-flex items-center gap-1 text-xs bg-red-50 text-red-700 border border-red-200 px-2 py-0.5 rounded-full hover:bg-red-100 transition-colors" title="查看错误日志">
+                                            <i class="fa fa-exclamation-triangle"></i>
+                                            错误 <span id="errorLogCount" class="font-semibold tabular-nums">0</span>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="bg-green-50 border border-green-200 rounded-lg px-4 py-2 flex items-center gap-2 text-xs text-green-700">
+                                    <i class="fa fa-info-circle"></i>
+                                    <span>内容有效期为2小时，请尽快下载。最多存储200个任务，超出限制时将自动删除最旧的任务。点击缩略图可预览完整内容。</span>
                                 </div>
                             </div>
+
+                            <!-- 历史记录网格（在上，无历史时隐藏） -->
+                            <div id="historyContainer" class="flex flex-wrap gap-3 max-h-[450px] overflow-y-auto hidden">
+                            </div>
+
+                            <!-- 分割线（有历史+任务时显示） -->
+                            <div id="splitLine" class="flex items-center gap-3 text-xs text-gray-300 hidden">
+                                <div class="flex-1 h-px bg-gray-200"></div>
+                                <span>进行中</span>
+                                <div class="flex-1 h-px bg-gray-200"></div>
+                            </div>
+                            
+                            <!-- 动态任务卡片（在下，有任务时显示） -->
+                            <div id="taskCardsContainer" class="hidden">
+                                <!-- JS 动态生成，有几个显示几个 -->
+                            </div>
+
+                            <!-- 描述词相关（从右侧工作区搬来） -->
+                            <div class="pt-4 mt-2 border-t border-gray-100">
+                                <!-- 三个一键按钮 -->
+                                <div class="flex gap-2 mb-3">
+                                    <button id="effectBtn" class="flex-1 flex items-center justify-center gap-1 px-3 py-2 rounded-lg bg-primary/10 text-primary hover:bg-primary/20 transition-colors text-sm">
+                                        <i class="fa fa-wand-magic-sparkles"></i>
+                                        <span>一键效果图</span>
+                                    </button>
+                                    <button id="copyBtn" class="flex-1 flex items-center justify-center gap-1 px-3 py-2 rounded-lg bg-primary/10 text-primary hover:bg-primary/20 transition-colors text-sm">
+                                        <i class="fa fa-copy"></i>
+                                        <span>一键复制</span>
+                                    </button>
+                                    <button id="designBtn" class="flex-1 flex items-center justify-center gap-1 px-3 py-2 rounded-lg bg-primary/10 text-primary hover:bg-primary/20 transition-colors text-sm">
+                                        <i class="fa fa-pen-fancy"></i>
+                                        <span>一键设计稿</span>
+                                    </button>
+                                </div>
+                                <!-- 预设描述词 -->
+                                <div id="presetTags" class="flex flex-wrap gap-2 max-h-40 overflow-y-auto pr-1 text-xs mb-3">
+                                    <span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200 cursor-pointer hover:border-primary hover:bg-primary/5" data-tag="提取图章">提取图章</span>
+                                    <span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200 cursor-pointer hover:border-primary hover:bg-primary/5" data-tag="提取背景">提取背景</span>
+                                    <span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200 cursor-pointer hover:border-primary hover:bg-primary/5" data-tag="删除文字">删除文字</span>
+                                    <span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200 cursor-pointer hover:border-primary hover:bg-primary/5" data-tag="白底黑内容">白底黑内容</span>
+                                    <span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200 cursor-pointer hover:border-primary hover:bg-primary/5" data-tag="物品材质修复">物品材质修复</span>
+                                    <span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200 cursor-pointer hover:border-primary hover:bg-primary/5" data-tag="提取印花">提取印花</span>
+                                    <span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200 cursor-pointer hover:border-primary hover:bg-primary/5" data-tag="修老照片">修老照片</span>
+                                    <span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200 cursor-pointer hover:border-primary hover:bg-primary/5" data-tag="转为平面图">转为平面图</span>
+                                    <span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200 cursor-pointer hover:border-primary hover:bg-primary/5" data-tag="转为二维图">转为二维图</span>
+                                    <span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200 cursor-pointer hover:border-primary hover:bg-primary/5" data-tag="生成背景图">生成背景图</span>
+                                    <span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200 cursor-pointer hover:border-primary hover:bg-primary/5" data-tag="去布纹理">去布纹理</span>
+                                    <span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200 cursor-pointer hover:border-primary hover:bg-primary/5" data-tag="拆分元素1">拆分元素1</span>
+                                    <span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200 cursor-pointer hover:border-primary hover:bg-primary/5" data-tag="拆分元素2">拆分元素2</span>
+                                    <span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200 cursor-pointer hover:border-primary hover:bg-primary/5" data-tag="拆分元素3">拆分元素3</span>
+                                    <span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200 cursor-pointer hover:border-primary hover:bg-primary/5" data-tag="拆分海报">拆分海报</span>
+                                    <span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200 cursor-pointer hover:border-primary hover:bg-primary/5" data-tag="变清晰">变清晰</span>
+                                    <span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200 cursor-pointer hover:border-primary hover:bg-primary/5" data-tag="转电子版">转电子版</span>
+                                    <span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200 cursor-pointer hover:border-primary hover:bg-primary/5" data-tag="复原设计稿">复原设计稿</span>
+                                    <span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200 cursor-pointer hover:border-primary hover:bg-primary/5" data-tag="复原logo手绘稿">复原logo手绘稿</span>
+                                    <span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200 cursor-pointer hover:border-primary hover:bg-primary/5" data-tag="手绘稿转CAD平面图">手绘稿转CAD平面图</span>
+                                    <span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200 cursor-pointer hover:border-primary hover:bg-primary/5" data-tag="文本还原">文本还原</span>
+                                    <span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200 cursor-pointer hover:border-primary hover:bg-primary/5" data-tag="产品精修">产品精修</span>
+                                    <span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200 cursor-pointer hover:border-primary hover:bg-primary/5" data-tag="菜品补齐">菜品补齐</span>
+                                    <span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200 cursor-pointer hover:border-primary hover:bg-primary/5" data-tag="精修证件照（白）">精修证件照（白）</span>
+                                    <span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200 cursor-pointer hover:border-primary hover:bg-primary/5" data-tag="精修证件照（红）">精修证件照（红）</span>
+                                    <span class="tag-hover px-3 py-1 rounded-full text-sm border border-gray-200 cursor-pointer hover:border-primary hover:bg-primary/5" data-tag="精修证件照（蓝）">精修证件照（蓝）</span>
+                                </div>
+                                <!-- 已选标签 -->
+                                <div id="selectedTagsContainer" class="mb-2 hidden">
+                                    <h3 class="text-xs text-gray-500 mb-1">已选描述词：</h3>
+                                    <div id="selectedTags" class="flex flex-wrap gap-1"></div>
+                                </div>
+                                <!-- 自定义描述词输入 -->
+                                <div>
+                                    <label class="block text-xs text-gray-500 mb-1">自定义描述词</label>
+                                    <textarea id="customPrompt" rows="3" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary" placeholder="描述你想要生成或修改的图像..."></textarea>
+                                </div>
+                            </div>
+
+                            <!-- 选中结果的操作按钮 -->
+                            <div id="resultActions" class="flex justify-center gap-3 hidden">
+                                <button id="downloadBtn" class="bg-primary text-white px-4 py-2 rounded-lg btn-hover flex items-center gap-1">
+                                    <i class="fa fa-download"></i>
+                                    <span>下载图片</span>
+                                </button>
+                                <button id="saveHistoryBtn" class="bg-primary text-white px-4 py-2 rounded-lg btn-hover flex items-center gap-1">
+                                    <i class="fa fa-save"></i>
+                                    <span>保存到历史</span>
+                                </button>
+                                <button id="regenerateBtn" class="bg-secondary text-white px-4 py-2 rounded-lg btn-hover flex items-center gap-1">
+                                    <i class="fa fa-refresh"></i>
+                                    <span>重新生成</span>
+                                </button>
+                            </div>
                         </div>
-                    </div>
-                </div>
-				
+                </div><!-- /#leftTaskState -->
+            </div><!-- /#leftPanel -->
+        </div><!-- /#panelSplit -->
     </main>
 
 
@@ -1269,6 +1051,11 @@
     const IMGBB_API_KEY = 'e8bf0d415745ca4f4ceee30dd5745e16';
     const IMGBB_UPLOAD_URL = 'https://api.imgbb.com/1/upload';
 
+    // Cloudinary API 配置（免费图床，支持CORS浏览器直传）
+    const CLOUDINARY_CLOUD_NAME = 'yahee';     // ← 填入你的 Cloud Name
+    const CLOUDINARY_UPLOAD_PRESET = 'yahee666'; // ← 填入你的 Unsigned Upload Preset
+    const CLOUDINARY_UPLOAD_URL = `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`;
+
     // API服务器配置
     const apiServers = {
         china: 'https://grsai.dakka.com.cn',
@@ -1328,8 +1115,116 @@
         generateCountBadge: document.getElementById('generateCountBadge')
     };
 
+    // 动态渲染任务卡片（参考图1样式：缩略图+下方进度条+进度文字）
+    function renderTaskCards() {
+        const container = document.getElementById('taskCardsContainer');
+        if (!container) return;
+
+        const tasks = appState.tasks || [];
+        const activeTasks = tasks.filter(t => t != null && t !== undefined);
+
+        if (activeTasks.length === 0) {
+            container.classList.add('hidden');
+            return;
+        }
+
+        container.classList.remove('hidden');
+
+        // 参考图1：小卡片（约100×120），缩略图在上，进度条+文字在下
+        let html = '<div class="flex flex-wrap gap-3">';
+        for (let i = 0; i < tasks.length; i++) {
+            const task = tasks[i];
+            if (!task) continue;
+            const progress = task.progress || 0;
+            const isDone = task.status === 'completed' || progress >= 100;
+            const isFailed = task.status === 'failed';
+            const barColor = isFailed ? '#EF4444' : (isDone ? '#10B981' : '#3B82F6');
+            const thumb = task.resultUrl 
+                ? `<img src="${task.resultUrl}" class="w-full h-full object-cover" loading="lazy">` 
+                : `<i class="fa fa-image text-gray-300 text-xl"></i>`;
+            const pctText = isDone ? '完成' : (isFailed ? '失败' : progress + '%');
+
+            html += `
+            <div class="task-card relative w-[110px] h-[130px] bg-white rounded-lg border border-gray-200 hover:border-primary/50 transition-colors cursor-pointer overflow-hidden flex flex-col" data-task-index="${i}">
+                <!-- 缩略图区域 -->
+                <div class="flex-1 bg-gray-100 flex items-center justify-center">
+                    ${thumb}
+                </div>
+                <!-- 进度条 + 文字（底部） -->
+                <div class="p-1.5 border-t border-gray-100">
+                    <div class="flex items-center justify-between mb-0.5">
+                        <span class="text-[10px] text-gray-500">进度</span>
+                        <span class="text-[10px] font-medium ${isFailed ? 'text-danger' : (isDone ? 'text-green-600' : 'text-gray-700')}">${pctText}</span>
+                    </div>
+                    <div class="w-full h-1 bg-gray-200 rounded-full overflow-hidden">
+                        <div class="h-full rounded-full transition-all duration-300" style="width: ${progress}%; background-color: ${barColor}"></div>
+                    </div>
+                </div>
+                <!-- 删除按钮（悬停右上角） -->
+                <button class="task-card-delete absolute top-1 right-1 w-5 h-5 bg-white/90 hover:bg-danger hover:text-white rounded-full flex items-center justify-center text-gray-400 text-xs opacity-0 hover:opacity-100 transition-all border border-gray-200 shadow-sm" data-idx="${i}" title="取消/删除">
+                    <i class="fa fa-times"></i>
+                </button>
+            </div>
+            `;
+        }
+        html += '</div>';
+        container.innerHTML = html;
+
+        // 更新运行中数量（badge 常驻左侧工具栏最右侧）
+        const runningCount = activeTasks.filter(t => (t.progress || 0) < 100 && t.status !== 'failed').length;
+        const rcRightEl = document.getElementById('runningTaskCountRight');
+        const runningDot = document.getElementById('runningDot');
+        if (rcRightEl) rcRightEl.textContent = runningCount;
+        if (runningDot) {
+            if (runningCount > 0) {
+                runningDot.className = 'w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse';
+            } else {
+                runningDot.className = 'w-1.5 h-1.5 rounded-full bg-gray-300';
+            }
+        }
+
+        // 分割线（上有历史 下有任务时才显示）
+        const splitLine = document.getElementById('splitLine');
+        if (splitLine) {
+            const hasHistory = document.getElementById('historyContainer') && document.getElementById('historyContainer').querySelector('img');
+            if (activeTasks.length > 0 && hasHistory) splitLine.classList.remove('hidden');
+            else splitLine.classList.add('hidden');
+        }
+
+        // 删除按钮
+        container.querySelectorAll('.task-card-delete').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const idx = parseInt(e.currentTarget.dataset.idx);
+                if (confirm('确认取消此任务？')) {
+                    if (appState.tasks[idx]) appState.tasks[idx] = null;
+                    renderTaskCards();
+                    window.updateLeftPanelState();
+                }
+            });
+        });
+
+        // 点击打开预览
+        container.querySelectorAll('.task-card').forEach(card => {
+            card.addEventListener('click', (e) => {
+                if (e.target.closest('.task-card-delete')) return;
+                const idx = parseInt(card.dataset.taskIndex);
+                const task = appState.tasks[idx];
+                if (task && task.resultUrl) window.open(task.resultUrl, '_blank');
+            });
+        });
+    }
+
+    // 取消后端任务（占位函数）
+    async function cancelBackendTask(taskId) {
+        try { console.log('Cancel task:', taskId); } catch(e) {}
+    }
+
     // 初始化函数
     async function init() {
+        // 先渲染卡片
+        renderTaskCards();
+
         bindEvents();
         loadApiKeys(); // 加载已保存的API Keys
         
@@ -1386,18 +1281,31 @@
 
     // 绑定事件
     function bindEvents() {
-        // 一键效果图按钮点击事件 - 打开一键效果图模态框
-        document.getElementById('effectBtn').addEventListener('click', () => {
+        // 图床选择切换事件
+        const imageHostSelect = document.getElementById('imageHostSelect');
+        if (imageHostSelect) {
+            const savedHost = localStorage.getItem('imageHost') || 'imgbb';
+            imageHostSelect.value = savedHost;
+            imageHostSelect.addEventListener('change', (e) => {
+                localStorage.setItem('imageHost', e.target.value);
+            });
+        }
+
+        // 一键效果图按钮点击事件
+        const effectBtn = document.getElementById('effectBtn');
+        if (effectBtn) effectBtn.addEventListener('click', () => {
             document.getElementById('effectModal').classList.remove('hidden');
         });
         
-        // 一键复制按钮点击事件 - 打开一键复制模态框
-        document.getElementById('copyBtn').addEventListener('click', () => {
+        // 一键复制按钮点击事件
+        const copyBtn = document.getElementById('copyBtn');
+        if (copyBtn) copyBtn.addEventListener('click', () => {
             document.getElementById('copyModal').classList.remove('hidden');
         });
         
-        // 一键设计稿按钮点击事件 - 打开一键设计稿模态框
-        document.getElementById('designBtn').addEventListener('click', () => {
+        // 一键设计稿按钮点击事件
+        const designBtn = document.getElementById('designBtn');
+        if (designBtn) designBtn.addEventListener('click', () => {
             document.getElementById('designModal').classList.remove('hidden');
         });
         
@@ -1458,11 +1366,13 @@
 
         
         // 预设描述词点击事件
-        elements.presetTags.addEventListener('click', (e) => {
-            if (e.target.tagName === 'SPAN' && e.target.dataset.tag) {
-                toggleTag(e.target.dataset.tag);
-            }
-        });
+        if (elements.presetTags) {
+            elements.presetTags?.addEventListener('click', (e) => {
+                if (e.target.tagName === 'SPAN' && e.target.dataset.tag) {
+                    toggleTag(e.target.dataset.tag);
+                }
+            });
+        }
         
 
         
@@ -1483,17 +1393,17 @@
         });
 
         // API 设置按钮点击事件
-        elements.apiSettingBtn.addEventListener('click', () => {
+        elements.apiSettingBtn?.addEventListener('click', () => {
             showApiModal();
         });
 
         // 关闭 API 模态框事件
-        elements.closeApiModal.addEventListener('click', () => {
+        elements.closeApiModal?.addEventListener('click', () => {
             hideApiModal();
         });
 
         // 点击模态框背景关闭
-        elements.apiModal.addEventListener('click', (e) => {
+        elements.apiModal?.addEventListener('click', (e) => {
             if (e.target === elements.apiModal) {
                 hideApiModal();
             }
@@ -1509,36 +1419,48 @@
             }
         });
 
-        // 模型选择器事件
-        document.querySelectorAll('.model-card').forEach(card => {
-            card.addEventListener('click', () => {
-                document.querySelectorAll('.model-card').forEach(c => {
-                    c.classList.remove('active');
-                    c.querySelector('.fa-check-circle').classList.add('hidden');
-                });
-                card.classList.add('active');
-                card.querySelector('.fa-check-circle').classList.remove('hidden');
-                
-                // 显示/隐藏相关配置
-                const model = card.dataset.model;
-                if (model === 'gpt') {
-                    document.getElementById('gptConfig').classList.remove('hidden');
-                    document.getElementById('bananaConfig').classList.add('hidden');
-                    // 切换到GPT专用的图片比例选项
-                    let gptSubModel = document.getElementById('gptVariants').value;
-                    updateImageSizeOptionsForGPT(gptSubModel);
-                    // 根据子模型决定是否显示尺寸选项
-                    document.getElementById('aspectRatioContainer').classList.remove('hidden');
-                } else if (model === 'banana') {
-                    document.getElementById('gptConfig').classList.add('hidden');
-                    document.getElementById('bananaConfig').classList.remove('hidden');
-                    // 恢复所有图片比例选项
-                    updateImageSizeOptionsForBanana();
-                    // 根据子模型决定是否显示图片比例选项
-                    updateBananaImageSizeVisibility(document.getElementById('bananaSubModel').value);
-                }
+        // 统一模型下拉选择器事件
+        const modelVariantUnified = document.getElementById('modelVariantUnified');
+        if (modelVariantUnified) {
+            modelVariantUnified.addEventListener('change', () => {
+                handleUnifiedModelChange(modelVariantUnified.value);
             });
-        });
+            // 页面加载时初始化显示
+            handleUnifiedModelChange(modelVariantUnified.value);
+        }
+
+        function handleUnifiedModelChange(value) {
+            // 同步隐藏的内部 dropdown（供旧 JS 兼容）
+            const gptVariants = document.getElementById('gptVariants');
+            const bananaSubModel = document.getElementById('bananaSubModel');
+            const gptSize = document.getElementById('gptImageSizeContainer');
+            const bananaSize = document.getElementById('bananaImageSizeContainer');
+
+            if (value.startsWith('gpt-image')) {
+                // GPT 系列：隐藏 banana 分辨率
+                if (bananaSize) bananaSize.classList.add('hidden');
+                // 是否需要显示分辨率选择（vip/sunburst/flare 需要，基础 2.5 不需要）
+                const needSize = ['gpt-image-2-vip', 'gpt-image-2.5-sunburst', 'gpt-image-2.5-flare'].includes(value);
+                if (gptSize) {
+                    if (needSize) gptSize.classList.remove('hidden');
+                    else gptSize.classList.add('hidden');
+                }
+                // 同步内部值
+                if (gptVariants) gptVariants.value = value;
+                updateImageSizeOptionsForGPT(value);
+                document.getElementById('aspectRatioContainer').classList.remove('hidden');
+            } else if (value.startsWith('nano-banana')) {
+                // Banana 系列（-2 / -pro 统一配置）：隐藏 GPT 分辨率、显示 Banana 分辨率
+                if (gptSize) gptSize.classList.add('hidden');
+                if (bananaSize) bananaSize.classList.remove('hidden');
+                if (bananaSubModel) bananaSubModel.value = value;
+                updateImageSizeOptionsForBanana();
+            } else {
+                // 其他模型：全部隐藏
+                if (gptSize) gptSize.classList.add('hidden');
+                if (bananaSize) bananaSize.classList.add('hidden');
+            }
+        }
 
         // 案例展示图片点击事件
         document.querySelectorAll('.case-item').forEach(item => {
@@ -1929,30 +1851,14 @@
             // 获取选择的模型
             const selectedModel = document.querySelector('input[name="model"]:checked').value;
             
-            // 设置主页面的模型选择
-            if (selectedModel.startsWith('gpt-image')) {
-                // 选择GPT模型
-                document.querySelectorAll('.model-card').forEach(card => {
-                    if (card.dataset.model === 'gpt') {
-                        card.click();
-                    }
-                });
-                // 设置GPT子模型
-                document.getElementById('gptVariants').value = selectedModel;
-                // 如果是VIP/Sunburst/Flare模型（4K版本），设置分辨率为4K
-                if (selectedModel === 'gpt-image-2-vip' || selectedModel === 'gpt-image-2.5-sunburst' || selectedModel === 'gpt-image-2.5-flare') {
-                    document.getElementById('gptImageSize').value = '4K';
-                }
-            } else {
-                // 选择Banana模型
-                document.querySelectorAll('.model-card').forEach(card => {
-                    if (card.dataset.model === 'banana') {
-                        card.click();
-                    }
-                });
-                // 设置Banana子模型为nano-banana-2
-                document.getElementById('bananaSubModel').value = 'nano-banana-2';
-                // 设置分辨率为4K
+            // 通过统一下拉设置主页面模型
+            const effectUnified = document.getElementById('modelVariantUnified');
+            effectUnified.value = selectedModel;
+            effectUnified.dispatchEvent(new Event('change'));
+            // 如果是VIP/Sunburst/Flare模型（4K版本），设置分辨率为4K
+            if (selectedModel === 'gpt-image-2-vip' || selectedModel === 'gpt-image-2.5-sunburst' || selectedModel === 'gpt-image-2.5-flare') {
+                document.getElementById('gptImageSize').value = '4K';
+            } else if (selectedModel.startsWith('nano-banana')) {
                 document.getElementById('bananaImageSize').value = '4K';
             }
             
@@ -2005,30 +1911,14 @@
             // 获取选择的模型
             const selectedModel = document.querySelector('input[name="copyModel"]:checked').value;
             
-            // 设置主页面的模型选择
-            if (selectedModel.startsWith('gpt-image')) {
-                // 选择GPT模型
-                document.querySelectorAll('.model-card').forEach(card => {
-                    if (card.dataset.model === 'gpt') {
-                        card.click();
-                    }
-                });
-                // 设置GPT子模型
-                document.getElementById('gptVariants').value = selectedModel;
-                // 如果是VIP/Sunburst/Flare模型（4K版本），设置分辨率为4K
-                if (selectedModel === 'gpt-image-2-vip' || selectedModel === 'gpt-image-2.5-sunburst' || selectedModel === 'gpt-image-2.5-flare') {
-                    document.getElementById('gptImageSize').value = '4K';
-                }
-            } else {
-                // 选择Banana模型
-                document.querySelectorAll('.model-card').forEach(card => {
-                    if (card.dataset.model === 'banana') {
-                        card.click();
-                    }
-                });
-                // 设置Banana子模型为nano-banana-2
-                document.getElementById('bananaSubModel').value = 'nano-banana-2';
-                // 设置分辨率为4K
+            // 通过统一下拉设置主页面模型
+            const copyUnified = document.getElementById('modelVariantUnified');
+            copyUnified.value = selectedModel;
+            copyUnified.dispatchEvent(new Event('change'));
+            // 如果是VIP/Sunburst/Flare模型（4K版本），设置分辨率为4K
+            if (selectedModel === 'gpt-image-2-vip' || selectedModel === 'gpt-image-2.5-sunburst' || selectedModel === 'gpt-image-2.5-flare') {
+                document.getElementById('gptImageSize').value = '4K';
+            } else if (selectedModel.startsWith('nano-banana')) {
                 document.getElementById('bananaImageSize').value = '4K';
             }
             
@@ -2063,30 +1953,14 @@
             // 获取选择的模型
             const selectedModel = document.querySelector('input[name="designModel"]:checked').value;
             
-            // 设置主页面的模型选择
-            if (selectedModel.startsWith('gpt-image')) {
-                // 选择GPT模型
-                document.querySelectorAll('.model-card').forEach(card => {
-                    if (card.dataset.model === 'gpt') {
-                        card.click();
-                    }
-                });
-                // 设置GPT子模型
-                document.getElementById('gptVariants').value = selectedModel;
-                // 如果是VIP/Sunburst/Flare模型（4K版本），设置分辨率为4K
-                if (selectedModel === 'gpt-image-2-vip' || selectedModel === 'gpt-image-2.5-sunburst' || selectedModel === 'gpt-image-2.5-flare') {
-                    document.getElementById('gptImageSize').value = '4K';
-                }
-            } else {
-                // 选择Banana模型
-                document.querySelectorAll('.model-card').forEach(card => {
-                    if (card.dataset.model === 'banana') {
-                        card.click();
-                    }
-                });
-                // 设置Banana子模型为nano-banana-2
-                document.getElementById('bananaSubModel').value = 'nano-banana-2';
-                // 设置分辨率为4K
+            // 通过统一下拉设置主页面模型
+            const designUnified = document.getElementById('modelVariantUnified');
+            designUnified.value = selectedModel;
+            designUnified.dispatchEvent(new Event('change'));
+            // 如果是VIP/Sunburst/Flare模型（4K版本），设置分辨率为4K
+            if (selectedModel === 'gpt-image-2-vip' || selectedModel === 'gpt-image-2.5-sunburst' || selectedModel === 'gpt-image-2.5-flare') {
+                document.getElementById('gptImageSize').value = '4K';
+            } else if (selectedModel.startsWith('nano-banana')) {
                 document.getElementById('bananaImageSize').value = '4K';
             }
             
@@ -2497,89 +2371,97 @@
         });
 
         // 错误日志按钮点击事件
-        elements.errorLogBtn.addEventListener('click', () => {
+        elements.errorLogBtn?.addEventListener('click', () => {
             showErrorLogModal();
         });
 
         // 关闭错误日志模态框
-        elements.closeErrorLogModal.addEventListener('click', () => {
+        elements.closeErrorLogModal?.addEventListener('click', () => {
             hideErrorLogModal();
         });
 
         // 点击错误日志模态框背景关闭
-        elements.errorLogModal.addEventListener('click', (e) => {
+        elements.errorLogModal?.addEventListener('click', (e) => {
             if (e.target === elements.errorLogModal) {
                 hideErrorLogModal();
             }
         });
 
         // 清空错误日志按钮
-        elements.clearErrorLogBtn.addEventListener('click', () => {
+        elements.clearErrorLogBtn?.addEventListener('click', () => {
             clearErrorLog();
         });
 
         // 生成日志按钮点击事件
-        elements.generateLogBtn.addEventListener('click', () => {
-            showGenerateLogModal();
-        });
+        if (elements.generateLogBtn) {
+            elements.generateLogBtn?.addEventListener('click', () => {
+                showGenerateLogModal();
+            });
+        }
 
         // 关闭生成日志模态框
-        elements.closeGenerateLogModal.addEventListener('click', () => {
-            hideGenerateLogModal();
-        });
+        if (elements.closeGenerateLogModal) {
+            elements.closeGenerateLogModal?.addEventListener('click', () => {
+                hideGenerateLogModal();
+            });
+        }
 
         // 点击生成日志模态框背景关闭
-        elements.generateLogModal.addEventListener('click', (e) => {
-            if (e.target === elements.generateLogModal) {
-                hideGenerateLogModal();
-            }
-        });
+        if (elements.generateLogModal) {
+            elements.generateLogModal?.addEventListener('click', (e) => {
+                if (e.target === elements.generateLogModal) {
+                    hideGenerateLogModal();
+                }
+            });
+        }
 
         // 清空生成日志按钮
-        elements.clearGenerateLogBtn.addEventListener('click', () => {
-            clearGenerateLog();
-        });
+        if (elements.clearGenerateLogBtn) {
+            elements.clearGenerateLogBtn?.addEventListener('click', () => {
+                clearGenerateLog();
+            });
+        }
 
         // API 设置模态框内按钮事件
-        elements.batchAddBtn.addEventListener('click', () => {
+        elements.batchAddBtn?.addEventListener('click', () => {
             handleBatchAdd();
         });
 
-        elements.batchExportBtn.addEventListener('click', () => {
+        elements.batchExportBtn?.addEventListener('click', () => {
             handleBatchExport();
         });
 
-        elements.addApiKeyBtn.addEventListener('click', () => {
+        elements.addApiKeyBtn?.addEventListener('click', () => {
             addApiKeyInput();
         });
 
-        elements.saveApiSetting.addEventListener('click', () => {
+        elements.saveApiSetting?.addEventListener('click', () => {
             saveApiSettings();
         });
 
-        elements.refreshCredits.addEventListener('click', () => {
+        elements.refreshCredits?.addEventListener('click', () => {
             refreshAllCredits();
         });
 
 
 
         // 生成按钮点击事件
-        elements.generateBtn.addEventListener('click', () => {
+        elements.generateBtn?.addEventListener('click', () => {
             generateImage();
         });
 
         // 重新生成按钮点击事件
-        elements.regenerateBtn.addEventListener('click', () => {
+        elements.regenerateBtn?.addEventListener('click', () => {
             generateImage();
         });
 
         // 下载按钮点击事件
-        elements.downloadBtn.addEventListener('click', () => {
+        elements.downloadBtn?.addEventListener('click', () => {
             downloadImage();
         });
 
         // 保存历史按钮点击事件
-        elements.saveHistoryBtn.addEventListener('click', () => {
+        elements.saveHistoryBtn?.addEventListener('click', () => {
             saveToHistory();
         });
 
@@ -2587,19 +2469,19 @@
         document.getElementById('clearHistoryBtn').addEventListener('click', () => {
             clearHistory();
         });
-        
+
         // 下载全部历史记录按钮
         document.getElementById('downloadAllHistoryBtn').addEventListener('click', () => {
             downloadAllHistory();
         });
 
         // 上传图片区域点击事件
-        elements.uploadArea.addEventListener('click', () => {
+        elements.uploadArea?.addEventListener('click', () => {
             elements.imageUpload.click();
         });
 
         // 文件选择事件
-        elements.imageUpload.addEventListener('change', (event) => {
+        elements.imageUpload?.addEventListener('change', (event) => {
             const files = event.target.files;
             if (files && files.length > 0) {
                 handleDroppedFiles(files);
@@ -2607,12 +2489,12 @@
         });
 
         // 复制所有URL按钮事件
-        elements.copyAllUrlsBtn.addEventListener('click', () => {
+        elements.copyAllUrlsBtn?.addEventListener('click', () => {
             copyAllImageUrls();
         });
 
         // API Key 列表事件委托（用于删除按钮和选择按钮）
-        elements.apiKeyList.addEventListener('click', (e) => {
+        elements.apiKeyList?.addEventListener('click', (e) => {
             if (e.target.closest('.fa-trash')) {
                 const item = e.target.closest('.api-key-item');
                 if (item) {
@@ -2654,7 +2536,7 @@
         });
 
         // API Key 输入框更改事件（用于实时更新积分）
-        elements.apiKeyList.addEventListener('input', (e) => {
+        elements.apiKeyList?.addEventListener('input', (e) => {
             if (e.target.type === 'password' && e.target.value.trim()) {
                 // 延迟执行，避免频繁请求
                 clearTimeout(e.target._timeout);
@@ -2665,17 +2547,17 @@
         });
 
         // 拖放功能
-        elements.uploadArea.addEventListener('dragover', (e) => {
+        elements.uploadArea?.addEventListener('dragover', (e) => {
             e.preventDefault();
             elements.uploadArea.classList.add('border-primary', 'bg-primary/5');
         });
 
-        elements.uploadArea.addEventListener('dragleave', (e) => {
+        elements.uploadArea?.addEventListener('dragleave', (e) => {
             e.preventDefault();
             elements.uploadArea.classList.remove('border-primary', 'bg-primary/5');
         });
 
-        elements.uploadArea.addEventListener('drop', (e) => {
+        elements.uploadArea?.addEventListener('drop', (e) => {
             e.preventDefault();
             elements.uploadArea.classList.remove('border-primary', 'bg-primary/5');
             const files = e.dataTransfer.files;
@@ -2722,6 +2604,12 @@
 
     // 使用ImgBB API上传图片到图床
     async function uploadImageToImgBB(file, index, total, addToUploadedList = true) {
+        // 检查图床选择
+        const hostSelect = document.getElementById('imageHostSelect');
+        if (hostSelect && hostSelect.value === 'cloudinary') {
+            return uploadImageToCloudinary(file, index, total, addToUploadedList);
+        }
+
         // 安全检查
         if (!file || !file.type) {
             console.error('Invalid file object in uploadImageToImgBB');
@@ -2811,6 +2699,94 @@
         }
     }
 
+    // 使用Cloudinary API上传图片到图床（支持CORS浏览器直传）
+    async function uploadImageToCloudinary(file, index, total, addToUploadedList = true) {
+        // 安全检查
+        if (!file || !file.type) {
+            console.error('Invalid file object in uploadImageToCloudinary');
+            return;
+        }
+
+        if (!file.type.startsWith('image/')) {
+            console.error('File is not an image:', file.type);
+            return;
+        }
+
+        try {
+            // 创建FormData对象
+            const formData = new FormData();
+            formData.append('file', file);
+            formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+
+            // 显示上传进度
+            if (addToUploadedList) {
+                updateUploadProgress(0, index, total);
+            }
+
+            // 发送请求到Cloudinary API
+            const response = await fetch(CLOUDINARY_UPLOAD_URL, {
+                method: 'POST',
+                body: formData
+            });
+
+            if (!response.ok) {
+                const errData = await response.json().catch(() => ({}));
+                throw new Error(errData.error?.message || `HTTP error! status: ${response.status}`);
+            }
+
+            const result = await response.json();
+
+            // Cloudinary 返回 secure_url 作为图片直链
+            const imageUrl = result.secure_url;
+
+            if (imageUrl) {
+                // 添加到已上传图片列表
+                if (addToUploadedList) {
+                    appState.uploadedImageUrls.push(imageUrl);
+
+                    // 更新UI显示
+                    if (typeof updateUploadedUrlsList === 'function') {
+                        updateUploadedUrlsList();
+                    }
+
+                    // 完成进度
+                    if (typeof updateUploadProgress === 'function') {
+                        updateUploadProgress(100, index, total);
+                    }
+
+                    showToast(`图片 ${index + 1}/${total} 上传成功`, 'success');
+
+                    // 重置文件输入框
+                    if (elements && elements.imageUpload) {
+                        elements.imageUpload.value = '';
+                    }
+                }
+
+                return imageUrl;
+            } else {
+                throw new Error('上传失败：未返回图片URL');
+            }
+
+        } catch (error) {
+            console.error('图片上传失败(Cloudinary):', error);
+            showToast(`上传失败: ${error.message}`, 'error');
+
+            if (addToUploadedList) {
+                if (elements && elements.imageUpload) {
+                    elements.imageUpload.value = '';
+                }
+
+                if (index === total - 1 && elements && elements.uploadProgress) {
+                    setTimeout(() => {
+                        elements.uploadProgress.classList.add('hidden');
+                    }, 1000);
+                }
+            }
+
+            return null;
+        }
+    }
+
     // 更新上传进度
     function updateUploadProgress(progress, currentIndex, total) {
         // 计算总体进度
@@ -2827,16 +2803,68 @@
         }
     }
 
-    // 更新已上传图片URL列表
+    // 更新已上传图片URL列表 + 预览网格
     function updateUploadedUrlsList() {
-        elements.uploadedUrlsList.innerHTML = '';
+        const urls = appState.uploadedImageUrls;
         
-        appState.uploadedImageUrls.forEach((url, index) => {
+        // 更新预览网格（大图）
+        const previewContainer = document.getElementById('uploadedPreviewContainer');
+        const previewGrid = document.getElementById('uploadedPreviewGrid');
+        if (previewContainer && previewGrid) {
+            previewGrid.innerHTML = '';
+            urls.forEach((url, index) => {
+                const item = document.createElement('div');
+                item.className = 'relative group';
+                item.innerHTML = `
+                    <div class="w-20 h-20 rounded-lg overflow-hidden border-2 border-gray-200 hover:border-primary transition-colors">
+                        <img src="${url}" alt="已上传 ${index + 1}" class="w-full h-full object-cover cursor-pointer" title="点击预览">
+                    </div>
+                    <button class="absolute -top-1 -right-1 w-5 h-5 bg-danger text-white rounded-full text-xs flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow remove-url-btn" data-index="${index}" title="删除">
+                        <i class="fa fa-times text-[10px]"></i>
+                    </button>
+                `;
+                previewGrid.appendChild(item);
+            });
+            // 显示/隐藏预览容器
+            if (urls.length > 0) {
+                previewContainer.classList.remove('hidden');
+            } else {
+                previewContainer.classList.add('hidden');
+            }
+            // 预览网格删除按钮
+            previewGrid.querySelectorAll('.remove-url-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const index = parseInt(e.currentTarget.dataset.index);
+                    appState.uploadedImageUrls.splice(index, 1);
+                    updateUploadedUrlsList();
+                    showToast('图片已删除', 'success');
+                    if (elements.imageUpload) elements.imageUpload.value = '';
+                });
+            });
+            // 预览网格图片点击放大
+            previewGrid.querySelectorAll('img').forEach(img => {
+                img.addEventListener('click', () => {
+                    const modal = document.getElementById('imagePreviewModal');
+                    const modalImg = document.getElementById('previewModalImg');
+                    if (modal && modalImg) {
+                        modalImg.src = img.src;
+                        modal.classList.remove('hidden');
+                    }
+                });
+            });
+        }
+        
+        // 更新URL列表（折叠区）
+        elements.uploadedUrlsList.innerHTML = '';
+        const countEl = document.getElementById('uploadedUrlsCount');
+        if (countEl) countEl.textContent = urls.length;
+        
+        urls.forEach((url, index) => {
             const urlItem = document.createElement('div');
             urlItem.className = 'flex items-center justify-between p-2 bg-white rounded border border-gray-200';
             urlItem.innerHTML = `
                 <div class="flex items-center gap-2 flex-1 min-w-0">
-                    <div class="w-12 h-12 bg-gray-200 rounded overflow-hidden flex-shrink-0">
+                    <div class="w-10 h-10 bg-gray-200 rounded overflow-hidden flex-shrink-0">
                         <img src="${url}" alt="预览" class="w-full h-full object-cover">
                     </div>
                     <div class="text-xs text-gray-600 truncate flex-1">${url}</div>
@@ -2869,9 +2897,7 @@
                 appState.uploadedImageUrls.splice(index, 1);
                 updateUploadedUrlsList();
                 showToast('URL已删除', 'success');
-                
-                // 修复：重置文件输入框，允许重新选择相同文件
-                elements.imageUpload.value = '';
+                if (elements.imageUpload) elements.imageUpload.value = '';
             });
         });
         
@@ -2883,8 +2909,8 @@
             });
         });
         
-        // 显示/隐藏URL列表容器
-        if (appState.uploadedImageUrls.length > 0) {
+        // 显示/隐藏URL列表容器（details 元素）
+        if (urls.length > 0) {
             elements.uploadedUrlsContainer.classList.remove('hidden');
         } else {
             elements.uploadedUrlsContainer.classList.add('hidden');
@@ -2903,20 +2929,23 @@
     function updateBananaImageSizeVisibility(subModel) {
         const imageSizeContainer = document.getElementById('bananaImageSizeContainer');
         const aspectRatioContainer = document.getElementById('aspectRatioContainer');
-        // 显示比例选项框（只有 Auto 选项），同时显示分辨率选择
         aspectRatioContainer.classList.remove('hidden');
         updateImageSizeOptionsForBanana();
-        if (subModel === 'nano-banana-pro' || subModel === 'nano-banana-2') {
-            imageSizeContainer.classList.remove('hidden');
-        } else {
-            imageSizeContainer.classList.remove('hidden');
+        // 只有 nano-banana-pro 需要显示分辨率选择
+        if (imageSizeContainer) {
+            if (subModel === 'nano-banana-pro') imageSizeContainer.classList.remove('hidden');
+            else imageSizeContainer.classList.add('hidden');
         }
     }
 
     function updateGptImageSizeVisibility(subModel) {
         const imageSizeContainer = document.getElementById('gptImageSizeContainer');
-        // GPT模型不需要单独的分辨率选择框，尺寸选项已包含分辨率信息
-        imageSizeContainer.classList.add('hidden');
+        // 只有 vip/sunburst/flare 才需要显示分辨率选择
+        const needSize = ['gpt-image-2-vip', 'gpt-image-2.5-sunburst', 'gpt-image-2.5-flare'].includes(subModel);
+        if (imageSizeContainer) {
+            if (needSize) imageSizeContainer.classList.remove('hidden');
+            else imageSizeContainer.classList.add('hidden');
+        }
     }
 
     // 设置当前使用的API Key
@@ -2970,6 +2999,16 @@
         return false;
     }
 
+    // 从 'WxH' 值计算预览框尺寸（短边统一 18px）
+    function computeBoxSize(value, base = 18) {
+        if (value === 'auto') return { w: base, h: base };
+        const m = value.match(/(\d+)x(\d+)/i);
+        if (!m) return { w: base, h: base };
+        const w = parseInt(m[1], 10), h = parseInt(m[2], 10);
+        if (!w || !h) return { w: base, h: base };
+        if (w <= h) return { w: base, h: Math.round(base * h / w) };
+        return { w: Math.round(base * w / h), h: base };
+    }
     // 更新图片比例选项为GPT专用
     function updateImageSizeOptionsForGPT(subModel) {
         const imageSizeOptions = document.getElementById('imageSizeOptions');
@@ -2982,55 +3021,55 @@
         
         if (subModel === 'gpt-image-2-vip' || subModel === 'gpt-image-2.5-sunburst' || subModel === 'gpt-image-2.5-flare') {
             gptOptions = [
-                { value: 'auto', text: 'auto', width: 18, height: 18 },
+                { value: 'auto', text: '自动' },
                 // 1:1 正方形
-                { value: '2880x2880', text: '2880x2880 (1:1, 4K)', width: 18, height: 18 },
+                { value: '2880x2880', text: '2880x2880 (1:1, 4K)' },
                 // 16:9 宽屏
-                { value: '3840x2160', text: '3840x2160 (16:9, 4K)', width: 32, height: 18 },
+                { value: '3840x2160', text: '3840x2160 (16:9, 4K)' },
                 // 9:16 竖屏
-                { value: '2160x3840', text: '2160x3840 (9:16, 4K)', width: 18, height: 32 },
+                { value: '2160x3840', text: '2160x3840 (9:16, 4K)' },
                 // 4:3 经典
-                { value: '3264x2448', text: '3264x2448 (4:3, 4K)', width: 24, height: 18 },
+                { value: '3264x2448', text: '3264x2448 (4:3, 4K)' },
                 // 3:4 竖版
-                { value: '2448x3264', text: '2448x3264 (3:4, 4K)', width: 18, height: 24 },
+                { value: '2448x3264', text: '2448x3264 (3:4, 4K)' },
                 // 3:2 照片
-                { value: '3504x2336', text: '3504x2336 (3:2, 4K)', width: 27, height: 18 },
+                { value: '3504x2336', text: '3504x2336 (3:2, 4K)' },
                 // 2:3 竖版照片
-                { value: '2336x3504', text: '2336x3504 (2:3, 4K)', width: 18, height: 27 },
+                { value: '2336x3504', text: '2336x3504 (2:3, 4K)' },
                 // 5:4 接近正方形
-                { value: '3200x2560', text: '3200x2560 (5:4, 4K)', width: 25, height: 20 },
+                { value: '3200x2560', text: '3200x2560 (5:4, 4K)' },
                 // 4:5 竖版
-                { value: '2560x3200', text: '2560x3200 (4:5, 4K)', width: 20, height: 25 },
+                { value: '2560x3200', text: '2560x3200 (4:5, 4K)' },
                 // 21:9 超宽屏
-                { value: '3840x1648', text: '3840x1648 (21:9, 4K)', width: 42, height: 18 },
+                { value: '3840x1648', text: '3840x1648 (21:9, 4K)' },
                 // 9:21 超长竖屏
-                { value: '1648x3840', text: '1648x3840 (9:21, 4K)', width: 18, height: 42 },
+                { value: '1648x3840', text: '1648x3840 (9:21, 4K)' },
                 // 1:3 长条
-                { value: '1280x3840', text: '1280x3840 (1:3, 4K)', width: 17, height: 50 },
+                { value: '1280x3840', text: '1280x3840 (1:3, 4K)' },
                 // 3:1 宽条
-                { value: '3840x1280', text: '3840x1280 (3:1, 4K)', width: 50, height: 17 },
+                { value: '3840x1280', text: '3840x1280 (3:1, 4K)' },
                 // 2:1 双倍宽
-                { value: '3840x1920', text: '3840x1920 (2:1, 4K)', width: 36, height: 18 },
+                { value: '3840x1920', text: '3840x1920 (2:1, 4K)' },
                 // 1:2 双倍高
-                { value: '1920x3840', text: '1920x3840 (1:2, 4K)', width: 18, height: 36 },
+                { value: '1920x3840', text: '1920x3840 (1:2, 4K)' },
             ];
         } else {
             gptOptions = [
-                { value: 'auto', text: 'auto', width: 18, height: 18 },
-                { value: '1024x1024', text: '1024x1024 (1:1)', width: 18, height: 18 },
-                { value: '1672x941', text: '1672x941 (16:9)', width: 32, height: 18 },
-                { value: '941x1672', text: '941x1672 (9:16)', width: 18, height: 32 },
-                { value: '1443x1090', text: '1443x1090 (4:3)', width: 24, height: 18 },
-                { value: '1090x1443', text: '1090x1443 (3:4)', width: 18, height: 24 },
-                { value: '1536x1024', text: '1536x1024 (3:2)', width: 27, height: 18 },
-                { value: '1024x1536', text: '1024x1536 (2:3)', width: 18, height: 27 },
-                { value: '1408x1120', text: '1408x1120 (5:4)', width: 25, height: 20 },
-                { value: '1120x1408', text: '1120x1408 (4:5)', width: 20, height: 25 },
-                { value: '1120x832', text: '1120x832 (4:3)', width: 24, height: 18 },
-                { value: '1920x832', text: '1920x832 (21:9)', width: 44, height: 19 },
-                { value: '832x1920', text: '832x1920 (9:21)', width: 19, height: 44 },
-                { value: '1792x896', text: '1792x896 (2:1)', width: 36, height: 18 },
-                { value: '896x1792', text: '896x1792 (1:2)', width: 18, height: 36 },
+                { value: 'auto', text: '自动' },
+                { value: '1024x1024', text: '1024x1024 (1:1)' },
+                { value: '1672x941', text: '1672x941 (16:9)' },
+                { value: '941x1672', text: '941x1672 (9:16)' },
+                { value: '1443x1090', text: '1443x1090 (4:3)' },
+                { value: '1090x1443', text: '1090x1443 (3:4)' },
+                { value: '1536x1024', text: '1536x1024 (3:2)' },
+                { value: '1024x1536', text: '1024x1536 (2:3)' },
+                { value: '1408x1120', text: '1408x1120 (5:4)' },
+                { value: '1120x1408', text: '1120x1408 (4:5)' },
+                { value: '1120x832', text: '1120x832 (4:3)' },
+                { value: '1920x832', text: '1920x832 (21:9)' },
+                { value: '832x1920', text: '832x1920 (9:21)' },
+                { value: '1792x896', text: '1792x896 (2:1)' },
+                { value: '896x1792', text: '896x1792 (1:2)' },
             ];
         }
         
@@ -3038,15 +3077,15 @@
         
         gptOptions.forEach(option => {
             const optionElement = document.createElement('div');
-            optionElement.className = 'flex items-center gap-2 px-3 py-2 cursor-pointer hover:bg-gray-100 transition-colors';
+            optionElement.className = 'flex items-center gap-2 px-2 py-1.5 cursor-pointer border border-gray-200 rounded hover:border-primary hover:bg-primary/5 transition-colors';
             optionElement.dataset.value = option.value;
             
             const previewDiv = document.createElement('div');
             previewDiv.className = 'border border-solid border-gray-400 bg-gray-100 flex-shrink-0';
-            previewDiv.style.width = `${option.width}px`;
-            previewDiv.style.height = `${option.height}px`;
-            previewDiv.style.minWidth = `${option.width}px`;
-            previewDiv.style.minHeight = `${option.height}px`;
+            previewDiv.style.width = `${computeBoxSize(option.value).w}px`;
+            previewDiv.style.height = `${computeBoxSize(option.value).h}px`;
+            previewDiv.style.minWidth = `${computeBoxSize(option.value).w}px`;
+            previewDiv.style.minHeight = `${computeBoxSize(option.value).h}px`;
             
             const textSpan = document.createElement('span');
             textSpan.textContent = option.text;
@@ -3058,15 +3097,16 @@
             optionElement.addEventListener('click', () => {
                 imageSizeValue.value = option.value;
                 sizeText.textContent = option.text;
-                aspectPreview.style.width = `${option.width}px`;
-                aspectPreview.style.height = `${option.height}px`;
+                aspectPreview.style.width = `${computeBoxSize(option.value).w}px`;
+                aspectPreview.style.height = `${computeBoxSize(option.value).h}px`;
                 closeImageSizeDropdown();
             });
             
             if (option.value === currentValue) {
                 sizeText.textContent = option.text;
-                aspectPreview.style.width = `${option.width}px`;
-                aspectPreview.style.height = `${option.height}px`;
+                aspectPreview.style.width = `${computeBoxSize(option.value).w}px`;
+                aspectPreview.style.height = `${computeBoxSize(option.value).h}px`;
+                optionElement.classList.add('bg-primary/10', 'border-primary');
             }
         });
         
@@ -3087,22 +3127,22 @@
         const currentValue = imageSizeValue.value;
         
         const bananaOptions = [
-            { value: 'auto', text: '自动', width: 18, height: 18 },
+            { value: 'auto', text: '自动' },
         ];
         
         imageSizeOptions.innerHTML = '';
         
         bananaOptions.forEach(option => {
             const optionElement = document.createElement('div');
-            optionElement.className = 'flex items-center gap-2 px-3 py-2 cursor-pointer hover:bg-gray-100 transition-colors';
+            optionElement.className = 'flex items-center gap-2 px-2 py-1.5 cursor-pointer border border-gray-200 rounded hover:border-primary hover:bg-primary/5 transition-colors';
             optionElement.dataset.value = option.value;
             
             const previewDiv = document.createElement('div');
             previewDiv.className = 'border border-solid border-gray-400 bg-gray-100 flex-shrink-0';
-            previewDiv.style.width = `${option.width}px`;
-            previewDiv.style.height = `${option.height}px`;
-            previewDiv.style.minWidth = `${option.width}px`;
-            previewDiv.style.minHeight = `${option.height}px`;
+            previewDiv.style.width = `${computeBoxSize(option.value).w}px`;
+            previewDiv.style.height = `${computeBoxSize(option.value).h}px`;
+            previewDiv.style.minWidth = `${computeBoxSize(option.value).w}px`;
+            previewDiv.style.minHeight = `${computeBoxSize(option.value).h}px`;
             
             const textSpan = document.createElement('span');
             textSpan.textContent = option.text;
@@ -3114,15 +3154,16 @@
             optionElement.addEventListener('click', () => {
                 imageSizeValue.value = option.value;
                 sizeText.textContent = option.text;
-                aspectPreview.style.width = `${option.width}px`;
-                aspectPreview.style.height = `${option.height}px`;
+                aspectPreview.style.width = `${computeBoxSize(option.value).w}px`;
+                aspectPreview.style.height = `${computeBoxSize(option.value).h}px`;
                 closeImageSizeDropdown();
             });
             
             if (option.value === currentValue) {
                 sizeText.textContent = option.text;
-                aspectPreview.style.width = `${option.width}px`;
-                aspectPreview.style.height = `${option.height}px`;
+                aspectPreview.style.width = `${computeBoxSize(option.value).w}px`;
+                aspectPreview.style.height = `${computeBoxSize(option.value).h}px`;
+                optionElement.classList.add('bg-primary/10', 'border-primary');
             }
         });
     }
@@ -3605,8 +3646,8 @@
         }
 
         // 收集生成参数
-        const modelCard = document.querySelector('.model-card.active');
-        const mainModel = modelCard ? modelCard.dataset.model : 'banana';
+        const unifiedValue = document.getElementById('modelVariantUnified')?.value || 'gpt-image-2.5';
+        const mainModel = unifiedValue.startsWith('nano-banana') ? 'banana' : 'gpt';
         
         let subModel, imageSize, prompt, variants, aspectRatio;
         
@@ -3763,8 +3804,9 @@
         // 添加任务到任务队列
         appState.tasks.push(task);
         
-        // 更新任务管理UI
-        updateTaskManagerUI();
+        // 动态渲染卡片
+        renderTaskCards();
+        window.updateLeftPanelState();
         
         try {
             // 发送请求，使用 finalApiKey
@@ -3853,8 +3895,8 @@
                 task.progress = data.progress;
                 task.status = data.status;
                 
-                // 更新任务管理UI
-                updateTaskManagerUI();
+                // 更新卡片UI（动态渲染）
+                renderTaskCards();
                 
                 // 检查是否完成
                 if (data.status === 'succeeded' && data.results && data.results.length > 0) {
@@ -4231,12 +4273,8 @@
         let history = JSON.parse(localStorage.getItem('aiGenerationHistory') || '[]');
         
         if (history.length === 0) {
-            historyContainer.innerHTML = `
-                <div class="col-span-full text-center py-8 text-secondary">
-                    <i class="fa fa-folder-open-o text-3xl mb-3"></i>
-                    <p class="text-sm">暂无历史记录</p>
-                </div>
-            `;
+            historyContainer.innerHTML = '';
+            historyContainer.classList.add('hidden');
             return;
         }
         
@@ -4261,29 +4299,36 @@
         
         // 检查更新后的历史记录是否为空
         if (history.length === 0) {
-            historyContainer.innerHTML = `
-                <div class="col-span-full text-center py-8 text-secondary">
-                    <i class="fa fa-folder-open-o text-3xl mb-3"></i>
-                    <p class="text-sm">暂无历史记录</p>
-                </div>
-            `;
+            historyContainer.innerHTML = '';
+            historyContainer.classList.add('hidden');
             return;
         }
         
+        historyContainer.classList.remove('hidden');
         historyContainer.innerHTML = '';
         
         history.forEach(item => {
             const historyItem = document.createElement('div');
-            historyItem.className = 'rounded-lg overflow-hidden border border-gray-200';
+            historyItem.className = 'history-card relative w-[110px] h-[130px] bg-white rounded-lg border border-gray-200 hover:border-primary/50 transition-colors cursor-pointer overflow-hidden flex flex-col';
             historyItem.innerHTML = `
-                <img src="${item.imageUrl}" alt="历史图片" class="w-full h-20 object-cover cursor-pointer">
-                <div class="p-2 flex justify-center">
-                    <button class="download-history-btn text-primary hover:text-primary/80 text-sm flex items-center gap-1" data-url="${item.imageUrl}">
-                        <i class="fa fa-download"></i>
-                        <span>下载</span>
-                    </button>
+                <!-- 下载按钮（悬停右上角显示） -->
+                <button class="download-history-btn absolute top-1 right-1 w-5 h-5 bg-white/90 hover:bg-primary hover:text-white rounded-full flex items-center justify-center text-gray-400 text-xs opacity-0 hover:opacity-100 transition-all border border-gray-200 shadow-sm z-10" data-url="${item.imageUrl}" title="下载">
+                    <i class="fa fa-download"></i>
+                </button>
+                <!-- 图片区 -->
+                <div class="flex-1 bg-gray-100">
+                    <img src="${item.imageUrl}" alt="历史图片" class="w-full h-full object-cover cursor-pointer" loading="lazy">
                 </div>
             `;
+            // 悬停显示下载按钮
+            historyItem.addEventListener('mouseenter', () => {
+                const btn = historyItem.querySelector('.download-history-btn');
+                if (btn) btn.classList.remove('opacity-0');
+            });
+            historyItem.addEventListener('mouseleave', () => {
+                const btn = historyItem.querySelector('.download-history-btn');
+                if (btn) btn.classList.add('opacity-0');
+            });
             // 添加点击放大功能
             const imgElement = historyItem.querySelector('img');
             if (imgElement) {
@@ -4357,6 +4402,7 @@
 
     // 渲染已选标签
     function renderSelectedTags() {
+        if (!elements.selectedTags || !elements.selectedTagsContainer) return;
         elements.selectedTags.innerHTML = '';
         if (appState.selectedTags.size > 0) {
             elements.selectedTagsContainer.classList.remove('hidden');
@@ -4384,31 +4430,8 @@
 
     // 更新任务管理UI
     function updateTaskManagerUI() {
-        const runningTaskCount = document.getElementById('runningTaskCount');
-        
-        // 计算运行中任务数量
-        const runningTasks = appState.tasks.filter(task => task.status === 'running').length;
-        runningTaskCount.textContent = runningTasks;
-        
-        // 重置所有进度条
-        for (let i = 0; i < 12; i++) {
-            const progressId = `progress${i + 1}`;
-            const progressTextId = `progressText${i + 1}`;
-            
-            const progressElement = document.getElementById(progressId);
-            const progressTextElement = document.getElementById(progressTextId);
-            
-            if (progressElement && progressTextElement) {
-                // 默认重置为初始状态
-                progressElement.style.strokeDashoffset = 100;
-                progressTextElement.textContent = '0%';
-            }
-        }
-        
-        // 更新进度条
-        appState.tasks.forEach((task, index) => {
-            updatePreviewArea(task, index);
-        });
+        // 统一用 renderTaskCards 动态渲染，旧的 progress1~12 DOM 已删除
+        renderTaskCards();
     }
 
     // 更新预览区域
@@ -4428,15 +4451,14 @@
         
         if (!progressElement || !progressTextElement) return;
         
-        // 更新进度
+        // 更新进度（横条 div 用 width% 代替 SVG strokeDashoffset）
         const progress = task.progress || 0;
-        const offset = 100 - progress;
-        progressElement.style.strokeDashoffset = offset;
+        progressElement.style.width = progress + '%';
         
         // 根据任务状态显示不同内容
         if (task.status === 'failed') {
             // 显示错误状态
-            progressElement.style.opacity = 0.3;
+            progressElement.style.backgroundColor = '#EF4444';
             progressTextElement.textContent = '失败';
             progressTextElement.style.color = '#EF4444';
             
@@ -4452,7 +4474,7 @@
             }
         } else {
             // 显示正常进度
-            progressElement.style.opacity = 1;
+            progressElement.style.backgroundColor = '';
             progressTextElement.textContent = `${progress}%`;
             progressTextElement.style.color = '';
             
@@ -4520,14 +4542,8 @@
 
     // 更新错误计数徽章
     function updateErrorCountBadge() {
-        if (elements.errorCountBadge) {
-            elements.errorCountBadge.textContent = appState.errorLogs.length;
-            if (appState.errorLogs.length > 0) {
-                elements.errorCountBadge.classList.remove('hidden');
-            } else {
-                elements.errorCountBadge.classList.add('hidden');
-            }
-        }
+        const badge = document.getElementById('errorLogCount');
+        if (badge) badge.textContent = appState.errorLogs.length;
     }
 
     // 显示错误日志模态框
@@ -4631,25 +4647,19 @@
     
     // 更新生成计数徽章
     function updateGenerateCountBadge() {
-        if (elements.generateCountBadge) {
-            elements.generateCountBadge.textContent = appState.generateLogs.length;
-            if (appState.generateLogs.length > 0) {
-                elements.generateCountBadge.classList.remove('hidden');
-            } else {
-                elements.generateCountBadge.classList.add('hidden');
-            }
-        }
+        const badge = document.getElementById('generateLogCount');
+        if (badge) badge.textContent = appState.generateLogs.length;
     }
     
     // 显示生成日志模态框
     function showGenerateLogModal() {
-        elements.generateLogModal.classList.remove('hidden');
+        if (elements.generateLogModal) elements.generateLogModal.classList.remove('hidden');
         updateGenerateLogDisplay();
     }
     
     // 隐藏生成日志模态框
     function hideGenerateLogModal() {
-        elements.generateLogModal.classList.add('hidden');
+        if (elements.generateLogModal) elements.generateLogModal.classList.add('hidden');
     }
     
     // 更新生成日志显示
@@ -4937,9 +4947,117 @@
     
 
 
+    // 左右面板拖拽分隔
+    function initPanelResizer() {
+        const split = document.getElementById('panelSplit');
+        const resizer = document.getElementById('panelResizer');
+        if (!split || !resizer) return;
+
+        const MIN_PCT = 5;   // 左侧最小占比 5%
+        const MAX_PCT = 95;  // 左侧最大占比 95% (即右侧最小 5%)
+        const DEFAULT_PCT = 45;
+        const STORAGE_KEY = 'ai_split_pct';
+
+        // 恢复持久化比例
+        const saved = parseFloat(localStorage.getItem(STORAGE_KEY));
+        const initialPct = (saved && !isNaN(saved) && saved >= MIN_PCT && saved <= MAX_PCT)
+            ? saved : DEFAULT_PCT;
+        split.style.setProperty('--left-pct', initialPct + '%');
+
+        let dragging = false;
+        let startX = 0;
+        let startPct = 0;
+
+        const onDown = (e) => {
+            dragging = true;
+            startX = e.clientX ?? (e.touches && e.touches[0].clientX) ?? 0;
+            const cur = parseFloat(getComputedStyle(split).getPropertyValue('--left-pct')) || initialPct;
+            startPct = cur;
+            resizer.classList.add('dragging');
+            document.body.style.cursor = 'col-resize';
+            document.body.style.userSelect = 'none';
+            try { resizer.setPointerCapture?.(e.pointerId); } catch (_) {}
+            e.preventDefault();
+        };
+
+        const onMove = (e) => {
+            if (!dragging) return;
+            const currentX = e.clientX ?? (e.touches && e.touches[0].clientX) ?? 0;
+            const rect = split.getBoundingClientRect();
+            const deltaPct = ((currentX - startX) / rect.width) * 100;
+            const next = Math.max(MIN_PCT, Math.min(MAX_PCT, startPct + deltaPct));
+            split.style.setProperty('--left-pct', next + '%');
+        };
+
+        const onUp = () => {
+            if (!dragging) return;
+            dragging = false;
+            resizer.classList.remove('dragging');
+            document.body.style.cursor = '';
+            document.body.style.userSelect = '';
+            const cur = parseFloat(getComputedStyle(split).getPropertyValue('--left-pct'));
+            localStorage.setItem(STORAGE_KEY, String(cur));
+        };
+
+        resizer.addEventListener('pointerdown', onDown);
+        document.addEventListener('pointermove', onMove);
+        document.addEventListener('pointerup', onUp);
+        resizer.addEventListener('dblclick', () => {
+            split.style.setProperty('--left-pct', DEFAULT_PCT + '%');
+            localStorage.setItem(STORAGE_KEY, String(DEFAULT_PCT));
+        });
+    }
+
     // 页面加载完成后初始化
     document.addEventListener('DOMContentLoaded', async () => {
         await init();
+        initPanelResizer();
+        // 给每个任务槽添加悬停显示的删除按钮
+        document.querySelectorAll('.task-item').forEach(item => {
+            const deleteBtn = document.createElement('button');
+            deleteBtn.className = 'absolute -top-2 -right-2 w-5 h-5 bg-danger text-white rounded-full text-[10px] flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity shadow delete-task-btn';
+            deleteBtn.innerHTML = '<i class="fa fa-times"></i>';
+            deleteBtn.title = '清除此任务';
+            deleteBtn.style.zIndex = '10';
+            item.style.position = 'relative';
+            item.appendChild(deleteBtn);
+            deleteBtn.addEventListener('click', async (e) => {
+                e.stopPropagation();
+                const idx = parseInt(item.dataset.taskIndex);
+                if (confirm('确定要清除此任务槽吗？')) {
+                    try {
+                        const apiUrl = appState.selectedServer === 'china' ? apiServers.china : apiServers.oversea;
+                        await fetch(`${apiUrl}/v1/queue/${idx}/cancel`, { method: 'DELETE' });
+                    } catch (err) { /* 忽略失败 */ }
+                    // 重置进度显示
+                    const pCircle = document.getElementById(`progress${idx + 1}`);
+                    const pText = document.getElementById(`progressText${idx + 1}`);
+                    const errIcon = document.getElementById(`errorIcon${idx + 1}`);
+                    if (pCircle) pCircle.style.width = '0%';
+                    if (pText) { pText.textContent = '0%'; pText.classList.remove('text-primary'); pText.classList.add('text-gray-500'); }
+                    if (errIcon) errIcon.classList.add('hidden');
+                    // 从 tasks 数组移除
+                    if (appState.tasks[idx]) appState.tasks[idx] = null;
+                    showToast('任务已清除', 'success');
+                }
+            });
+            // 父级悬停显示
+            item.addEventListener('mouseenter', () => deleteBtn.classList.remove('opacity-0'));
+            item.addEventListener('mouseleave', () => deleteBtn.classList.add('opacity-0'));
+        });
+
+        // 左侧状态切换（挂到 window 上让外部 generateImage 可调用）
+        // 注：leftTaskState 始终可见，内部 historyContainer / taskCardsContainer / splitLine 自行根据有无内容控制显隐
+        window.updateLeftPanelState = function() {
+            // 触发 historyContainer / taskCardsContainer / splitLine 的刷新
+            if (window.renderTaskCards) window.renderTaskCards();
+            if (window.updateHistoryDisplay) window.updateHistoryDisplay();
+        };
+        window.updateLeftPanelState();
+        // 每隔 1 秒检查一次状态
+        setInterval(window.updateLeftPanelState, 1000);
+        // 监听 storage 事件，历史变化时立即响应
+        window.addEventListener('storage', window.updateLeftPanelState);
     });
 </script>
 </body>
