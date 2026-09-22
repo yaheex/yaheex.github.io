@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
@@ -77,33 +77,33 @@
 </head>
 <body class="font-inter text-dark min-h-screen flex flex-col" style="background-color: #f0f8ff;">
     <header class="bg-white shadow-sm sticky top-0 z-50 shrink-0">
-        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+        <div class="container mx-auto px-3 md:px-4 py-2 md:py-3 flex justify-between items-center gap-2">
             <div class="flex items-center gap-2">
-                <i class="fa fa-paint-brush text-primary text-2xl"></i>
-                <h1 class="text-xl font-bold text-primary">万物皆可Ai ai .</h1>
+                <i class="fa fa-paint-brush text-primary text-lg md:text-2xl"></i>
+                <h1 class="text-base md:text-xl font-bold text-primary whitespace-nowrap">万物皆可Ai</h1>
             </div>
             <div class="flex items-center gap-4">
-                <div id="creditDisplay" class="flex items-center gap-1 text-sm text-secondary">
-                    <i class="fa fa-credit-card text-primary"></i>
-                    <span>当前积分: <span id="creditCount" class="font-bold">--</span></span>
-                    <span id="totalCredit" class="ml-2">(总积分: <span id="totalCreditCount" class="font-bold">--</span>)</span>
+                <div id="creditDisplay" class="flex items-center gap-1 text-xs md:text-sm text-secondary">
+                    <i class="fa fa-credit-card text-primary text-xs md:text-base"></i>
+                    <span>积分: <span id="creditCount" class="font-bold">--</span></span>
+                    <span id="totalCredit" class="ml-1 hidden md:inline">(总: <span id="totalCreditCount" class="font-bold">--</span>)</span>
                     <div id="creditStatus" class="ml-2 hidden"></div>
                 </div>
-                <button id="apiSettingBtn" class="flex items-center gap-1 text-secondary hover:text-primary btn-hover px-3 py-1.5 rounded-lg">
+                <button id="apiSettingBtn" class="flex items-center gap-1 text-secondary hover:text-primary btn-hover px-2 md:px-3 py-1 md:py-1.5 rounded-lg"
                     <i class="fa fa-key"></i>
-                    <span class="hidden sm:inline">API 设置</span>
+                    <span class="hidden md:inline">API 设置</span>
                 </button>
-                <a href="https://ganxiang.xiaoyina.com/quotation/productView" target="_blank" class="flex items-center gap-1 text-secondary hover:text-primary btn-hover px-3 py-1.5 rounded-lg">
+                <a href="https://ganxiang.xiaoyina.com/quotation/productView" target="_blank" class="flex items-center gap-1 text-secondary hover:text-primary btn-hover px-2 md:px-3 py-1 md:py-1.5 rounded-lg"
                     <i class="fa fa-print"></i>
-                    <span class="hidden sm:inline">印刷报价</span>
+                    <span class="hidden md:inline">印刷报价</span>
                 </a>
-                <a href="https://yaheex.github.io/yahee/bj.html" target="_blank" class="flex items-center gap-1 text-secondary hover:text-primary btn-hover px-3 py-1.5 rounded-lg">
+                <a href="https://yaheex.github.io/yahee/bj.html" target="_blank" class="flex items-center gap-1 text-secondary hover:text-primary btn-hover px-2 md:px-3 py-1 md:py-1.5 rounded-lg"
                     <i class="fa fa-bullhorn"></i>
-                    <span class="hidden sm:inline">广告报价</span>
+                    <span class="hidden md:inline">广告报价</span>
                 </a>
-                <a href="https://yaheex.github.io/yahee/py.html" target="_blank" class="flex items-center gap-1 text-secondary hover:text-primary btn-hover px-3 py-1.5 rounded-lg">
+                <a href="https://yaheex.github.io/yahee/py.html" target="_blank" class="flex items-center gap-1 text-secondary hover:text-primary btn-hover px-2 md:px-3 py-1 md:py-1.5 rounded-lg"
                     <i class="fa fa-bullhorn"></i>
-                    <span class="hidden sm:inline">矢量图</span>
+                    <span class="hidden md:inline">矢量图</span>
                 </a>
             </div>
         </div>
@@ -113,7 +113,7 @@
         <div id="panelSplit" class="flex flex-col md:flex-row gap-2 md:gap-3 p-2 md:p-3 items-stretch min-h-full" style="--left-pct: 45%;">
             <!-- 右面板：工作区（配置+上传+描述词） -->
             <div id="rightPanel" class="min-h-full w-full md:w-[var(--left-pct)] md:min-w-0">
-                <div class="bg-white rounded-xl p-4 md:p-5 shadow-sm card-shadow space-y-4 min-h-full">
+                <div class="bg-white rounded-xl p-4 md:p-5 shadow-sm card-shadow space-y-2 md:space-y-4 min-h-full">
 
                     <!-- 已上传图片预览（显示在上传区上方） -->
                     <div id="uploadedPreviewContainer" class="hidden">
@@ -265,7 +265,7 @@
                 <!-- 任务/历史 + 描述词控制区（始终可见） -->
                 <div id="leftTaskState" class="min-h-full">
                         <!-- 合并卡片（所有内容放里面） -->
-                        <div class="bg-white rounded-xl p-4 md:p-5 shadow-sm card-shadow space-y-4 min-h-full">
+                        <div class="bg-white rounded-xl p-4 md:p-5 shadow-sm card-shadow space-y-2 md:space-y-4 min-h-full">
                             <!-- 卡片顶部：操作按钮行 + 绿色提示条 -->
                             <div>
                                 <div class="flex items-center justify-between gap-3 mb-3 flex-wrap md:flex-nowrap">
@@ -372,7 +372,7 @@
                                 <!-- 自定义描述词输入 -->
                                 <div>
                                     <label class="block text-xs text-gray-500 mb-1">自定义描述词</label>
-                                    <textarea id="customPrompt" rows="4" class="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm leading-relaxed focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary resize-y" placeholder="描述你想要生成或修改的图像..."></textarea>
+                                    <textarea id="customPrompt" rows="4" class="w-full border border-gray-300 rounded-md px-2.5 py-2 text-sm leading-relaxed md:rounded-lg md:px-3 md:py-2.5 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary resize-y" placeholder="描述你想要生成或修改的图像..."></textarea>
                                 </div>
                             </div>
 
