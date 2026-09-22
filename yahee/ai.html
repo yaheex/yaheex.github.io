@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>万物皆可AI - YaHee, Studio. </title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
     <script>
         tailwind.config = {
             theme: {
@@ -74,38 +74,48 @@
             }
         }
     </style>
-</head>
+
+    <!-- FA 图标强制修复：防止 Tailwind preflight 覆盖字体 -->
+    <style>
+        /* FA 6 标准类（fa fa-xxx）*/
+        .fa, .fas, .fa-solid {
+            font-family: "Font Awesome 6 Free" !important;
+            font-weight: 900 !important;
+        }
+        .far, .fa-regular {
+            font-family: "Font Awesome 6 Free" !important;
+            font-weight: 400 !important;
+        }
+        .fab, .fa-brands {
+            font-family: "Font Awesome 6 Brands" !important;
+            font-weight: 400 !important;
+        }
+    </style></head>
 <body class="font-inter text-dark min-h-screen flex flex-col" style="background-color: #f0f8ff;">
     <header class="bg-white shadow-sm sticky top-0 z-50 shrink-0">
-        <div class="container mx-auto px-3 md:px-4 py-2 md:py-3 flex justify-between items-center gap-2">
-            <div class="flex items-center gap-2">
-                <i class="fa fa-paint-brush text-primary text-lg md:text-2xl"></i>
-                <h1 class="text-base md:text-xl font-bold text-primary whitespace-nowrap">万物皆可Ai</h1>
-            </div>
-            <div class="flex items-center gap-4">
+        <div class="container mx-auto px-3 md:px-4 py-2 md:py-3 flex justify-center items-center gap-1.5 md:gap-3 flex-wrap">
                 <div id="creditDisplay" class="flex items-center gap-1 text-xs md:text-sm text-secondary">
                     <i class="fa fa-credit-card text-primary text-xs md:text-base"></i>
                     <span>积分: <span id="creditCount" class="font-bold">--</span></span>
                     <span id="totalCredit" class="ml-1 hidden md:inline">(总: <span id="totalCreditCount" class="font-bold">--</span>)</span>
                     <div id="creditStatus" class="ml-2 hidden"></div>
                 </div>
-                <button id="apiSettingBtn" class="flex items-center gap-1 text-secondary hover:text-primary btn-hover px-2 md:px-3 py-1 md:py-1.5 rounded-lg"
+                <button id="apiSettingBtn" class="flex items-center gap-1 text-secondary hover:text-primary btn-hover px-2 md:px-3 py-1 md:py-1.5 rounded-lg">
                     <i class="fa fa-key"></i>
-                    <span class="hidden md:inline">API 设置</span>
+                    <span>API</span>
                 </button>
-                <a href="https://ganxiang.xiaoyina.com/quotation/productView" target="_blank" class="flex items-center gap-1 text-secondary hover:text-primary btn-hover px-2 md:px-3 py-1 md:py-1.5 rounded-lg"
+                <a href="https://ganxiang.xiaoyina.com/quotation/productView" target="_blank" class="flex items-center gap-1 text-secondary hover:text-primary btn-hover px-2 md:px-3 py-1 md:py-1.5 rounded-lg">
                     <i class="fa fa-print"></i>
-                    <span class="hidden md:inline">印刷报价</span>
+                    <span>印刷</span>
                 </a>
-                <a href="https://yaheex.github.io/yahee/bj.html" target="_blank" class="flex items-center gap-1 text-secondary hover:text-primary btn-hover px-2 md:px-3 py-1 md:py-1.5 rounded-lg"
+                <a href="https://yaheex.github.io/yahee/bj.html" target="_blank" class="flex items-center gap-1 text-secondary hover:text-primary btn-hover px-2 md:px-3 py-1 md:py-1.5 rounded-lg">
                     <i class="fa fa-bullhorn"></i>
-                    <span class="hidden md:inline">广告报价</span>
+                    <span>广告</span>
                 </a>
-                <a href="https://yaheex.github.io/yahee/py.html" target="_blank" class="flex items-center gap-1 text-secondary hover:text-primary btn-hover px-2 md:px-3 py-1 md:py-1.5 rounded-lg"
+                <a href="https://yaheex.github.io/yahee/py.html" target="_blank" class="flex items-center gap-1 text-secondary hover:text-primary btn-hover px-2 md:px-3 py-1 md:py-1.5 rounded-lg">
                     <i class="fa fa-bullhorn"></i>
-                    <span class="hidden md:inline">矢量图</span>
+                    <span>矢量</span>
                 </a>
-            </div>
         </div>
     </header>
 
@@ -126,7 +136,7 @@
                             <input type="file" id="imageUpload" accept="image/*" multiple class="hidden">
                             <i class="fa fa-cloud-upload text-4xl text-gray-400 mb-3"></i>
                             <p class="text-secondary mb-2">点击添加更多图像</p>
-                            <p class="text-xs text-gray-500">提示：可以从左侧任务区拖动图片素材到这里</p>
+                            <p class="text-xs text-gray-500">提示：拖动图片素材到这里，或单击点选图片素材。</p>
                         </div>
                         <div id="uploadProgress" class="mt-2 hidden">
                             <div class="flex justify-between text-xs text-gray-600 mb-1">
@@ -287,7 +297,7 @@
                                             </span>
                                         </span>
                                         <button id="generateLogBtn" class="inline-flex items-center gap-1 text-xs bg-blue-50 text-blue-700 border border-blue-200 px-2 py-0.5 rounded-full hover:bg-blue-100 transition-colors" title="查看生成日志">
-                                            <i class="fa fa-list-alt"></i>
+                                            <i class="fa fa-list"></i>
                                             日志 <span id="generateLogCount" class="font-semibold tabular-nums">0</span>
                                         </button>
                                         <button id="errorLogBtn" class="inline-flex items-center gap-1 text-xs bg-red-50 text-red-700 border border-red-200 px-2 py-0.5 rounded-full hover:bg-red-100 transition-colors" title="查看错误日志">
@@ -323,7 +333,7 @@
                                 <!-- 三个一键按钮 -->
                                 <div class="flex gap-2 mb-3">
                                     <button id="effectBtn" class="flex-1 flex items-center justify-center gap-1 px-3 py-2 rounded-lg bg-primary/10 text-primary hover:bg-primary/20 transition-colors text-sm">
-                                        <i class="fa fa-wand-magic-sparkles"></i>
+                                        <i class="fa fa-magic"></i>
                                         <span>一键效果图</span>
                                     </button>
                                     <button id="copyBtn" class="flex-1 flex items-center justify-center gap-1 px-3 py-2 rounded-lg bg-primary/10 text-primary hover:bg-primary/20 transition-colors text-sm">
@@ -331,7 +341,7 @@
                                         <span>一键复制</span>
                                     </button>
                                     <button id="designBtn" class="flex-1 flex items-center justify-center gap-1 px-3 py-2 rounded-lg bg-primary/10 text-primary hover:bg-primary/20 transition-colors text-sm">
-                                        <i class="fa fa-pen-fancy"></i>
+                                        <i class="fa fa-pencil"></i>
                                         <span>一键设计稿</span>
                                     </button>
                                 </div>
@@ -557,7 +567,7 @@
                 <h3 class="text-xl font-semibold">一键效果图（现场照片用黄色的矩形框画出来）</h3>
                 <div class="flex gap-2">
                     <button id="minimizeEffectModal" class="text-gray-400 hover:text-gray-600">
-                        <i class="fa fa-window-minimize"></i>
+                        <i class="fa fa-minus-square-o"></i>
                     </button>
                     <button id="closeEffectModal" class="text-gray-400 hover:text-gray-600">
                         <i class="fa fa-times"></i>
@@ -754,7 +764,7 @@
                 <h3 class="text-xl font-semibold">一键复制</h3>
                 <div class="flex gap-2">
                     <button id="minimizeCopyModal" class="text-gray-400 hover:text-gray-600">
-                        <i class="fa fa-window-minimize"></i>
+                        <i class="fa fa-minus-square-o"></i>
                     </button>
                     <button id="closeCopyModal" class="text-gray-400 hover:text-gray-600">
                         <i class="fa fa-times"></i>
@@ -896,7 +906,7 @@
                 <h3 class="text-xl font-semibold">一键设计稿</h3>
                 <div class="flex gap-2">
                     <button id="minimizeDesignModal" class="text-gray-400 hover:text-gray-600">
-                        <i class="fa fa-window-minimize"></i>
+                        <i class="fa fa-minus-square-o"></i>
                     </button>
                     <button id="closeDesignModal" class="text-gray-400 hover:text-gray-600">
                         <i class="fa fa-times"></i>

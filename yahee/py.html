@@ -1,11 +1,11 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>万物皆可矢量 - YaHee, Studio. </title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
     <script>
         tailwind.config = {
             theme: {
@@ -73,7 +73,22 @@
             }
         }
     </style>
-</head>
+    <!-- FA 图标强制修复：防止 Tailwind preflight 覆盖字体 -->
+    <style>
+        /* FA 6 标准类（fa fa-xxx）*/
+        .fa, .fas, .fa-solid {
+            font-family: "Font Awesome 6 Free" !important;
+            font-weight: 900 !important;
+        }
+        .far, .fa-regular {
+            font-family: "Font Awesome 6 Free" !important;
+            font-weight: 400 !important;
+        }
+        .fab, .fa-brands {
+            font-family: "Font Awesome 6 Brands" !important;
+            font-weight: 400 !important;
+        }
+    </style></head>
 <body class="font-inter bg-light text-dark min-h-screen flex flex-col">
     <header class="bg-white shadow-sm sticky top-0 z-50">
         <div class="container mx-auto px-4 py-3 flex justify-between items-center">
