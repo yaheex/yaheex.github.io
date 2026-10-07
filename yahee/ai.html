@@ -184,7 +184,7 @@
                             </optgroup>
                             <!-- Banana 系列 -->
                             <optgroup label="Nano Banana">
-                                <option value="nano-banana-2">nano-banana-2 - 1200积分/次</option>
+                                <option value="nano-banana-2.1">nano-banana-2.1 - 1200积分/次</option>
                                 <option value="nano-banana-pro">nano-banana-pro - 1800积分/次</option>
                             </optgroup>
                         </select>
@@ -199,7 +199,7 @@
                             <option value="gpt-image-2.5-flare">gpt-image-2.5-flare</option>
                         </select>
                         <select id="bananaSubModel">
-                            <option value="nano-banana-2">nano-banana-2</option>
+                            <option value="nano-banana-2.1">nano-banana-2.1</option>
                             <option value="nano-banana-pro">nano-banana-pro</option>
                         </select>
                     </div>
@@ -717,8 +717,8 @@
             <div class="mb-6">
                 <div class="flex gap-4">
                     <label class="flex items-center gap-1">
-                        <input type="radio" name="model" value="nano-banana-2" class="text-primary" checked>
-                        <span class="text-sm">nano-banana-2—4K</span>
+                        <input type="radio" name="model" value="nano-banana-2.1" class="text-primary" checked>
+                        <span class="text-sm">nano-banana-2.1—4K</span>
                     </label>
                     <label class="flex items-center gap-1">
                         <input type="radio" name="model" value="gpt-image-2.5" class="text-primary">
@@ -859,8 +859,8 @@
             <div class="mb-6">
                 <div class="flex gap-4">
                     <label class="flex items-center gap-1">
-                        <input type="radio" name="copyModel" value="nano-banana-2" class="text-primary" checked>
-                        <span class="text-sm">nano-banana-2—4K</span>
+                        <input type="radio" name="copyModel" value="nano-banana-2.1" class="text-primary" checked>
+                        <span class="text-sm">nano-banana-2.1—4K</span>
                     </label>
                     <label class="flex items-center gap-1">
                         <input type="radio" name="copyModel" value="gpt-image-2.5" class="text-primary">
@@ -1001,8 +1001,8 @@
             <div class="mb-6">
                 <div class="flex gap-4">
                     <label class="flex items-center gap-1">
-                        <input type="radio" name="designModel" value="nano-banana-2" class="text-primary" checked>
-                        <span class="text-sm">nano-banana-2—4K</span>
+                        <input type="radio" name="designModel" value="nano-banana-2.1" class="text-primary" checked>
+                        <span class="text-sm">nano-banana-2.1—4K</span>
                     </label>
                     <label class="flex items-center gap-1">
                         <input type="radio" name="designModel" value="gpt-image-2.5" class="text-primary">
@@ -3769,7 +3769,7 @@
         // 计算所需积分
         let requiredCredit;
         if (mainModel === 'banana') {
-            if (subModel === 'nano-banana-2') {
+            if (subModel === 'nano-banana-2.1') {
                 requiredCredit = 1200;
             } else if (subModel === 'nano-banana-pro') {
                 requiredCredit = 1800;
@@ -3827,7 +3827,7 @@
             };
             
             // 当使用支持imageSize的模型时添加参数
-            if (subModel === 'nano-banana-pro' || subModel === 'nano-banana-2') {
+            if (subModel === 'nano-banana-pro' || subModel === 'nano-banana-2.1') {
                 requestData.imageSize = imageSize;
             }
             
